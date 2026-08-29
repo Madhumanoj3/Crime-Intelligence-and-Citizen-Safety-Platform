@@ -1,0 +1,164 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Report Complaint - CISP</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🛡️ CISP</h2>
+            <p>Citizen Panel</p>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="{% url 'citizen_dashboard' %}">📊 Dashboard</a>
+            <a href="{% url 'complaint_form' %}" class="active">📝 Report Complaint</a>
+            <a href="{% url 'complaints' %}">📋 My Complaints</a>
+            <a href="{% url 'sos' %}">🆘 SOS Emergency</a>
+            <a href="{% url 'missing_person' %}">👤 Missing Person</a>
+            <a href="{% url 'lost_found' %}">🔍 Lost &amp; Found</a>
+            <a href="{% url 'community_alerts' %}">📢 Community Alerts</a>
+            <a href="{% url 'feedback' %}">💬 Feedback</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="dashboard-header">
+            <div style="display:flex; align-items:center;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h2>Report Complaint</h2>
+            </div>
+            <div class="header-right">
+                <span class="header-icon">🔔</span>
+                <span>👤 {{ current_user.name|default:"Citizen User" }}</span>
+                <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <div class="form-container">
+                <h3 class="page-title">New Incident / Crime Complaint</h3>
+                <p style="color:#666; font-size:13px; margin-bottom:20px;">
+                    Select the incident location in Madurai. The system will automatically geo-route and assign this complaint to the nearest jurisdictional Police Station.
+                </p>
+
+                <form method="POST" action="{% url 'complaint_form' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="title">Complaint Title *</label>
+                        <input type="text" id="title" name="title" placeholder="Brief summary of what happened" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Crime Category *</label>
+                        <select id="category" name="category" required>
+                            <option value="">Select Category</option>
+                            <option value="theft">Theft / Burglary</option>
+                            <option value="cybercrime">Cybercrime / Online Fraud</option>
+                            <option value="fraud">Financial Fraud</option>
+                            <option value="harassment">Harassment / Stalking</option>
+                            <option value="accident">Road Accident / Traffic Issue</option>
+                            <option value="assault">Assault / Physical Violence</option>
+                            <option value="vandalism">Vandalism / Property Damage</option>
+                            <option value="other">Other Incident</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Detailed Description *</label>
+                        <textarea id="description" name="description" rows="4" placeholder="Describe what happened, where, and any identifying details" required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="incident_date">Incident Date *</label>
+                            <input type="date" id="incident_date" name="incident_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="incident_time">Incident Time</label>
+                            <input type="time" id="incident_time" name="incident_time">
+                        </div>
+                    </div>
+
+                    <!-- Madurai Area Selection (280+ Locations) -->
+                    <div class="form-group">
+                        <label for="area">Incident Area / Locality in Madurai * <small style="color:#2980b9;">(Choose from 280+ Madurai Locations)</small></label>
+                        <input list="madurai-complaint-areas" id="area" name="area" placeholder="Type or choose area (e.g. Anna Nagar, Tallakulam, Goripalayam, Simmakkal)" autocomplete="off" required oninput="onComplaintAreaChange(this.value)">
+                        <datalist id="madurai-complaint-areas">
+                            {% for loc in locations %}
+                            <option value="{{ loc.name }}" data-lat="{{ loc.latitude }}" data-lon="{{ loc.longitude }}">{{ loc.name }} ({{ loc.location_type }})</option>
+                            {% endfor %}
+                        </datalist>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Specific Address / Landmark</label>
+                        <input type="text" id="address" name="address" placeholder="e.g. Opposite to Bus Stand, Main Road">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="street">Street / Road Name</label>
+                            <input type="text" id="street" name="street" placeholder="e.g. West Veli Street">
+                        </div>
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" name="city" value="Madurai" readonly style="background:#f8f9fa;">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="pincode">Pincode</label>
+                            <input type="text" id="pincode" name="pincode" placeholder="e.g. 625001" value="625001">
+                        </div>
+                        <div class="form-group">
+                            <label for="latitude">Latitude (Auto-calculated)</label>
+                            <input type="text" id="latitude" name="latitude" placeholder="e.g. 9.9252" readonly style="background:#f8f9fa;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="longitude">Longitude (Auto-calculated)</label>
+                        <input type="text" id="longitude" name="longitude" placeholder="e.g. 78.1198" readonly style="background:#f8f9fa;">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="evidence">Evidence Attachment (Optional)</label>
+                        <input type="file" id="evidence" name="evidence" accept="image/*,video/*,.pdf">
+                    </div>
+
+                    <div class="info-box warning" style="margin-bottom:20px;">
+                        🛡️ <strong>Automated Station Routing:</strong> When you submit, our system calculates the shortest distance using GPS coordinates and assigns your complaint directly to the responsible Madurai Police Station.
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg" style="width:100%;">Submit Complaint &amp; Geo-Route</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const complaintLocationMap = {
+        {% for loc in locations %}
+        "{{ loc.name|escapejs }}": { lat: "{{ loc.latitude }}", lon: "{{ loc.longitude }}" },
+        {% endfor %}
+    };
+
+    function onComplaintAreaChange(val) {
+        const trimmed = val ? val.trim() : '';
+        if (complaintLocationMap[trimmed]) {
+            document.getElementById('latitude').value = complaintLocationMap[trimmed].lat;
+            document.getElementById('longitude').value = complaintLocationMap[trimmed].lon;
+        }
+    }
+</script>
+<script src="{% static 'firstapp/script.js' %}"></script>
+</body>
+</html>

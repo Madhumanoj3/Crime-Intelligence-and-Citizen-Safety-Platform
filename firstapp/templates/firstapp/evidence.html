@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Evidence - CISP</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🛡️ CISP</h2>
+            <p>Police Panel</p>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="{% url 'police_dashboard' %}">📊 Dashboard</a>
+            <a href="{% url 'police_complaints' %}">📋 Complaints</a>
+            <a href="{% url 'fir' %}">📄 FIR</a>
+            <a href="{% url 'cases' %}">📁 Cases</a>
+            <a href="{% url 'evidence' %}" class="active">🔍 Evidence</a>
+            <a href="{% url 'accused' %}">👤 Accused</a>
+            <a href="{% url 'police_sos' %}">🆘 SOS Alerts</a>
+            <a href="{% url 'crime_intelligence' %}">🗺️ Crime Intelligence</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="dashboard-header">
+            <div style="display:flex; align-items:center;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h2>Evidence Management</h2>
+            </div>
+            <div class="header-right">
+                <span class="header-icon">🔔</span>
+                <span>👤 {{ current_user.name|default:"SI Muthukumar" }}</span>
+                <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <!-- Evidence Table -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h3>Evidence Vault</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Evidence ID</th>
+                            <th>Complaint ID</th>
+                            <th>File Name</th>
+                            <th>Type</th>
+                            <th>Size</th>
+                            <th>Uploaded</th>
+                            <th>Added By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if evidence_records %}
+                            {% for e in evidence_records %}
+                            <tr>
+                                <td>{{ e.evidence_id }}</td>
+                                <td>{{ e.complaint_id }}</td>
+                                <td>{{ e.file_name }}</td>
+                                <td>{{ e.file_type }}</td>
+                                <td>{{ e.file_size }}</td>
+                                <td>{{ e.uploaded_date }}</td>
+                                <td>{{ e.added_by }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="7" style="text-align:center; color:#888;">No evidence uploaded yet.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'firstapp/script.js' %}"></script>
+</body>
+</html>

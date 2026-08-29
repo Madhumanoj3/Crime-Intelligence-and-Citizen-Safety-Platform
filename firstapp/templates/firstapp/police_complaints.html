@@ -1,0 +1,162 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Complaint Management - CISP</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🛡️ CISP</h2>
+            <p>Police Panel</p>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="{% url 'police_dashboard' %}">📊 Dashboard</a>
+            <a href="{% url 'police_complaints' %}" class="active">📋 Complaints</a>
+            <a href="{% url 'fir' %}">📄 FIR</a>
+            <a href="{% url 'cases' %}">📁 Cases</a>
+            <a href="{% url 'evidence' %}">🔍 Evidence</a>
+            <a href="{% url 'accused' %}">👤 Accused</a>
+            <a href="{% url 'police_sos' %}">🆘 SOS Alerts</a>
+            <a href="{% url 'crime_intelligence' %}">🗺️ Crime Intelligence</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="dashboard-header">
+            <div style="display:flex; align-items:center;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h2>Complaint Management</h2>
+            </div>
+            <div class="header-right">
+                <span class="header-icon">🔔</span>
+                <span>👤 {{ current_user.name|default:"SI Muthukumar" }}</span>
+                <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <!-- Complaints Table -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h3>All Complaints</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Complaint ID</th>
+                            <th>Citizen Name</th>
+                            <th>Category</th>
+                            <th>Incident Date</th>
+                            <th>Status</th>
+                            <th>FIR Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if complaints %}
+                            {% for c in complaints %}
+                            <tr>
+                                <td><strong>{{ c.complaint_id }}</strong></td>
+                                <td>{{ c.citizen_name }}</td>
+                                <td>{{ c.category }}</td>
+                                <td>{{ c.incident_date }}</td>
+                                <td>
+                                    <span class="badge {% if c.status == 'Resolved' %}badge-success{% elif c.status == 'Rejected' %}badge-danger{% elif c.status == 'Under Review' %}badge-info{% else %}badge-warning{% endif %}">
+                                        {{ c.status }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge {% if c.fir_status == 'FIR Registered' %}badge-danger{% elif c.fir_status == 'Approved' %}badge-success{% else %}badge-secondary{% endif %}">
+                                        {{ c.fir_status }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="?view_id={{ c.complaint_id }}" class="btn btn-sm btn-primary">Manage</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="7" style="text-align:center; color:#888;">No complaints recorded yet.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Complaint Detail Section -->
+            <div class="card mt-20" id="complaint-detail">
+                <div class="card-header">Complaint Details — {{ selected_complaint.complaint_id|default:"CMP-001" }}</div>
+                <div class="card-body">
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Citizen Name</div>
+                            <div class="detail-value">{{ selected_complaint.citizen_name }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Email</div>
+                            <div class="detail-value">{{ selected_complaint.citizen_email }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Phone</div>
+                            <div class="detail-value">{{ selected_complaint.citizen_phone }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Category</div>
+                            <div class="detail-value">{{ selected_complaint.category }}</div>
+                        </div>
+                    </div>
+                    <div style="margin-top:15px;">
+                        <div class="detail-label">Description</div>
+                        <p style="font-size:14px; color:#333; margin-top:5px;">{{ selected_complaint.description }}</p>
+                    </div>
+                    <div style="margin-top:15px;">
+                        <div class="detail-label">Location</div>
+                        <p style="font-size:14px; color:#333; margin-top:5px;">{{ selected_complaint.address }}, {{ selected_complaint.city }} — {{ selected_complaint.latitude }}, {{ selected_complaint.longitude }}</p>
+                    </div>
+                    <div style="margin-top:15px;">
+                        <div class="detail-label">Evidence</div>
+                        <p style="font-size:14px; color:#333; margin-top:5px;">{{ selected_complaint.evidence|default:"No files attached" }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Duplicate Detection Placeholder -->
+            <div class="ai-section">
+                <h3>🤖 AI Duplicate Complaint Check</h3>
+                <p style="font-size:14px; color:#555; margin-bottom:10px;">This section uses TF-IDF + Cosine Similarity to detect duplicate complaints.</p>
+
+                <div class="detail-grid" style="max-width:400px;">
+                    <div class="detail-item">
+                        <div class="detail-label">Similarity Score</div>
+                        <div class="detail-value" style="color:#f39c12; font-size:20px;">82%</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Status</div>
+                        <div class="detail-value"><span class="badge badge-warning">Possible Duplicate</span></div>
+                    </div>
+                </div>
+
+                <div class="similarity-bar" style="max-width:400px;">
+                    <div class="similarity-fill" style="width:82%;"></div>
+                </div>
+
+                <p style="font-size:13px; color:#888; margin-top:10px;">Similar to: CMP-005 — "Wallet Stolen in Market" (Filed by Madhu Manoj)</p>
+
+                <div class="info-box info" style="margin-top:15px;">
+                    ℹ️ This is a UI placeholder. The ML model for duplicate detection will be implemented later using TF-IDF and Cosine Similarity.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'firstapp/script.js' %}"></script>
+</body>
+</html>

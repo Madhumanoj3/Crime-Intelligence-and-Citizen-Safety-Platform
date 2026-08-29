@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FIR Management - CISP</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🛡️ CISP</h2>
+            <p>Police Panel</p>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="{% url 'police_dashboard' %}">📊 Dashboard</a>
+            <a href="{% url 'police_complaints' %}">📋 Complaints</a>
+            <a href="{% url 'fir' %}" class="active">📄 FIR</a>
+            <a href="{% url 'cases' %}">📁 Cases</a>
+            <a href="{% url 'evidence' %}">🔍 Evidence</a>
+            <a href="{% url 'accused' %}">👤 Accused</a>
+            <a href="{% url 'police_sos' %}">🆘 SOS Alerts</a>
+            <a href="{% url 'crime_intelligence' %}">🗺️ Crime Intelligence</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="dashboard-header">
+            <div style="display:flex; align-items:center;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h2>FIR Management</h2>
+            </div>
+            <div class="header-right">
+                <span class="header-icon">🔔</span>
+                <span>👤 {{ current_user.name|default:"SI Muthukumar" }}</span>
+                <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <!-- Register FIR Form -->
+            <div class="form-container">
+                <h3 class="page-title">Register First Information Report (FIR)</h3>
+                <form method="POST" action="{% url 'fir' %}">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fir_number">FIR Number</label>
+                            <input type="text" id="fir_number" name="fir_number" value="{{ next_fir_id|default:'FIR-005' }}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="complaint_id">Associated Complaint ID *</label>
+                            <input type="text" id="complaint_id" name="complaint_id" placeholder="e.g. CMP-001" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="section_of_law">Section of Law *</label>
+                            <input type="text" id="section_of_law" name="section_of_law" placeholder="e.g. IPC Section 379" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fir_date">FIR Date</label>
+                            <input type="date" id="fir_date" name="fir_date">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="incident_details">Incident Summary *</label>
+                        <textarea id="incident_details" name="description" rows="3" placeholder="Brief summary of the incident as per complaint" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status">Initial FIR Status</label>
+                        <select id="status" name="status">
+                            <option value="Valid">Valid</option>
+                            <option value="Under Investigation">Under Investigation</option>
+                            <option value="Pending Review">Pending Review</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Register FIR</button>
+                </form>
+            </div>
+
+            <!-- Existing FIRs -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h3>Registered FIRs</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>FIR ID</th>
+                            <th>Complaint ID</th>
+                            <th>Section of Law</th>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if firs %}
+                            {% for f in firs %}
+                            <tr>
+                                <td>{{ f.fir_id }}</td>
+                                <td>{{ f.complaint_id }}</td>
+                                <td>{{ f.section_of_law }}</td>
+                                <td>{{ f.fir_date }}</td>
+                                <td>{{ f.description|truncatechars:45 }}</td>
+                                <td><span class="badge badge-success">{{ f.status }}</span></td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" style="text-align:center; color:#888;">No FIR records on file.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'firstapp/script.js' %}"></script>
+</body>
+</html>

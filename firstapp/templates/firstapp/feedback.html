@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Feedback - CISP</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🛡️ CISP</h2>
+            <p>Citizen Panel</p>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="{% url 'citizen_dashboard' %}">📊 Dashboard</a>
+            <a href="{% url 'complaint_form' %}">📝 Report Complaint</a>
+            <a href="{% url 'complaints' %}">📋 My Complaints</a>
+            <a href="{% url 'sos' %}">🆘 SOS Emergency</a>
+            <a href="{% url 'missing_person' %}">👤 Missing Person</a>
+            <a href="{% url 'lost_found' %}">🔍 Lost &amp; Found</a>
+            <a href="{% url 'community_alerts' %}">📢 Community Alerts</a>
+            <a href="{% url 'feedback' %}" class="active">💬 Feedback</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="dashboard-header">
+            <div style="display:flex; align-items:center;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h2>Feedback</h2>
+            </div>
+            <div class="header-right">
+                <span class="header-icon">🔔</span>
+                <span>👤 {{ current_user.name|default:"Madhu Manoj" }}</span>
+                <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <div class="feedback-card">
+                <div class="feedback-card-header">
+                    <h2>Citizen Feedback</h2>
+                    <p>We value your feedback. Let us know about your experience.</p>
+                </div>
+
+                <form class="feedback-body" method="POST" action="{% url 'feedback' %}">
+                    {% csrf_token %}
+                    <!-- Rating -->
+                    <div class="form-group">
+                        <label for="full_name">Full Name *</label>
+                        <input type="text" id="full_name" name="full_name" placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rating">Rate the Platform (1-10)</label>
+                        <input type="range" id="rating" name="rating" min="1" max="10" value="7" style="width:100%;">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Which features do you use?</label>
+                        <div style="margin-top:5px;">
+                            <input type="checkbox" name="products_used" value="complaints"> Complaint Reporting &nbsp;
+                            <input type="checkbox" name="products_used" value="sos"> SOS Emergency &nbsp;
+                            <input type="checkbox" name="products_used" value="missing"> Missing Person &nbsp;
+                            <input type="checkbox" name="products_used" value="lost_found"> Lost &amp; Found &nbsp;
+                            <input type="checkbox" name="products_used" value="alerts"> Community Alerts
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feedback">Your Feedback</label>
+                        <textarea id="feedback" name="feedback" rows="5" placeholder="Share your experience, suggestions or issues..."></textarea>
+                    </div>
+
+                    <input type="submit" value="Submit Feedback">
+                    <input type="reset" value="Reset Form">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'firstapp/script.js' %}"></script>
+</body>
+</html>

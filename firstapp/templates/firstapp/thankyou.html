@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thank You - CISP</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+</head>
+<body>
+
+<div class="thankyou">
+    <h1>🛡️ Thank You!</h1>
+    <p>Your feedback has been submitted successfully.</p>
+    <p>We appreciate your input in helping us improve the Crime Intelligence and Citizen Safety Platform.</p>
+    <br>
+    <a href="{% url 'citizen_dashboard' %}" class="btn btn-primary">Go to Dashboard</a>
+    &nbsp;
+    <a href="{% url 'index' %}" class="btn btn-outline-primary">Back to Home</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Community Alerts - CISP</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🛡️ CISP</h2>
+            <p>Citizen Panel</p>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="{% url 'citizen_dashboard' %}">📊 Dashboard</a>
+            <a href="{% url 'complaint_form' %}">📝 Report Complaint</a>
+            <a href="{% url 'complaints' %}">📋 My Complaints</a>
+            <a href="{% url 'sos' %}">🆘 SOS Emergency</a>
+            <a href="{% url 'missing_person' %}">👤 Missing Person</a>
+            <a href="{% url 'lost_found' %}">🔍 Lost &amp; Found</a>
+            <a href="{% url 'community_alerts' %}" class="active">📢 Community Alerts</a>
+            <a href="{% url 'feedback' %}">💬 Feedback</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="dashboard-header">
+            <div style="display:flex; align-items:center;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h2>Community Alerts</h2>
+            </div>
+            <div class="header-right">
+                <span class="header-icon">🔔</span>
+                <span>👤 {{ current_user.name|default:"Madhu Manoj" }}</span>
+                <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <h3 class="page-title">Safety Alerts in Your Area</h3>
+
+            <div class="alerts-list">
+                {% if alerts %}
+                    {% for alert in alerts %}
+                    <div class="alert-card">
+                        <div class="alert-info">
+                            <h4>⚠️ {{ alert.title }}</h4>
+                            <p>{{ alert.description }}</p>
+                        </div>
+                        <div class="alert-meta">
+                            <p><strong>Area:</strong> {{ alert.area }}</p>
+                            <p><strong>Date:</strong> {{ alert.created_date }}</p>
+                            <p><span class="badge {{ alert.badge_class|default:'badge-warning' }}">{{ alert.status }}</span></p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color:#888; text-align:center;">No community alerts active right now.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'firstapp/script.js' %}"></script>
+</body>
+</html>

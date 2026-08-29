@@ -1,0 +1,301 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inspector Dashboard - CISP</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+    <style>
+        .badge-ai-dup {
+            background-color: #e67e22;
+            color: #fff;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .badge-ai-ok {
+            background-color: #27ae60;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        .station-banner {
+            background: linear-gradient(135deg, #1b4f72, #2e86c1);
+            color: white;
+            padding: 18px 24px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .assign-select {
+            padding: 6px 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-box {
+            background: white;
+            border-radius: 8px;
+            max-width: 520px;
+            width: 90%;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🛡️ CISP</h2>
+            <p>Inspector (Station In-Charge)</p>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="{% url 'inspector_dashboard' %}" class="active">📊 Station Dashboard</a>
+            <a href="{% url 'inspector_monitoring' %}">👁️ Officer Monitoring</a>
+            <a href="{% url 'fir' %}">📄 FIR Records</a>
+            <a href="{% url 'cases' %}">📁 Station Cases</a>
+            <a href="{% url 'evidence' %}">🔍 Evidence Vault</a>
+            <a href="{% url 'accused' %}">👤 Accused Records</a>
+            <a href="{% url 'police_sos' %}">🆘 Emergency SOS</a>
+            <a href="{% url 'crime_intelligence' %}">🗺️ Crime Intelligence</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="dashboard-header">
+            <div style="display:flex; align-items:center;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h2>Station In-Charge Inspector Panel</h2>
+            </div>
+            <div class="header-right">
+                <span class="header-icon">🔔</span>
+                <span>👮 {{ current_user.name }} ({{ current_user.rank|default:"Inspector" }})</span>
+                <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <!-- Station Jurisdiction Banner -->
+            <div class="station-banner">
+                <div>
+                    <h3 style="margin:0 0 6px 0; font-size:20px;">🏢 Jurisdiction: {{ station_name }}</h3>
+                    <p style="margin:0; opacity:0.9; font-size:14px;">
+                        Station In-Charge: <strong>{{ current_user.name }}</strong> | Badge: <strong>{{ current_user.badge_number|default:"TN-INSP-01" }}</strong>
+                    </p>
+                </div>
+                <div>
+                    <a href="{% url 'inspector_monitoring' %}" class="btn btn-sm btn-outline" style="border-color:white; color:white;">
+                        Live Officer Monitor &rarr;
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid" style="grid-template-columns: repeat(5, 1fr);">
+                <div class="stat-card">
+                    <div class="stat-icon">📥</div>
+                    <div class="stat-number">{{ pending_review_count|default:"0" }}</div>
+                    <div class="stat-label">Pending Review</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚠️</div>
+                    <div class="stat-number" style="color:#e67e22;">{{ duplicate_flagged_count|default:"0" }}</div>
+                    <div class="stat-label">AI Duplicate Flagged</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👮</div>
+                    <div class="stat-number">{{ assigned_count|default:"0" }}</div>
+                    <div class="stat-label">Assigned / Investigating</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📄</div>
+                    <div class="stat-number">{{ active_firs_count|default:"0" }}</div>
+                    <div class="stat-label">Station FIRs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📁</div>
+                    <div class="stat-number">{{ active_cases_count|default:"0" }}</div>
+                    <div class="stat-label">Active Cases</div>
+                </div>
+            </div>
+
+            <!-- Station Complaint Queue & AI Duplicate Review -->
+            <div class="table-container mt-20">
+                <div class="table-header">
+                    <div>
+                        <h3 style="margin:0;">📋 Station Complaint Queue (Jurisdiction Routed)</h3>
+                        <p style="font-size:13px; color:#666; margin:4px 0 0 0;">
+                            Review incoming complaints, verify AI duplicate recommendations, and assign investigating officers.
+                        </p>
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Complaint ID</th>
+                            <th>Citizen Details</th>
+                            <th>Category &amp; Title</th>
+                            <th>Incident Location</th>
+                            <th>AI Recommendation</th>
+                            <th>Current Status / Assigned Officer</th>
+                            <th style="min-width:220px;">Inspector Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if station_complaints %}
+                            {% for c in station_complaints %}
+                            <tr>
+                                <td>
+                                    <strong>{{ c.complaint_id }}</strong><br>
+                                    <small style="color:#888;">{{ c.incident_date }}</small>
+                                </td>
+                                <td>
+                                    <strong>{{ c.citizen_name }}</strong><br>
+                                    <small style="color:#666;">{{ c.citizen_phone|default:c.citizen_email }}</small>
+                                </td>
+                                <td>
+                                    <span class="badge badge-info">{{ c.category }}</span><br>
+                                    <strong>{{ c.title }}</strong><br>
+                                    <small style="color:#666;">{{ c.description|truncatewords:10 }}</small>
+                                </td>
+                                <td>
+                                    <small>{{ c.address|default:c.city }}</small><br>
+                                    <small style="color:#888;">📍 {{ c.latitude }}, {{ c.longitude }}</small>
+                                </td>
+                                <td>
+                                    {% if c.ai_duplicate_flag == 'Possible Duplicate' %}
+                                        <span class="badge-ai-dup" title="{{ c.ai_matched_title }}">
+                                            ⚠️ Duplicate ({{ c.ai_similarity_score }})
+                                        </span>
+                                        {% if c.ai_matched_complaint_id %}
+                                            <br><small style="color:#c0392b;">Matches: {{ c.ai_matched_complaint_id }}</small>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="badge-ai-ok">
+                                            ✅ Unique ({{ c.ai_similarity_score|default:"10%" }})
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge {% if c.status == 'Assigned' %}badge-info{% elif c.status == 'Under Investigation' %}badge-warning{% elif c.status == 'FIR Registered' %}badge-danger{% elif c.status == 'Duplicate / Ignored' or c.status == 'Closed / Rejected' %}badge-secondary{% elif c.status == 'Resolved' %}badge-success{% else %}badge-warning{% endif %}">
+                                        {{ c.status }}
+                                    </span>
+                                    {% if c.assigned_officer_name %}
+                                        <br><small style="color:#2980b9;">👮 IO: <strong>{{ c.assigned_officer_name }}</strong></small>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if c.status == 'Pending Review' or c.status == 'Pending' %}
+                                        <!-- Quick Assign Form -->
+                                        <form method="POST" action="{% url 'inspector_dashboard' %}" style="display:inline-block; margin-bottom:4px;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="assign_officer">
+                                            <input type="hidden" name="complaint_id" value="{{ c.complaint_id }}">
+                                            <select name="officer_id" class="assign-select" required>
+                                                <option value="" disabled selected>Select Officer...</option>
+                                                {% for off in station_officers %}
+                                                    <option value="{{ off.id }}">{{ off.name }} ({{ off.badge_number }})</option>
+                                                {% empty %}
+                                                    <option value="officer.a@tnpolice.gov.in">Officer A (Ravi)</option>
+                                                    <option value="officer.b@tnpolice.gov.in">Officer B (Suresh)</option>
+                                                {% endfor %}
+                                            </select>
+                                            <button type="submit" class="btn btn-sm btn-primary" style="padding:5px 8px; font-size:12px;">Assign</button>
+                                        </form>
+
+                                        <!-- Mark Duplicate Form -->
+                                        <form method="POST" action="{% url 'inspector_dashboard' %}" style="display:inline-block;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="mark_duplicate">
+                                            <input type="hidden" name="complaint_id" value="{{ c.complaint_id }}">
+                                            <button type="submit" class="btn btn-sm btn-danger" style="padding:5px 8px; font-size:12px;" onclick="return confirm('Mark this complaint as Duplicate/Ignored?')">Ignore / Dup</button>
+                                        </form>
+                                    {% else %}
+                                        <span style="font-size:12px; color:#666;">Assigned on {{ c.assigned_date|default:"Recently" }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="7" style="text-align:center; padding:30px; color:#888;">
+                                    No complaints currently queued for this jurisdiction.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Station Officers Live Monitoring Summary -->
+            <div class="table-container mt-20">
+                <div class="table-header">
+                    <div>
+                        <h3 style="margin:0;">👮 Station Officers &amp; Live Investigation Monitoring</h3>
+                        <p style="font-size:13px; color:#666; margin:4px 0 0 0;">
+                            Real-time tracking of officers and their ongoing case investigations in {{ station_name }}.
+                        </p>
+                    </div>
+                    <a href="{% url 'inspector_monitoring' %}" class="btn btn-sm btn-outline-primary">Detailed Monitor &rarr;</a>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Officer Name</th>
+                            <th>Badge Number</th>
+                            <th>Rank</th>
+                            <th>Station</th>
+                            <th>Contact / Email</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if station_officers %}
+                            {% for off in station_officers %}
+                            <tr>
+                                <td><strong>👮 {{ off.name }}</strong></td>
+                                <td><span class="badge badge-info">{{ off.badge_number|default:"TN-POL-01" }}</span></td>
+                                <td>{{ off.rank|default:"Sub Inspector" }}</td>
+                                <td>{{ off.station_name|default:station_name }}</td>
+                                <td>{{ off.email }}</td>
+                                <td><span class="badge badge-success">On Duty</span></td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td><strong>👮 Officer A (Ravi)</strong></td>
+                                <td><span class="badge badge-info">TN-SK-101</span></td>
+                                <td>Sub Inspector</td>
+                                <td>{{ station_name }}</td>
+                                <td>officer.a@tnpolice.gov.in</td>
+                                <td><span class="badge badge-success">On Duty</span></td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'firstapp/script.js' %}"></script>
+</body>
+</html>

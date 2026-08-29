@@ -1,0 +1,164 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Case Management &amp; Investigation Diary - CISP</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🛡️ CISP</h2>
+            <p>Police Panel</p>
+        </div>
+        <nav class="sidebar-menu">
+            {% if current_user.role == 'inspector' %}
+                <a href="{% url 'inspector_dashboard' %}">📊 Station Dashboard</a>
+                <a href="{% url 'inspector_monitoring' %}">👁️ Officer Monitoring</a>
+            {% else %}
+                <a href="{% url 'officer_dashboard' %}">📊 My Assigned Work</a>
+            {% endif %}
+            <a href="{% url 'fir' %}">📄 FIR Records</a>
+            <a href="{% url 'cases' %}" class="active">📁 Case Files</a>
+            <a href="{% url 'evidence' %}">🔍 Evidence Vault</a>
+            <a href="{% url 'accused' %}">👤 Suspects &amp; Accused</a>
+            <a href="{% url 'police_sos' %}">🆘 Emergency SOS</a>
+            <a href="{% url 'crime_intelligence' %}">🗺️ Crime Intelligence</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="dashboard-header">
+            <div style="display:flex; align-items:center;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h2>Investigation Case Files &amp; Trial Progress</h2>
+            </div>
+            <div class="header-right">
+                <span class="header-icon">🔔</span>
+                <span>👮 {{ current_user.name }} ({{ current_user.badge_number|default:"TN-POL-01" }})</span>
+                <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <!-- Cases Table -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h3>Active &amp; Trial Investigation Cases</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Case ID</th>
+                            <th>FIR ID</th>
+                            <th>Complaint ID</th>
+                            <th>Assigned Lead IO</th>
+                            <th>Case Stage</th>
+                            <th>Start Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if cases %}
+                            {% for c in cases %}
+                            <tr>
+                                <td><strong>{{ c.case_id }}</strong></td>
+                                <td><span class="badge badge-danger">{{ c.fir_id }}</span></td>
+                                <td>{{ c.complaint_id }}</td>
+                                <td>👮 {{ c.assigned_officer }}</td>
+                                <td>
+                                    <span class="badge {% if c.status == 'Closed' %}badge-success{% else %}badge-warning{% endif %}">
+                                        {{ c.status }}
+                                    </span>
+                                </td>
+                                <td>{{ c.start_date }}</td>
+                                <td>
+                                    <a href="{% url 'cases' %}?id={{ c.case_id }}" class="btn btn-sm btn-primary">Open File &rarr;</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="7" style="text-align:center; color:#888; padding:30px;">No case records found.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Case File Detailed Viewer & Update Form -->
+            {% if selected_case %}
+            <div class="card mt-20">
+                <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+                    <span>Case File: <strong>{{ selected_case.case_id }}</strong> (FIR Ref: {{ selected_case.fir_id }})</span>
+                    <span class="badge {% if selected_case.status == 'Closed' %}badge-success{% else %}badge-warning{% endif %}">
+                        {{ selected_case.status }}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Associated Complaint</div>
+                            <div class="detail-value"><strong>{{ selected_case.complaint_id }}</strong></div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Lead Investigating Officer</div>
+                            <div class="detail-value">👮 <strong>{{ selected_case.assigned_officer }}</strong> ({{ selected_case.officer_badge }})</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Investigation Commenced</div>
+                            <div class="detail-value">{{ selected_case.start_date }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Last Diary Entry</div>
+                            <div class="detail-value">{{ selected_case.last_update|default:selected_case.start_date }}</div>
+                        </div>
+                    </div>
+
+                    <form method="POST" action="{% url 'cases' %}" style="margin-top:20px; border-top:1px solid #eee; padding-top:15px;">
+                        {% csrf_token %}
+                        <input type="hidden" name="case_id" value="{{ selected_case.case_id }}">
+
+                        <div class="form-group">
+                            <label><strong>Investigation Stage / Status *</strong></label>
+                            <select name="status" style="width:100%; padding:10px; border:1px solid #ced4da; border-radius:4px;">
+                                <option value="Investigation in Progress" {% if selected_case.status == 'Investigation in Progress' %}selected{% endif %}>Investigation in Progress</option>
+                                <option value="Accused Interrogated / Under Arrest" {% if selected_case.status == 'Accused Interrogated / Under Arrest' %}selected{% endif %}>Accused Interrogated / Under Arrest</option>
+                                <option value="Charge Sheet Filed in Court" {% if selected_case.status == 'Charge Sheet Filed in Court' %}selected{% endif %}>Charge Sheet Filed in Court</option>
+                                <option value="Court Trial / Hearing" {% if selected_case.status == 'Court Trial / Hearing' %}selected{% endif %}>Court Trial / Hearing</option>
+                                <option value="Closed" {% if selected_case.status == 'Closed' %}selected{% endif %}>Case Resolved &amp; Closed</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" style="margin-top:12px;">
+                            <label><strong>Investigation Summary &amp; Diary Updates</strong></label>
+                            <textarea name="investigation_summary" rows="4" style="width:100%; padding:10px; border:1px solid #ced4da; border-radius:4px;" placeholder="Record recent findings, witness statements, ballistic/forensic reports...">{{ selected_case.investigation_summary }}</textarea>
+                        </div>
+
+                        <div class="form-row" style="margin-top:12px;">
+                            <div class="form-group">
+                                <label><strong>Accused / Suspects Profile</strong></label>
+                                <input type="text" name="accused_info" value="{{ selected_case.accused_info }}" placeholder="Names, alias, custody status" style="width:100%; padding:10px; border:1px solid #ced4da; border-radius:4px;">
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Witnesses &amp; Statements</strong></label>
+                                <input type="text" name="witnesses" value="{{ selected_case.witnesses }}" placeholder="Key witness names &amp; contact info" style="width:100%; padding:10px; border:1px solid #ced4da; border-radius:4px;">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="margin-top:15px;">💾 Update Case Progress</button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'firstapp/script.js' %}"></script>
+</body>
+</html>

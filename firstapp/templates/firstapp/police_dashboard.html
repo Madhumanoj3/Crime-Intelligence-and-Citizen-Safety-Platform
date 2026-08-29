@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Police Dashboard - CISP</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🛡️ CISP</h2>
+            <p>Police Panel</p>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="{% url 'police_dashboard' %}" class="active">📊 Dashboard</a>
+            <a href="{% url 'police_complaints' %}">📋 Complaints</a>
+            <a href="{% url 'fir' %}">📄 FIR</a>
+            <a href="{% url 'cases' %}">📁 Cases</a>
+            <a href="{% url 'evidence' %}">🔍 Evidence</a>
+            <a href="{% url 'accused' %}">👤 Accused</a>
+            <a href="{% url 'police_sos' %}">🆘 SOS Alerts</a>
+            <a href="{% url 'crime_intelligence' %}">🗺️ Crime Intelligence</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="dashboard-header">
+            <div style="display:flex; align-items:center;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h2>Police Dashboard</h2>
+            </div>
+            <div class="header-right">
+                <span class="header-icon">🔔</span>
+                <span>👤 {{ current_user.name|default:"SI Muthukumar" }}</span>
+                <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <!-- Stats Cards -->
+            <div class="stats-grid" style="grid-template-columns: repeat(5, 1fr);">
+                <div class="stat-card">
+                    <div class="stat-icon">📋</div>
+                    <div class="stat-number">{{ new_complaints_count|default:"24" }}</div>
+                    <div class="stat-label">New Complaints</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⏳</div>
+                    <div class="stat-number">{{ pending_validation_count|default:"12" }}</div>
+                    <div class="stat-label">Pending Validation</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📄</div>
+                    <div class="stat-number">{{ active_firs_count|default:"18" }}</div>
+                    <div class="stat-label">Active FIRs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📁</div>
+                    <div class="stat-number">{{ active_cases_count|default:"15" }}</div>
+                    <div class="stat-label">Active Cases</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🆘</div>
+                    <div class="stat-number">{{ active_sos_count|default:"3" }}</div>
+                    <div class="stat-label">Active SOS</div>
+                </div>
+            </div>
+
+            <!-- Recent Complaints -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h3>Recent Complaints</h3>
+                    <a href="{% url 'police_complaints' %}" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Citizen</th>
+                            <th>Category</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if recent_complaints %}
+                            {% for c in recent_complaints %}
+                            <tr>
+                                <td>{{ c.complaint_id }}</td>
+                                <td>{{ c.citizen_name }}</td>
+                                <td>{{ c.category }}</td>
+                                <td>{{ c.incident_date }}</td>
+                                <td>
+                                    <span class="badge {% if c.status == 'Resolved' %}badge-success{% elif c.status == 'Rejected' %}badge-danger{% elif c.status == 'Under Review' %}badge-info{% else %}badge-warning{% endif %}">
+                                        {{ c.status }}
+                                    </span>
+                                </td>
+                                <td><a href="{% url 'police_complaints' %}?view_id={{ c.complaint_id }}" class="btn btn-sm btn-primary">View</a></td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" style="text-align:center; color:#888;">No complaints on record.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Active SOS -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h3>Active SOS Alerts</h3>
+                    <a href="{% url 'police_sos' %}" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>SOS ID</th>
+                            <th>Citizen</th>
+                            <th>Time</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if active_sos %}
+                            {% for s in active_sos %}
+                            <tr>
+                                <td>{{ s.sos_id }}</td>
+                                <td>{{ s.citizen_name }}</td>
+                                <td>{{ s.time }}</td>
+                                <td>{{ s.location }}</td>
+                                <td><span class="badge badge-danger">Active</span></td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" style="text-align:center; color:#888;">No active SOS alerts.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'firstapp/script.js' %}"></script>
+</body>
+</html>

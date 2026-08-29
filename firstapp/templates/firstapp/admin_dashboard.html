@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard - CISP</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🛡️ CISP</h2>
+            <p>Admin Panel</p>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="{% url 'admin_dashboard' %}" class="active">📊 Dashboard</a>
+            <a href="{% url 'users' %}">👥 Officers &amp; Personnel</a>
+            <a href="{% url 'police_stations' %}">🏢 Police Stations</a>
+            <a href="{% url 'admin_alerts' %}">📢 Community Alerts</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="dashboard-header">
+            <div style="display:flex; align-items:center;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h2>System Administration Dashboard</h2>
+            </div>
+            <div class="header-right">
+                <span class="header-icon">🔔</span>
+                <span>👤 Administrator</span>
+                <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <!-- Stats Cards -->
+            <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="stat-card">
+                    <div class="stat-icon">🏢</div>
+                    <div class="stat-number">{{ stations_count|default:"0" }}</div>
+                    <div class="stat-label">Police Stations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👮</div>
+                    <div class="stat-number">{{ inspectors_count|default:"0" }}</div>
+                    <div class="stat-label">Station Inspectors</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🚔</div>
+                    <div class="stat-number">{{ officers_count|default:"0" }}</div>
+                    <div class="stat-label">Police Officers (IOs)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-number">{{ citizens_count|default:"0" }}</div>
+                    <div class="stat-label">Citizens Registered</div>
+                </div>
+            </div>
+
+            <!-- Hierarchy Overview -->
+            <div class="card mt-20" style="background:#ebf5fb; border:1px solid #aed6f1;">
+                <div class="card-body" style="padding:15px 20px;">
+                    <h4 style="margin:0 0 5px 0; color:#1b4f72;">🛡️ Organizational Hierarchy Architecture</h4>
+                    <p style="margin:0; font-size:13px; color:#2c3e50;">
+                        <strong>Admin</strong> manages Stations &amp; assigns Inspectors/Officers &rarr; 
+                        <strong>Inspectors</strong> manage Station Queues &amp; assign complaints &rarr; 
+                        <strong>Police Officers</strong> investigate and file FIRs/Cases.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Recent Stations Table -->
+            <div class="table-container mt-20">
+                <div class="table-header">
+                    <h3>🏢 Registered Police Stations</h3>
+                    <a href="{% url 'police_stations' %}" class="btn btn-sm btn-outline-primary">+ Manage Stations</a>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Station ID</th>
+                            <th>Station Name</th>
+                            <th>District</th>
+                            <th>Station In-Charge Inspector</th>
+                            <th>Contact</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if recent_stations %}
+                            {% for st in recent_stations %}
+                            <tr>
+                                <td><strong>{{ st.station_id }}</strong></td>
+                                <td><strong>{{ st.name }}</strong></td>
+                                <td><span class="badge badge-info">{{ st.district|default:"Madurai" }}</span></td>
+                                <td>👮 {{ st.incharge_inspector_name|default:"Not Assigned" }}</td>
+                                <td>{{ st.contact|default:"—" }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Recent Personnel -->
+            <div class="table-container mt-20">
+                <div class="table-header">
+                    <h3>👥 Recent Registered Personnel</h3>
+                    <a href="{% url 'users' %}" class="btn btn-sm btn-outline-primary">Manage Personnel</a>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role / Designation</th>
+                            <th>Assigned Station</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if recent_users %}
+                            {% for u in recent_users %}
+                            <tr>
+                                <td><strong>{{ u.name }}</strong></td>
+                                <td>{{ u.email }}</td>
+                                <td>
+                                    <span class="badge {% if u.role == 'inspector' %}badge-danger{% elif u.role == 'officer' %}badge-primary{% elif u.role == 'citizen' %}badge-success{% else %}badge-info{% endif %}">
+                                        {{ u.role|title }}
+                                    </span>
+                                </td>
+                                <td>{{ u.station_name|default:u.station|default:"—" }}</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'firstapp/script.js' %}"></script>
+</body>
+</html>

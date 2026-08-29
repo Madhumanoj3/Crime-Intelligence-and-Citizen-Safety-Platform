@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Community Alerts Management - CISP</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🛡️ CISP</h2>
+            <p>Admin Panel</p>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="{% url 'admin_dashboard' %}">📊 Dashboard</a>
+            <a href="{% url 'users' %}">👥 Users</a>
+            <a href="{% url 'police_stations' %}">🏢 Police Stations</a>
+            <a href="{% url 'admin_alerts' %}" class="active">📢 Community Alerts</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="dashboard-header">
+            <div style="display:flex; align-items:center;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h2>Community Alert Management</h2>
+            </div>
+            <div class="header-right">
+                <span class="header-icon">🔔</span>
+                <span>👤 Admin</span>
+                <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <!-- Create Alert Form -->
+            <div class="form-container">
+                <h3 class="page-title">Create Alert</h3>
+                <form method="POST" action="{% url 'admin_alerts' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="alert_title">Alert Title *</label>
+                        <input type="text" id="alert_title" name="title" placeholder="Enter alert title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="alert_description">Description *</label>
+                        <textarea id="alert_description" name="description" rows="3" placeholder="Describe the alert" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="alert_area">Area *</label>
+                        <input type="text" id="alert_area" name="area" placeholder="Affected area (e.g. Mattuthavani, Madurai)" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="created_date">Created Date</label>
+                            <input type="date" id="created_date" name="created_date">
+                        </div>
+                        <div class="form-group">
+                            <label for="expiry_date">Expiry / Duration</label>
+                            <input type="text" id="expiry_date" name="expiry_date" placeholder="e.g. Active 48h">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Create Alert</button>
+                </form>
+            </div>
+
+            <!-- Existing Alerts -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h3>Existing Alerts</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Area</th>
+                            <th>Created</th>
+                            <th>Expiry</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if alerts %}
+                            {% for a in alerts %}
+                            <tr>
+                                <td>{{ a.alert_id }}</td>
+                                <td>{{ a.title }}</td>
+                                <td>{{ a.area }}</td>
+                                <td>{{ a.created_date }}</td>
+                                <td>{{ a.expiry_date }}</td>
+                                <td><span class="badge {{ a.badge_class|default:'badge-warning' }}">{{ a.status }}</span></td>
+                                <td>
+                                    <a href="{% url 'admin_alerts' %}?action=delete&id={{ a.alert_id }}" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="7" style="text-align:center; color:#888;">No alerts currently created.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'firstapp/script.js' %}"></script>
+</body>
+</html>

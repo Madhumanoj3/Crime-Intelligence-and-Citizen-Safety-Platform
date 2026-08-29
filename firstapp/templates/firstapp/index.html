@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crime Intelligence and Citizen Safety Platform</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-brand">🛡️ CISP</div>
+    <div class="navbar-links">
+        <a href="{% url 'index' %}">Home</a>
+        <a href="#about">About</a>
+        <a href="#features">Safety Features</a>
+        <a href="#contact">Contact</a>
+        <a href="{% url 'register' %}" class="btn btn-sm btn-primary">Citizen Register</a>
+        <a href="{% url 'police_register' %}" class="btn btn-sm btn-outline">Police Register</a>
+        <a href="{% url 'login' %}" class="btn btn-sm btn-outline">Login</a>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+    <h1>Crime Intelligence and Citizen Safety Platform</h1>
+    <p>A comprehensive platform for reporting incidents, requesting emergency help and improving community safety.</p>
+    <div class="hero-buttons">
+        <a href="{% url 'register' %}" class="btn btn-primary">Register as Citizen</a>
+        <a href="{% url 'police_register' %}" class="btn btn-outline">Police Portal Register</a>
+        <a href="{% url 'login' %}" class="btn btn-warning">Sign In</a>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="section" id="features">
+    <h2 class="section-title">Safety Features</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="icon">📝</div>
+            <h3>Crime Reporting</h3>
+            <p>Report crimes and complaints easily with location and evidence details.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">🆘</div>
+            <h3>Emergency SOS</h3>
+            <p>Send emergency alerts with your location to get immediate help.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">👤</div>
+            <h3>Missing Person</h3>
+            <p>Report and search for missing persons in your area.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">🔍</div>
+            <h3>Lost &amp; Found</h3>
+            <p>Report lost or found items and connect with the rightful owners.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">📢</div>
+            <h3>Community Alerts</h3>
+            <p>Stay updated with safety alerts and warnings in your area.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">📊</div>
+            <h3>Crime Intelligence</h3>
+            <p>View crime statistics and hotspot analysis for better awareness.</p>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="about-section" id="about">
+    <div class="about-content">
+        <h2 class="section-title">About the Platform</h2>
+        <p>The Crime Intelligence and Citizen Safety Platform is designed to bridge the gap between citizens and law enforcement agencies. It provides a simple and accessible way to report incidents, track complaints, and stay informed about community safety.</p>
+        <p>This platform serves three user roles: Citizens can report complaints and emergencies, Police Officers can manage cases and investigations, and Administrators can oversee the entire system.</p>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact-section" id="contact">
+    <h2 class="section-title">Contact Us</h2>
+    <div class="contact-info">
+        <div class="contact-item">
+            <div class="icon">📧</div>
+            <p>support@cisp.gov.in</p>
+        </div>
+        <div class="contact-item">
+            <div class="icon">📞</div>
+            <p>+91 1800-XXX-XXXX</p>
+        </div>
+        <div class="contact-item">
+            <div class="icon">📍</div>
+            <p>Madurai, Tamil Nadu, India</p>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>&copy; 2026 Crime Intelligence and Citizen Safety Platform. All rights reserved.</p>
+</footer>
+
+<script src="{% static 'firstapp/script.js' %}"></script>
+</body>
+</html>

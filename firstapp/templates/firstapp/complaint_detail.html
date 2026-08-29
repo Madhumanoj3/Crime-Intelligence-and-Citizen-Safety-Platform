@@ -1,0 +1,229 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Complaint Details &amp; Live Tracking - CISP</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+    <style>
+        .workflow-timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin: 25px 0 35px 0;
+        }
+        .workflow-timeline::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 5%;
+            right: 5%;
+            height: 4px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+        .step-item {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            flex: 1;
+        }
+        .step-circle {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            color: #777;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px auto;
+            font-weight: bold;
+            font-size: 16px;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .step-item.active .step-circle {
+            background: #2e86c1;
+            color: white;
+        }
+        .step-item.completed .step-circle {
+            background: #27ae60;
+            color: white;
+        }
+        .step-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #555;
+        }
+        .step-desc {
+            font-size: 11px;
+            color: #888;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🛡️ CISP</h2>
+            <p>Citizen Portal</p>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="{% url 'citizen_dashboard' %}">📊 Dashboard</a>
+            <a href="{% url 'complaint_form' %}">📝 Report Complaint</a>
+            <a href="{% url 'complaints' %}" class="active">📋 My Complaints</a>
+            <a href="{% url 'sos' %}">🆘 SOS Emergency</a>
+            <a href="{% url 'missing_person' %}">👤 Missing Person</a>
+            <a href="{% url 'lost_found' %}">🔍 Lost &amp; Found</a>
+            <a href="{% url 'community_alerts' %}">📢 Community Alerts</a>
+            <a href="{% url 'feedback' %}">💬 Feedback</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="dashboard-header">
+            <div style="display:flex; align-items:center;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h2>Complaint Lifecycle &amp; Police Tracker</h2>
+            </div>
+            <div class="header-right">
+                <span class="header-icon">🔔</span>
+                <span>👤 {{ current_user.name|default:"Citizen" }}</span>
+                <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <a href="{% url 'complaints' %}" style="font-size:14px; margin-bottom:15px; display:inline-block;">&larr; Back to My Complaints</a>
+
+            <!-- Visual Progress Tracker -->
+            <div class="card">
+                <div class="card-header">Police Investigation Workflow Progress</div>
+                <div class="card-body">
+                    <div class="workflow-timeline">
+                        <!-- Step 1 -->
+                        <div class="step-item completed">
+                            <div class="step-circle">1</div>
+                            <div class="step-title">Submitted</div>
+                            <div class="step-desc">Complaint Filed</div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="step-item completed">
+                            <div class="step-circle">2</div>
+                            <div class="step-title">Geo-Routed</div>
+                            <div class="step-desc">{{ complaint.assigned_station_name|default:"Station Assigned" }}</div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="step-item {% if complaint.status != 'Pending Review' and complaint.status != 'Pending' %}completed{% else %}active{% endif %}">
+                            <div class="step-circle">3</div>
+                            <div class="step-title">Inspector Review</div>
+                            <div class="step-desc">AI Check &amp; Validation</div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="step-item {% if complaint.assigned_officer_name %}completed{% elif complaint.status == 'Assigned' %}active{% endif %}">
+                            <div class="step-circle">4</div>
+                            <div class="step-title">Officer Assigned</div>
+                            <div class="step-desc">{{ complaint.assigned_officer_name|default:"Awaiting Assignment" }}</div>
+                        </div>
+
+                        <!-- Step 5 -->
+                        <div class="step-item {% if complaint.status == 'FIR Registered' or complaint.status == 'Case Active' or complaint.status == 'Resolved' %}completed{% elif complaint.status == 'Under Investigation' %}active{% endif %}">
+                            <div class="step-circle">5</div>
+                            <div class="step-title">Investigation</div>
+                            <div class="step-desc">Field Inquiry &amp; Evidence</div>
+                        </div>
+
+                        <!-- Step 6 -->
+                        <div class="step-item {% if complaint.fir_status == 'FIR Registered' or complaint.status == 'Resolved' %}completed{% endif %}">
+                            <div class="step-circle">6</div>
+                            <div class="step-title">FIR / Case</div>
+                            <div class="step-desc">{{ complaint.fir_status|default:"Not Filed" }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Complaint Information Card -->
+            <div class="card mt-20">
+                <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+                    <span>Complaint Information — <strong>{{ complaint.complaint_id|default:"CMP-001" }}</strong></span>
+                    <span class="badge {% if complaint.status == 'Resolved' %}badge-success{% elif complaint.status == 'FIR Registered' %}badge-danger{% elif complaint.status == 'Under Investigation' %}badge-warning{% elif complaint.status == 'Duplicate / Ignored' or complaint.status == 'Closed / Rejected' %}badge-secondary{% else %}badge-info{% endif %}">
+                        {{ complaint.status|default:"Pending Review" }}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Complaint Title</div>
+                            <div class="detail-value"><strong>{{ complaint.title }}</strong></div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Category</div>
+                            <div class="detail-value"><span class="badge badge-info">{{ complaint.category }}</span></div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Jurisdiction Police Station</div>
+                            <div class="detail-value">🏢 <strong>{{ complaint.assigned_station_name|default:"Jurisdiction Station" }}</strong></div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Assigned Investigating Officer (IO)</div>
+                            <div class="detail-value">
+                                {% if complaint.assigned_officer_name %}
+                                    👮 <strong>{{ complaint.assigned_officer_name }}</strong>
+                                {% else %}
+                                    <span style="color:#e67e22;">Under Inspector Queue Review</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Incident Date &amp; Time</div>
+                            <div class="detail-value">{{ complaint.incident_date }} at {{ complaint.incident_time }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Filed On</div>
+                            <div class="detail-value">{{ complaint.created_at }}</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:15px;">
+                        <div class="detail-label">Incident Description</div>
+                        <p style="font-size:14px; color:#333; margin-top:5px; line-height:1.5;">{{ complaint.description }}</p>
+                    </div>
+
+                    <div style="margin-top:15px;">
+                        <div class="detail-label">Location Details</div>
+                        <p style="font-size:14px; color:#333; margin-top:5px;">
+                            📍 {{ complaint.street|default:"" }} {{ complaint.address }}, {{ complaint.city }} ({{ complaint.pincode }})
+                            <br><small style="color:#888;">Coordinates: {{ complaint.latitude }}, {{ complaint.longitude }}</small>
+                        </p>
+                    </div>
+
+                    {% if complaint.investigation_notes %}
+                        <div style="margin-top:15px; background:#e8f4f8; border-left:4px solid #2e86c1; padding:12px 16px; border-radius:4px;">
+                            <div class="detail-label" style="color:#1b4f72; font-weight:bold;">👮 Police Investigation Notes / Diary Update</div>
+                            <p style="font-size:14px; color:#333; margin-top:5px;">{{ complaint.investigation_notes }}</p>
+                        </div>
+                    {% endif %}
+
+                    {% if complaint.rejection_reason %}
+                        <div style="margin-top:15px; background:#fdedec; border-left:4px solid #e74c3c; padding:12px 16px; border-radius:4px;">
+                            <div class="detail-label" style="color:#c0392b; font-weight:bold;">Official Remarks / Reason for Closure</div>
+                            <p style="font-size:14px; color:#333; margin-top:5px;">{{ complaint.rejection_reason }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'firstapp/script.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Officer Monitoring - Inspector Panel</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🛡️ CISP</h2>
+            <p>Inspector (Station In-Charge)</p>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="{% url 'inspector_dashboard' %}">📊 Station Dashboard</a>
+            <a href="{% url 'inspector_monitoring' %}" class="active">👁️ Officer Monitoring</a>
+            <a href="{% url 'fir' %}">📄 FIR Records</a>
+            <a href="{% url 'cases' %}">📁 Station Cases</a>
+            <a href="{% url 'evidence' %}">🔍 Evidence Vault</a>
+            <a href="{% url 'accused' %}">👤 Accused Records</a>
+            <a href="{% url 'police_sos' %}">🆘 Emergency SOS</a>
+            <a href="{% url 'crime_intelligence' %}">🗺️ Crime Intelligence</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="dashboard-header">
+            <div style="display:flex; align-items:center;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h2>Officer Performance &amp; Case Monitoring</h2>
+            </div>
+            <div class="header-right">
+                <span class="header-icon">🔔</span>
+                <span>👮 {{ current_user.name }} ({{ current_user.rank|default:"Inspector" }})</span>
+                <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <div class="table-container">
+                <div class="table-header">
+                    <div>
+                        <h3 style="margin:0;">Active Officer Assignments &amp; Case Diary Tracker</h3>
+                        <p style="font-size:13px; color:#666; margin:4px 0 0 0;">
+                            Live monitoring of assigned complaints, investigation milestones, and FIR updates by officers in {{ station_name }}.
+                        </p>
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Assigned Officer</th>
+                            <th>Complaint ID</th>
+                            <th>Category &amp; Title</th>
+                            <th>Investigation Status</th>
+                            <th>FIR Status</th>
+                            <th>Officer Diary / Notes</th>
+                            <th>Assigned Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if assigned_complaints %}
+                            {% for c in assigned_complaints %}
+                            <tr>
+                                <td>
+                                    <strong>👮 {{ c.assigned_officer_name|default:"Not Assigned" }}</strong><br>
+                                    <small style="color:#888;">Station: {{ c.assigned_station_name|default:station_name }}</small>
+                                </td>
+                                <td><strong>{{ c.complaint_id }}</strong></td>
+                                <td>
+                                    <span class="badge badge-info">{{ c.category }}</span><br>
+                                    <strong>{{ c.title }}</strong>
+                                </td>
+                                <td>
+                                    <span class="badge {% if c.status == 'Resolved' %}badge-success{% elif c.status == 'FIR Registered' %}badge-danger{% elif c.status == 'Under Investigation' %}badge-warning{% else %}badge-info{% endif %}">
+                                        {{ c.status }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge {% if c.fir_status == 'FIR Registered' %}badge-danger{% else %}badge-secondary{% endif %}">
+                                        {{ c.fir_status|default:"Pending" }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if c.investigation_notes %}
+                                        <div style="background:#f8f9fa; border-left:3px solid #2e86c1; padding:6px 10px; font-size:12px; border-radius:3px;">
+                                            {{ c.investigation_notes }}
+                                        </div>
+                                    {% else %}
+                                        <span style="color:#aaa; font-style:italic; font-size:12px;">No diary entries logged yet</span>
+                                    {% endif %}
+                                </td>
+                                <td><small>{{ c.assigned_date|default:c.created_at }}</small></td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="7" style="text-align:center; padding:30px; color:#888;">
+                                    No active officer assignments currently recorded.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Monitored Cases Table -->
+            <div class="table-container mt-20">
+                <div class="table-header">
+                    <h3>📁 Monitored Case Files &amp; Trial Progress</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Case ID</th>
+                            <th>FIR ID</th>
+                            <th>Lead Investigating Officer</th>
+                            <th>Case Stage</th>
+                            <th>Start Date</th>
+                            <th>Last Diary Update</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if cases %}
+                            {% for cs in cases %}
+                            <tr>
+                                <td><strong>{{ cs.case_id }}</strong></td>
+                                <td><span class="badge badge-danger">{{ cs.fir_id }}</span></td>
+                                <td>👮 {{ cs.assigned_officer }} ({{ cs.officer_badge }})</td>
+                                <td>
+                                    <span class="badge {% if cs.status == 'Closed' %}badge-success{% else %}badge-warning{% endif %}">
+                                        {{ cs.status }}
+                                    </span>
+                                </td>
+                                <td>{{ cs.start_date }}</td>
+                                <td>{{ cs.last_update|default:cs.start_date }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" style="text-align:center; padding:20px; color:#888;">
+                                    No active case files in this station jurisdiction.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'firstapp/script.js' %}"></script>
+</body>
+</html>

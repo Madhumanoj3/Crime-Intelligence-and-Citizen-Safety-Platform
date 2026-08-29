@@ -1,0 +1,130 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Accused Management - CISP</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🛡️ CISP</h2>
+            <p>Police Panel</p>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="{% url 'police_dashboard' %}">📊 Dashboard</a>
+            <a href="{% url 'police_complaints' %}">📋 Complaints</a>
+            <a href="{% url 'fir' %}">📄 FIR</a>
+            <a href="{% url 'cases' %}">📁 Cases</a>
+            <a href="{% url 'evidence' %}">🔍 Evidence</a>
+            <a href="{% url 'accused' %}" class="active">👤 Accused</a>
+            <a href="{% url 'police_sos' %}">🆘 SOS Alerts</a>
+            <a href="{% url 'crime_intelligence' %}">🗺️ Crime Intelligence</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="dashboard-header">
+            <div style="display:flex; align-items:center;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h2>Accused Management</h2>
+            </div>
+            <div class="header-right">
+                <span class="header-icon">🔔</span>
+                <span>👤 {{ current_user.name|default:"SI Muthukumar" }}</span>
+                <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <!-- Accused Table -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h3>Known Suspects / Accused Records</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Accused ID</th>
+                            <th>Name</th>
+                            <th>Gender</th>
+                            <th>Phone</th>
+                            <th>Address</th>
+                            <th>Criminal Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if accused_records %}
+                            {% for a in accused_records %}
+                            <tr>
+                                <td>{{ a.accused_id }}</td>
+                                <td>{{ a.name }}</td>
+                                <td>{{ a.gender }}</td>
+                                <td>{{ a.phone }}</td>
+                                <td>{{ a.address }}</td>
+                                <td>
+                                    <span class="badge {% if a.criminal_status == 'Repeat Offender' %}badge-danger{% else %}badge-warning{% endif %}">
+                                        {{ a.criminal_status }}
+                                    </span>
+                                </td>
+                                <td><a href="{% url 'accused' %}?id={{ a.accused_id }}" class="btn btn-sm btn-primary">View Profile</a></td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="7" style="text-align:center; color:#888;">No accused records on file.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Accused Detail -->
+            <div class="card mt-20">
+                <div class="card-header">Accused Details — {{ selected_accused.name|default:"Pandiarajan" }}</div>
+                <div class="card-body">
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Full Name</div>
+                            <div class="detail-value">{{ selected_accused.name }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Gender</div>
+                            <div class="detail-value">{{ selected_accused.gender }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Phone</div>
+                            <div class="detail-value">{{ selected_accused.phone }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Address</div>
+                            <div class="detail-value">{{ selected_accused.address }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Criminal Status</div>
+                            <div class="detail-value"><span class="badge badge-danger">{{ selected_accused.criminal_status }}</span></div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Identification Marks</div>
+                            <div class="detail-value">{{ selected_accused.marks|default:"None reported" }}</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:20px;">
+                        <h4 style="margin-bottom:10px; color:#1a5276;">Associated Complaints / Cases</h4>
+                        <p style="font-size:14px; color:#555;">{{ selected_accused.associated_cases }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'firstapp/script.js' %}"></script>
+</body>
+</html>

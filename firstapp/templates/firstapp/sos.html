@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SOS Emergency - CISP</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🛡️ CISP</h2>
+            <p>Citizen Panel</p>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="{% url 'citizen_dashboard' %}">📊 Dashboard</a>
+            <a href="{% url 'complaint_form' %}">📝 Report Complaint</a>
+            <a href="{% url 'complaints' %}">📋 My Complaints</a>
+            <a href="{% url 'sos' %}" class="active">🆘 SOS Emergency</a>
+            <a href="{% url 'missing_person' %}">👤 Missing Person</a>
+            <a href="{% url 'lost_found' %}">🔍 Lost &amp; Found</a>
+            <a href="{% url 'community_alerts' %}">📢 Community Alerts</a>
+            <a href="{% url 'feedback' %}">💬 Feedback</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="dashboard-header">
+            <div style="display:flex; align-items:center;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h2>SOS Emergency</h2>
+            </div>
+            <div class="header-right">
+                <span class="header-icon">🔔</span>
+                <span>👤 {{ current_user.name|default:"Madhu Manoj" }}</span>
+                <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <div class="sos-container">
+                <h2 class="page-title" style="text-align:center;">Emergency SOS Alert</h2>
+                <p style="color:#666; margin-bottom:10px;">Press the button below to send an emergency SOS alert</p>
+
+                <button class="sos-button" onclick="sendSOS()">SEND SOS</button>
+
+                <!-- Location Info -->
+                <div class="sos-location">
+                    <p><strong>Current Location:</strong> South Gate, Madurai</p>
+                    <p><strong>Latitude:</strong> 9.9135</p>
+                    <p><strong>Longitude:</strong> 78.1205</p>
+                    <p><strong>Time:</strong> <span id="current-time">{% now "Y-m-d H:i:s" %}</span></p>
+                    <p><strong>SOS Status:</strong> <span id="sos-status" class="badge badge-pending">Not Sent</span></p>
+                </div>
+
+                <!-- Info -->
+                <div class="sos-info">
+                    <div class="info-box info">
+                        ℹ️ Your location will be shared with the responsible police personnel when SOS functionality is connected.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'firstapp/script.js' %}"></script>
+</body>
+</html>

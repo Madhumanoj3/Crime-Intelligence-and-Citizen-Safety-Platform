@@ -1,0 +1,147 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Citizen Registration - CISP</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+</head>
+<body>
+
+<div class="auth-wrapper">
+    <div class="auth-card wide">
+        <h2 style="margin-bottom: 2px;">🛡️ CISP</h2>
+        <p class="subtitle" style="margin-bottom: 15px;">Crime Intelligence &amp; Citizen Safety Platform</p>
+
+        <!-- Auth Navigation Tabs -->
+        <div class="auth-tabs">
+            <a href="{% url 'register' %}" class="auth-tab active">👤 Citizen Register</a>
+            <a href="{% url 'police_register' %}" class="auth-tab">👮 Police Register</a>
+            <a href="{% url 'login' %}" class="auth-tab">🔐 Login</a>
+        </div>
+
+        {% if error %}
+        <div class="info-box danger" style="margin-bottom: 15px;">
+            ⚠️ {{ error }}
+        </div>
+        {% endif %}
+
+        {% if success %}
+        <div class="info-box success" style="margin-bottom: 15px;">
+            ✅ {{ success }}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'register' %}">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="full_name">Full Name *</label>
+                <input type="text" id="full_name" name="full_name" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email">Email Address * <small style="color:#666;">(e.g. user@gmail.com)</small></label>
+                    <input type="email" id="email" name="email" placeholder="username@gmail.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" placeholder="10-digit mobile number" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob" name="dob">
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender">
+                        <option value="Male" selected>Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="area">Madurai Area / Locality * <small style="color:#2980b9;">(Select from 280+ Madurai Locations)</small></label>
+                <input list="madurai-locations" id="area" name="area" placeholder="Type or choose area (e.g. Anna Nagar, Tallakulam, Sellur)" autocomplete="off" required oninput="onAreaChange(this.value)">
+                <datalist id="madurai-locations">
+                    {% for loc in locations %}
+                    <option value="{{ loc.name }}" data-lat="{{ loc.latitude }}" data-lon="{{ loc.longitude }}">{{ loc.name }} ({{ loc.location_type }})</option>
+                    {% endfor %}
+                </datalist>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Residential / Street Address</label>
+                <input type="text" id="address" name="address" placeholder="House / Door No, Street name">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" id="city" name="city" value="Madurai" readonly style="background:#f8f9fa;">
+                </div>
+                <div class="form-group">
+                    <label for="pincode">Pincode</label>
+                    <input type="text" id="pincode" name="pincode" placeholder="e.g. 625001" value="625001">
+                </div>
+            </div>
+
+            <!-- Hidden / Auto-bound Coordinates from selected Madurai Area -->
+            <div class="form-row" style="background:#eaf2f8; padding:10px 12px; border-radius:6px; margin-bottom:15px;">
+                <div class="form-group" style="margin-bottom:0;">
+                    <label style="font-size:12px; color:#1b4f72;">📍 Geo Latitude</label>
+                    <input type="text" id="latitude" name="latitude" placeholder="Auto-filled" style="font-size:13px; background:#fff;" readonly>
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label style="font-size:12px; color:#1b4f72;">📍 Geo Longitude</label>
+                    <input type="text" id="longitude" name="longitude" placeholder="Auto-filled" style="font-size:13px; background:#fff;" readonly>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="password">Password *</label>
+                    <input type="password" id="password" name="password" placeholder="Create password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password *</label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm password" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px; padding: 12px; font-size: 15px;">Create Citizen Account</button>
+        </form>
+
+        <div class="auth-links">
+            Already have an account? <a href="{% url 'login' %}">Login here</a>
+        </div>
+
+        <div class="auth-links" style="margin-top:10px;">
+            <a href="{% url 'index' %}">&larr; View Platform Overview</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const locationMap = {
+        {% for loc in locations %}
+        "{{ loc.name|escapejs }}": { lat: "{{ loc.latitude }}", lon: "{{ loc.longitude }}" },
+        {% endfor %}
+    };
+
+    function onAreaChange(val) {
+        const trimmed = val ? val.trim() : '';
+        if (locationMap[trimmed]) {
+            document.getElementById('latitude').value = locationMap[trimmed].lat;
+            document.getElementById('longitude').value = locationMap[trimmed].lon;
+        }
+    }
+</script>
+
+</body>
+</html>

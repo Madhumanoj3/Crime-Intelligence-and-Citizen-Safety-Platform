@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Missing Person - CISP</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🛡️ CISP</h2>
+            <p>Citizen Panel</p>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="{% url 'citizen_dashboard' %}">📊 Dashboard</a>
+            <a href="{% url 'complaint_form' %}">📝 Report Complaint</a>
+            <a href="{% url 'complaints' %}">📋 My Complaints</a>
+            <a href="{% url 'sos' %}">🆘 SOS Emergency</a>
+            <a href="{% url 'missing_person' %}" class="active">👤 Missing Person</a>
+            <a href="{% url 'lost_found' %}">🔍 Lost &amp; Found</a>
+            <a href="{% url 'community_alerts' %}">📢 Community Alerts</a>
+            <a href="{% url 'feedback' %}">💬 Feedback</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="dashboard-header">
+            <div style="display:flex; align-items:center;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h2>Missing Person</h2>
+            </div>
+            <div class="header-right">
+                <span class="header-icon">🔔</span>
+                <span>👤 {{ current_user.name|default:"Madhu Manoj" }}</span>
+                <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <!-- Report Form -->
+            <div class="form-container">
+                <h3 class="page-title">Report Missing Person</h3>
+                <form method="POST" action="{% url 'missing_person' %}">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="person_name">Person Name *</label>
+                            <input type="text" id="person_name" name="person_name" placeholder="Full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age *</label>
+                            <input type="number" id="age" name="age" placeholder="Age" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select id="gender" name="gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="last_seen_date">Last Seen Date</label>
+                            <input type="date" id="last_seen_date" name="last_seen_date" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="last_seen_location">Last Seen Location *</label>
+                        <input type="text" id="last_seen_location" name="last_seen_location" placeholder="Location where last seen (e.g. Mattuthavani Bus Stand, Madurai)" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" rows="3" placeholder="Physical appearance, clothing, etc."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit Missing Person Report</button>
+                </form>
+            </div>
+
+            <!-- Missing Persons List -->
+            <h3 class="page-title">Reported Missing Persons</h3>
+            <div class="persons-grid">
+                {% if missing_persons %}
+                    {% for p in missing_persons %}
+                    <div class="person-card">
+                        <div class="person-photo">👤</div>
+                        <h4>{{ p.name }}</h4>
+                        <p><strong>Age:</strong> {{ p.age }}</p>
+                        <p><strong>Gender:</strong> {{ p.gender }}</p>
+                        <p><strong>Last Seen:</strong> {{ p.last_seen_location }}</p>
+                        <p><strong>Reported:</strong> {{ p.reported_date }}</p>
+                        <p><span class="badge {% if p.status == 'Found' %}badge-success{% else %}badge-danger{% endif %}">{{ p.status }}</span></p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color:#888;">No missing person reports on file.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'firstapp/script.js' %}"></script>
+</body>
+</html>

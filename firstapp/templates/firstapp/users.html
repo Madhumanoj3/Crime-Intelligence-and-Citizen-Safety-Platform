@@ -1,0 +1,347 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Personnel &amp; Officer Management - Admin Panel</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+    <style>
+        .verify-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+        }
+        .verify-modal.active {
+            display: flex;
+        }
+        .verify-box {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            max-width: 580px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🛡️ CISP</h2>
+            <p>Admin Panel</p>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="{% url 'admin_dashboard' %}">📊 Dashboard</a>
+            <a href="{% url 'users' %}" class="active">👥 Officers &amp; Personnel</a>
+            <a href="{% url 'police_stations' %}">🏢 Police Stations</a>
+            <a href="{% url 'admin_alerts' %}">📢 Community Alerts</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="dashboard-header">
+            <div style="display:flex; align-items:center;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h2>Police Personnel &amp; Hierarchy Management</h2>
+            </div>
+            <div class="header-right">
+                <span class="header-icon">🔔</span>
+                <span>👤 Administrator</span>
+                <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
+            </div>
+        </header>
+
+        <div class="content-area">
+
+            <!-- 1. PENDING POLICE APPLICANTS (Awaiting Admin Verification & Posting) -->
+            <div class="table-container" style="border-left: 5px solid #e67e22;">
+                <div class="table-header">
+                    <div>
+                        <h3 style="color:#d35400; margin:0;">⏳ Pending Police Registrations (Awaiting Verification &amp; Station Posting)</h3>
+                        <p style="font-size:13px; color:#666; margin:4px 0 0 0;">
+                            Police applicants registered with personal email. Review details, assign official <code>@tnpolice.gov.in</code> ID, role, and police station.
+                        </p>
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Applicant Name</th>
+                            <th>Personal Email</th>
+                            <th>Phone</th>
+                            <th>City / Location</th>
+                            <th>Registered On</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if pending_police %}
+                            {% for p in pending_police %}
+                            <tr style="background:#fffaf0;">
+                                <td><strong>👮 {{ p.name }}</strong></td>
+                                <td>{{ p.personal_email|default:p.email }}</td>
+                                <td>{{ p.phone|default:"—" }}</td>
+                                <td>{{ p.city|default:"Madurai" }}</td>
+                                <td><small>{{ p.created_at|default:"Recently" }}</small></td>
+                                <td>
+                                    <button class="btn btn-sm btn-success" onclick="openVerifyModal('{{ p.id }}', '{{ p.name|escapejs }}', '{{ p.personal_email|default:p.email|escapejs }}')">
+                                        ✅ Verify &amp; Assign Posting
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" style="text-align:center; padding:20px; color:#888;">
+                                    No pending police registrations awaiting verification.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 2. STATION IN-CHARGE INSPECTORS -->
+            <div class="table-container mt-20">
+                <div class="table-header">
+                    <h3>👮 Verified Station In-Charge Inspectors</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Inspector Name</th>
+                            <th>Official Email (@tnpolice.gov.in)</th>
+                            <th>Badge No</th>
+                            <th>Assigned Police Station</th>
+                            <th>Rank</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if inspectors %}
+                            {% for insp in inspectors %}
+                            <tr>
+                                <td><strong>👮 {{ insp.name }}</strong></td>
+                                <td><strong>{{ insp.official_email|default:insp.email }}</strong></td>
+                                <td><span class="badge badge-info">{{ insp.badge_number|default:"TN-INSP-01" }}</span></td>
+                                <td><strong>🏢 {{ insp.station_name|default:insp.station|default:"Assigned Station" }}</strong></td>
+                                <td>{{ insp.rank|default:"Inspector" }}</td>
+                                <td><span class="badge badge-success">Verified &amp; Active</span></td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" style="text-align:center; color:#888;">No Inspectors assigned yet.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 3. POLICE OFFICERS (INVESTIGATING OFFICERS) -->
+            <div class="table-container mt-20">
+                <div class="table-header">
+                    <h3>👮 Verified Police Officers (Investigating Officers)</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Officer Name</th>
+                            <th>Official Email (@tnpolice.gov.in)</th>
+                            <th>Badge No</th>
+                            <th>Assigned Station</th>
+                            <th>Rank</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if police_officers %}
+                            {% for officer in police_officers %}
+                            <tr>
+                                <td><strong>👮 {{ officer.name }}</strong></td>
+                                <td><strong>{{ officer.official_email|default:officer.email }}</strong></td>
+                                <td><span class="badge badge-info">{{ officer.badge_number|default:"TN-POL-101" }}</span></td>
+                                <td><strong>🏢 {{ officer.station_name|default:officer.station|default:"Station" }}</strong></td>
+                                <td>{{ officer.rank|default:"Sub Inspector" }}</td>
+                                <td><span class="badge badge-success">Verified &amp; Active</span></td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" style="text-align:center; color:#888;">No Police Officers assigned yet.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 4. DIRECT ADD PERSONNEL FORM (Admin Shortcut) -->
+            <div class="form-container mt-20">
+                <h3 class="page-title">Direct Officer Creation (Admin Tool)</h3>
+                <form method="POST" action="{% url 'users' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add_personnel">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Officer Name *</label>
+                            <input type="text" name="full_name" placeholder="e.g. Kumar / Ravi" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Official Police Email (@tnpolice.gov.in) *</label>
+                            <input type="email" name="email" placeholder="e.g. kumar.inspector@tnpolice.gov.in" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Badge Number *</label>
+                            <input type="text" name="badge_number" placeholder="e.g. TN-SK-001" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Rank *</label>
+                            <input type="text" name="rank" placeholder="e.g. Inspector / Sub Inspector / Head Constable" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Role *</label>
+                            <select name="role" style="width:100%; padding:10px; border:1px solid #ced4da; border-radius:4px;" required>
+                                <option value="inspector">Inspector (Station In-Charge — Manages Station Queue)</option>
+                                <option value="officer" selected>Police Officer (Investigating Officer — Handles Assigned Cases)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Assigned Police Station *</label>
+                            <select name="station_id" style="width:100%; padding:10px; border:1px solid #ced4da; border-radius:4px;" required>
+                                <option value="" disabled selected>Select Jurisdiction Police Station...</option>
+                                {% for st in stations %}
+                                    <option value="{{ st.station_id }}">{{ st.name }} ({{ st.district|default:"Madurai" }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="margin-top:10px;">Create &amp; Assign Personnel</button>
+                </form>
+            </div>
+
+            <!-- 5. REGISTERED CITIZENS -->
+            <div class="table-container mt-20">
+                <div class="table-header">
+                    <h3>👥 Registered Citizens</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>City / District</th>
+                            <th>Registered</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if citizens %}
+                            {% for citizen in citizens %}
+                            <tr>
+                                <td><strong>{{ citizen.name }}</strong></td>
+                                <td>{{ citizen.email }}</td>
+                                <td>{{ citizen.phone|default:"—" }}</td>
+                                <td>{{ citizen.city|default:"Madurai" }}</td>
+                                <td>{{ citizen.created_at|default:"Recently" }}</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Admin Verification & Posting Assignment -->
+<div id="verifyModal" class="verify-modal">
+    <div class="verify-box">
+        <h3 style="margin-top:0; color:#1b4f72;">👮 Verify &amp; Assign Station Posting</h3>
+        <p style="font-size:13px; color:#666;">
+            Assign official <code>@tnpolice.gov.in</code> email, designation, rank, and police station to <strong id="modal_officer_name"></strong>.
+        </p>
+
+        <form method="POST" action="{% url 'users' %}">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="verify_police">
+            <input type="hidden" id="modal_user_id" name="user_id" value="">
+
+            <div class="form-group" style="margin-bottom:12px;">
+                <label><strong>Assign Official Department Email (@tnpolice.gov.in) *</strong></label>
+                <input type="email" id="modal_official_email" name="official_email" style="width:100%; padding:9px; border:1px solid #ced4da; border-radius:4px;" placeholder="name@tnpolice.gov.in" required>
+            </div>
+
+            <div class="form-row" style="margin-bottom:12px;">
+                <div class="form-group">
+                    <label><strong>Posting Role *</strong></label>
+                    <select name="role" id="modal_role" style="width:100%; padding:9px; border:1px solid #ced4da; border-radius:4px;" required>
+                        <option value="officer" selected>Police Officer (Investigating Officer)</option>
+                        <option value="inspector">Inspector (Station In-Charge)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><strong>Assigned Station *</strong></label>
+                    <select name="station_id" style="width:100%; padding:9px; border:1px solid #ced4da; border-radius:4px;" required>
+                        <option value="" disabled selected>Select Police Station...</option>
+                        {% for st in stations %}
+                            <option value="{{ st.station_id }}">{{ st.name }} ({{ st.district|default:"Madurai" }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row" style="margin-bottom:12px;">
+                <div class="form-group">
+                    <label><strong>Official Rank *</strong></label>
+                    <input type="text" name="rank" placeholder="e.g. Sub Inspector / Inspector" value="Sub Inspector" style="width:100%; padding:9px; border:1px solid #ced4da; border-radius:4px;" required>
+                </div>
+                <div class="form-group">
+                    <label><strong>Badge Number *</strong></label>
+                    <input type="text" name="badge_number" placeholder="e.g. TN-SK-105" style="width:100%; padding:9px; border:1px solid #ced4da; border-radius:4px;" required>
+                </div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+                <button type="button" class="btn btn-secondary" onclick="closeVerifyModal()">Cancel</button>
+                <button type="submit" class="btn btn-success">Approve &amp; Activate Officer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openVerifyModal(userId, userName, userEmail) {
+    document.getElementById('modal_user_id').value = userId;
+    document.getElementById('modal_officer_name').innerText = userName;
+    
+    // Generate clean suggested @tnpolice.gov.in email
+    var cleanName = userName.toLowerCase().replace(/[^a-z0-9]/g, '.').replace(/\.+/g, '.');
+    document.getElementById('modal_official_email').value = cleanName + '@tnpolice.gov.in';
+    
+    document.getElementById('verifyModal').classList.add('active');
+}
+function closeVerifyModal() {
+    document.getElementById('verifyModal').classList.remove('active');
+}
+</script>
+
+<script src="{% static 'firstapp/script.js' %}"></script>
+</body>
+</html>

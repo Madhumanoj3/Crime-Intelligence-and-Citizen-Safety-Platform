@@ -1,0 +1,336 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Investigating Officer Dashboard - CISP</title>
+    <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+    <style>
+        .officer-banner {
+            background: linear-gradient(135deg, #1b4f72, #2471a3);
+            color: white;
+            padding: 18px 24px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .action-box {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 8px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            max-width: 550px;
+            width: 90%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🛡️ CISP</h2>
+            <p>Police Officer (IO)</p>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="{% url 'officer_dashboard' %}" class="active">📊 My Assigned Work</a>
+            <a href="{% url 'fir' %}">📄 File / View FIRs</a>
+            <a href="{% url 'cases' %}">📁 Case Diary</a>
+            <a href="{% url 'evidence' %}">🔍 Evidence Log</a>
+            <a href="{% url 'accused' %}">👤 Suspects &amp; Accused</a>
+            <a href="{% url 'police_sos' %}">🆘 Emergency SOS</a>
+            <a href="{% url 'crime_intelligence' %}">🗺️ Crime Intelligence</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="dashboard-header">
+            <div style="display:flex; align-items:center;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h2>Investigating Officer Workbench</h2>
+            </div>
+            <div class="header-right">
+                <span class="header-icon">🔔</span>
+                <span>👮 {{ current_user.name }} (Badge: {{ current_user.badge_number|default:"TN-POL-01" }})</span>
+                <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <!-- Officer Profile Banner -->
+            <div class="officer-banner">
+                <div>
+                    <h3 style="margin:0 0 4px 0; font-size:18px;">👮 {{ current_user.name }} — {{ current_user.rank|default:"Investigating Officer" }}</h3>
+                    <p style="margin:0; opacity:0.9; font-size:13px;">
+                        Attached Station: <strong>{{ current_user.station_name|default:current_user.station|default:"Station Headquarters" }}</strong> | Badge: <strong>{{ current_user.badge_number|default:"TN-POL-01" }}</strong>
+                    </p>
+                </div>
+                <div>
+                    <span class="badge badge-success" style="padding:8px 12px; font-size:13px;">Active On Duty</span>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="stat-card">
+                    <div class="stat-icon">📋</div>
+                    <div class="stat-number">{{ assigned_count|default:"0" }}</div>
+                    <div class="stat-label">Assigned Complaints</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🔍</div>
+                    <div class="stat-number">{{ active_investigations_count|default:"0" }}</div>
+                    <div class="stat-label">In Progress Investigations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📄</div>
+                    <div class="stat-number">{{ firs_registered_count|default:"0" }}</div>
+                    <div class="stat-label">FIRs Filed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📁</div>
+                    <div class="stat-number">{{ total_cases_count|default:"0" }}</div>
+                    <div class="stat-label">Active Investigation Cases</div>
+                </div>
+            </div>
+
+            <!-- My Assigned Complaints Queue -->
+            <div class="table-container mt-20">
+                <div class="table-header">
+                    <div>
+                        <h3 style="margin:0;">📋 My Assigned Complaints (Assigned by Inspector)</h3>
+                        <p style="font-size:13px; color:#666; margin:4px 0 0 0;">
+                            Review evidence, add field investigation notes, and make FIR / Case decisions.
+                        </p>
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Complaint ID</th>
+                            <th>Citizen Name &amp; Contact</th>
+                            <th>Category &amp; Title</th>
+                            <th>Incident Details</th>
+                            <th>Status</th>
+                            <th>Investigation Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if assigned_complaints %}
+                            {% for c in assigned_complaints %}
+                            <tr>
+                                <td>
+                                    <strong>{{ c.complaint_id }}</strong><br>
+                                    <small style="color:#888;">Assigned: {{ c.assigned_date|default:c.created_at }}</small>
+                                </td>
+                                <td>
+                                    <strong>{{ c.citizen_name }}</strong><br>
+                                    <small style="color:#666;">📞 {{ c.citizen_phone }}<br>✉️ {{ c.citizen_email }}</small>
+                                </td>
+                                <td>
+                                    <span class="badge badge-info">{{ c.category }}</span><br>
+                                    <strong>{{ c.title }}</strong><br>
+                                    <small style="color:#555;">{{ c.description }}</small>
+                                </td>
+                                <td>
+                                    <small>📍 {{ c.address|default:c.city }} ({{ c.pincode }})</small><br>
+                                    <small style="color:#888;">Date: {{ c.incident_date }} {{ c.incident_time }}</small><br>
+                                    <small style="color:#2980b9;">📎 Evidence: {{ c.evidence|default:"None attached" }}</small>
+                                </td>
+                                <td>
+                                    <span class="badge {% if c.status == 'FIR Registered' %}badge-danger{% elif c.status == 'Under Investigation' %}badge-warning{% elif c.status == 'Closed / Rejected' %}badge-secondary{% elif c.status == 'Resolved' %}badge-success{% else %}badge-info{% endif %}">
+                                        {{ c.status }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <!-- Action 1: Add Notes -->
+                                    <button class="btn btn-sm btn-outline-primary" style="margin-bottom:4px;" onclick="openNotesModal('{{ c.complaint_id }}', '{{ c.investigation_notes|escapejs }}')">
+                                        📝 Update Notes
+                                    </button>
+
+                                    {% if c.status != 'FIR Registered' and c.status != 'Closed / Rejected' %}
+                                        <!-- Action 2: File FIR -->
+                                        <button class="btn btn-sm btn-success" style="margin-bottom:4px;" onclick="openFirModal('{{ c.complaint_id }}', '{{ c.title|escapejs }}', '{{ c.category|escapejs }}')">
+                                            📄 File FIR
+                                        </button>
+
+                                        <!-- Action 3: Close / Reject -->
+                                        <button class="btn btn-sm btn-danger" onclick="openRejectModal('{{ c.complaint_id }}')">
+                                            ❌ Close / Invalid
+                                        </button>
+                                    {% elif c.status == 'FIR Registered' %}
+                                        <a href="{% url 'cases' %}" class="btn btn-sm btn-primary">📁 View Case</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" style="text-align:center; padding:30px; color:#888;">
+                                    No complaints currently assigned to you. When the Station Inspector assigns a complaint, it will appear here.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Active Cases Queue -->
+            <div class="table-container mt-20">
+                <div class="table-header">
+                    <h3>📁 My Active Case Diaries</h3>
+                    <a href="{% url 'cases' %}" class="btn btn-sm btn-outline-primary">Open Case Manager</a>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Case ID</th>
+                            <th>FIR ID</th>
+                            <th>Stage / Status</th>
+                            <th>Start Date</th>
+                            <th>Last Diary Update</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if my_cases %}
+                            {% for cs in my_cases %}
+                            <tr>
+                                <td><strong>{{ cs.case_id }}</strong></td>
+                                <td><span class="badge badge-danger">{{ cs.fir_id }}</span></td>
+                                <td>
+                                    <span class="badge {% if cs.status == 'Closed' %}badge-success{% else %}badge-warning{% endif %}">
+                                        {{ cs.status }}
+                                    </span>
+                                </td>
+                                <td>{{ cs.start_date }}</td>
+                                <td>{{ cs.last_update|default:cs.start_date }}</td>
+                                <td>
+                                    <a href="{% url 'cases' %}?id={{ cs.case_id }}" class="btn btn-sm btn-primary">Manage Diary</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" style="text-align:center; color:#888; padding:20px;">
+                                    No active cases yet. Registering an FIR on a valid complaint will automatically create an investigation case.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 1: Update Investigation Notes -->
+<div id="notesModal" class="modal">
+    <div class="modal-content">
+        <h3 style="margin-top:0;">📝 Update Investigation Diary / Notes</h3>
+        <form method="POST" action="{% url 'officer_dashboard' %}">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="add_notes">
+            <input type="hidden" id="notes_complaint_id" name="complaint_id" value="">
+            <div class="form-group">
+                <label for="investigation_notes">Investigation Observations &amp; Progress</label>
+                <textarea id="investigation_notes" name="investigation_notes" rows="5" class="form-control" style="width:100%; padding:10px; border:1px solid #ced4da; border-radius:4px;" placeholder="Record witness statements, site visit findings, CCTV check, etc." required></textarea>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:15px;">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('notesModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Notes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal 2: File Formal FIR -->
+<div id="firModal" class="modal">
+    <div class="modal-content">
+        <h3 style="margin-top:0; color:#c0392b;">📄 Register First Information Report (FIR)</h3>
+        <p style="font-size:13px; color:#666;">Filing this FIR will formally open an official Case and initiate charge proceedings.</p>
+        <form method="POST" action="{% url 'fir' %}">
+            {% csrf_token %}
+            <input type="hidden" id="fir_complaint_id" name="complaint_id" value="">
+            <div class="form-group" style="margin-bottom:12px;">
+                <label>Section(s) of Law *</label>
+                <input type="text" name="section_of_law" class="form-control" style="width:100%; padding:8px; border:1px solid #ced4da; border-radius:4px;" placeholder="e.g. IPC Section 379 (Theft), IPC Section 420 (Fraud)" required>
+            </div>
+            <div class="form-group" style="margin-bottom:12px;">
+                <label>FIR Occurrence / Brief Summary *</label>
+                <textarea id="fir_description" name="description" rows="4" class="form-control" style="width:100%; padding:8px; border:1px solid #ced4da; border-radius:4px;" required></textarea>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:15px;">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('firModal')">Cancel</button>
+                <button type="submit" class="btn btn-danger">Register FIR &amp; Create Case</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal 3: Close / Reject Complaint -->
+<div id="rejectModal" class="modal">
+    <div class="modal-content">
+        <h3 style="margin-top:0; color:#e74c3c;">❌ Close / Reject Complaint as Invalid</h3>
+        <p style="font-size:13px; color:#666;">Use this if preliminary inquiry confirms the complaint is false, civil dispute, or unsubstantiated.</p>
+        <form method="POST" action="{% url 'officer_dashboard' %}">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="close_invalid">
+            <input type="hidden" id="reject_complaint_id" name="complaint_id" value="">
+            <div class="form-group">
+                <label>Official Reason for Rejection / Closure *</label>
+                <textarea name="rejection_reason" rows="4" class="form-control" style="width:100%; padding:8px; border:1px solid #ced4da; border-radius:4px;" placeholder="Provide detailed explanation for citizen and station records..." required></textarea>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:15px;">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('rejectModal')">Cancel</button>
+                <button type="submit" class="btn btn-danger">Confirm Closure</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openNotesModal(cid, notes) {
+    document.getElementById('notes_complaint_id').value = cid;
+    document.getElementById('investigation_notes').value = notes || '';
+    document.getElementById('notesModal').classList.add('active');
+}
+function openFirModal(cid, title, category) {
+    document.getElementById('fir_complaint_id').value = cid;
+    document.getElementById('fir_description').value = `Investigation into ${category}: '${title}' confirms cognizable offense. Formal FIR registered.`;
+    document.getElementById('firModal').classList.add('active');
+}
+function openRejectModal(cid) {
+    document.getElementById('reject_complaint_id').value = cid;
+    document.getElementById('rejectModal').classList.add('active');
+}
+function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+}
+</script>
+<script src="{% static 'firstapp/script.js' %}"></script>
+</body>
+</html>
