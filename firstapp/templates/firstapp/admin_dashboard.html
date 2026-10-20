@@ -4,6 +4,7 @@
 <head>
     <title>Admin Dashboard - CISP</title>
     <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+    <link rel="stylesheet" href="{% static 'firstapp/animations.css' %}">
 </head>
 <body>
 
@@ -39,24 +40,24 @@
         <div class="content-area">
             <!-- Stats Cards -->
             <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
-                <div class="stat-card">
-                    <div class="stat-icon">🏢</div>
-                    <div class="stat-number">{{ stations_count|default:"0" }}</div>
+                <div class="stat-card accent-blue">
+                    <div class="stat-icon-wrap">🏢</div>
+                    <div class="stat-number" data-count="{{ stations_count|default:0 }}">{{ stations_count|default:"0" }}</div>
                     <div class="stat-label">Police Stations</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">👮</div>
-                    <div class="stat-number">{{ inspectors_count|default:"0" }}</div>
+                <div class="stat-card accent-amber">
+                    <div class="stat-icon-wrap">👮</div>
+                    <div class="stat-number" data-count="{{ inspectors_count|default:0 }}">{{ inspectors_count|default:"0" }}</div>
                     <div class="stat-label">Station Inspectors</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🚔</div>
-                    <div class="stat-number">{{ officers_count|default:"0" }}</div>
+                <div class="stat-card accent-green">
+                    <div class="stat-icon-wrap">🚔</div>
+                    <div class="stat-number" data-count="{{ officers_count|default:0 }}">{{ officers_count|default:"0" }}</div>
                     <div class="stat-label">Police Officers (IOs)</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">👥</div>
-                    <div class="stat-number">{{ citizens_count|default:"0" }}</div>
+                <div class="stat-card accent-red">
+                    <div class="stat-icon-wrap">👥</div>
+                    <div class="stat-number" data-count="{{ citizens_count|default:0 }}">{{ citizens_count|default:"0" }}</div>
                     <div class="stat-label">Citizens Registered</div>
                 </div>
             </div>
@@ -140,10 +141,15 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- Crime Hotspot Map (Leaflet) -->
+            {% include 'firstapp/partials/hotspot_map.html' %}
         </div>
     </div>
 </div>
 
+<script src="{% static 'firstapp/ambient.js' %}"></script>
 <script src="{% static 'firstapp/script.js' %}"></script>
+<script src="{% static 'firstapp/ui.js' %}"></script>
 </body>
 </html>

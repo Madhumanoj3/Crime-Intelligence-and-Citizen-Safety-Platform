@@ -138,3 +138,12 @@ function switchTab(tabId, clickedBtn) {
         targetPane.classList.add('active');
     }
 }
+
+/* ===== AMBIENT BACKGROUND (decorative only, see ambient.js) ===== */
+(function () {
+    var current = document.currentScript;
+    if (!current || window.__cispAmbient) return;
+    var s = document.createElement('script');
+    s.src = current.src.replace(/script\.js(\?.*)?$/, 'ambient.js');
+    document.head.appendChild(s);
+})();

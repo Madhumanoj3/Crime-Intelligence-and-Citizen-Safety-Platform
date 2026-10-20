@@ -1,9 +1,10 @@
-{% load static %}
+﻿{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Investigating Officer Dashboard - CISP</title>
     <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+    <link rel="stylesheet" href="{% static 'firstapp/animations.css' %}">
     <style>
         .officer-banner {
             background: linear-gradient(135deg, #1b4f72, #2471a3);
@@ -49,21 +50,7 @@
 
 <div class="dashboard-layout">
     <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <h2>🛡️ CISP</h2>
-            <p>Police Officer (IO)</p>
-        </div>
-        <nav class="sidebar-menu">
-            <a href="{% url 'officer_dashboard' %}" class="active">📊 My Assigned Work</a>
-            <a href="{% url 'fir' %}">📄 File / View FIRs</a>
-            <a href="{% url 'cases' %}">📁 Case Diary</a>
-            <a href="{% url 'evidence' %}">🔍 Evidence Log</a>
-            <a href="{% url 'accused' %}">👤 Suspects &amp; Accused</a>
-            <a href="{% url 'police_sos' %}">🆘 Emergency SOS</a>
-            <a href="{% url 'crime_intelligence' %}">🗺️ Crime Intelligence</a>
-        </nav>
-    </aside>
+    {% include 'firstapp/partials/police_sidebar.html' %}
 
     <!-- Main Content -->
     <div class="main-content">
@@ -243,6 +230,9 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- Crime Hotspot Map (Leaflet) -->
+            {% include 'firstapp/partials/hotspot_map.html' %}
         </div>
     </div>
 </div>
@@ -331,6 +321,9 @@ function closeModal(id) {
     document.getElementById(id).classList.remove('active');
 }
 </script>
+<script src="{% static 'firstapp/ambient.js' %}"></script>
 <script src="{% static 'firstapp/script.js' %}"></script>
+<script src="{% static 'firstapp/ui.js' %}"></script>
 </body>
 </html>
+

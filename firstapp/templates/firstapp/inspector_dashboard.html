@@ -4,6 +4,7 @@
 <head>
     <title>Inspector Dashboard - CISP</title>
     <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+    <link rel="stylesheet" href="{% static 'firstapp/animations.css' %}">
     <style>
         .badge-ai-dup {
             background-color: #e67e22;
@@ -60,22 +61,7 @@
 
 <div class="dashboard-layout">
     <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <h2>🛡️ CISP</h2>
-            <p>Inspector (Station In-Charge)</p>
-        </div>
-        <nav class="sidebar-menu">
-            <a href="{% url 'inspector_dashboard' %}" class="active">📊 Station Dashboard</a>
-            <a href="{% url 'inspector_monitoring' %}">👁️ Officer Monitoring</a>
-            <a href="{% url 'fir' %}">📄 FIR Records</a>
-            <a href="{% url 'cases' %}">📁 Station Cases</a>
-            <a href="{% url 'evidence' %}">🔍 Evidence Vault</a>
-            <a href="{% url 'accused' %}">👤 Accused Records</a>
-            <a href="{% url 'police_sos' %}">🆘 Emergency SOS</a>
-            <a href="{% url 'crime_intelligence' %}">🗺️ Crime Intelligence</a>
-        </nav>
-    </aside>
+    {% include 'firstapp/partials/police_sidebar.html' %}
 
     <!-- Main Content -->
     <div class="main-content">
@@ -109,29 +95,29 @@
 
             <!-- Stats Grid -->
             <div class="stats-grid" style="grid-template-columns: repeat(5, 1fr);">
-                <div class="stat-card">
-                    <div class="stat-icon">📥</div>
-                    <div class="stat-number">{{ pending_review_count|default:"0" }}</div>
+                <div class="stat-card accent-amber">
+                    <div class="stat-icon-wrap">📥</div>
+                    <div class="stat-number" data-count="{{ pending_review_count|default:0 }}">{{ pending_review_count|default:"0" }}</div>
                     <div class="stat-label">Pending Review</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">⚠️</div>
-                    <div class="stat-number" style="color:#e67e22;">{{ duplicate_flagged_count|default:"0" }}</div>
-                    <div class="stat-label">AI Duplicate Flagged</div>
+                <div class="stat-card accent-red">
+                    <div class="stat-icon-wrap">⚠️</div>
+                    <div class="stat-number" style="color:#e67e22;" data-count="{{ duplicate_flagged_count|default:0 }}">{{ duplicate_flagged_count|default:"0" }}</div>
+                    <div class="stat-label">AI Flagged Duplicates</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">👮</div>
-                    <div class="stat-number">{{ assigned_count|default:"0" }}</div>
+                <div class="stat-card accent-blue">
+                    <div class="stat-icon-wrap">👮</div>
+                    <div class="stat-number" data-count="{{ assigned_count|default:0 }}">{{ assigned_count|default:"0" }}</div>
                     <div class="stat-label">Assigned / Investigating</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">📄</div>
-                    <div class="stat-number">{{ active_firs_count|default:"0" }}</div>
+                <div class="stat-card accent-blue">
+                    <div class="stat-icon-wrap">📄</div>
+                    <div class="stat-number" data-count="{{ active_firs_count|default:0 }}">{{ active_firs_count|default:"0" }}</div>
                     <div class="stat-label">Station FIRs</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">📁</div>
-                    <div class="stat-number">{{ active_cases_count|default:"0" }}</div>
+                <div class="stat-card accent-green">
+                    <div class="stat-icon-wrap">📁</div>
+                    <div class="stat-number" data-count="{{ active_cases_count|default:0 }}">{{ active_cases_count|default:"0" }}</div>
                     <div class="stat-label">Active Cases</div>
                 </div>
             </div>
@@ -146,6 +132,9 @@
                         </p>
                     </div>
                 </div>
+                <div class="ai-priority-note">
+                    🤖 <strong>AI Predicted Priority</strong> is generated from the complaint information and is provided only as decision support. Final priority/validation is determined by the Inspector.
+                </div>
                 <table class="data-table">
                     <thead>
                         <tr>
@@ -153,7 +142,8 @@
                             <th>Citizen Details</th>
                             <th>Category &amp; Title</th>
                             <th>Incident Location</th>
-                            <th>AI Recommendation</th>
+                            <th>AI Predicted Priority</th>
+                            <th>AI Duplicate Check</th>
                             <th>Current Status / Assigned Officer</th>
                             <th style="min-width:220px;">Inspector Action</th>
                         </tr>
@@ -164,7 +154,8 @@
                             <tr>
                                 <td>
                                     <strong>{{ c.complaint_id }}</strong><br>
-                                    <small style="color:#888;">{{ c.incident_date }}</small>
+                                    <small style="color:#888;">{{ c.incident_date }}</small><br>
+                                    <a href="{% url 'complaint_detail' %}?id={{ c.complaint_id }}" style="font-size:12px;">View details &rarr;</a>
                                 </td>
                                 <td>
                                     <strong>{{ c.citizen_name }}</strong><br>
@@ -178,6 +169,9 @@
                                 <td>
                                     <small>{{ c.address|default:c.city }}</small><br>
                                     <small style="color:#888;">📍 {{ c.latitude }}, {{ c.longitude }}</small>
+                                </td>
+                                <td>
+                                    {% include 'firstapp/partials/ai_priority_badge.html' with c=c %}
                                 </td>
                                 <td>
                                     {% if c.ai_duplicate_flag == 'Possible Duplicate' %}
@@ -202,6 +196,11 @@
                                     {% endif %}
                                 </td>
                                 <td>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" style="padding:5px 8px; font-size:12px; margin-bottom:4px;"
+                                        data-map-id="{{ c.complaint_id }}" data-map-title="{{ c.title }}" data-map-addr="{{ c.address|default:c.city }}"
+                                        data-map-lat="{{ c.latitude }}" data-map-lon="{{ c.longitude }}"
+                                        data-map-pending="{% if c.status == 'Pending Review' or c.status == 'Pending' %}1{% endif %}"
+                                        onclick="openCrimeMap(this)">🗺️ Map</button><br>
                                     {% if c.status == 'Pending Review' or c.status == 'Pending' %}
                                         <!-- Quick Assign Form -->
                                         <form method="POST" action="{% url 'inspector_dashboard' %}" style="display:inline-block; margin-bottom:4px;">
@@ -235,7 +234,7 @@
                             {% endfor %}
                         {% else %}
                             <tr>
-                                <td colspan="7" style="text-align:center; padding:30px; color:#888;">
+                                <td colspan="8" style="text-align:center; padding:30px; color:#888;">
                                     No complaints currently queued for this jurisdiction.
                                 </td>
                             </tr>
@@ -292,10 +291,110 @@
                 </table>
             </div>
 
+
+            <!-- Crime Hotspot Map (Leaflet) -->
+            {% include 'firstapp/partials/hotspot_map.html' %}
         </div>
     </div>
 </div>
 
+
+<!-- Crime location map + assign -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<div class="modal-overlay" id="mapModal">
+    <div class="modal-box" style="max-width:760px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <h3 style="margin:0;" id="mapTitle">Crime location</h3>
+            <button type="button" class="btn btn-sm btn-outline" onclick="closeCrimeMap()">✕</button>
+        </div>
+        <p style="margin:0 0 8px 0; font-size:13px; color:#555;" id="mapAddr"></p>
+        <div id="crimeMap" style="height:340px; border-radius:6px; border:1px solid #ced4da;"></div>
+        <p style="margin:8px 0; font-size:13px;">
+            <span style="color:#c0392b;">● Crime location</span> &nbsp;
+            <span style="color:#2980b9;">● Your current location</span> &nbsp;
+            <strong id="mapDist"></strong>
+        </p>
+        <form method="POST" action="{% url 'inspector_dashboard' %}" id="mapAssignForm" style="display:none; gap:8px; align-items:center;">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="assign_officer">
+            <input type="hidden" name="complaint_id" id="mapComplaintId">
+            <select name="officer_id" class="assign-select" required>
+                <option value="" disabled selected>Select Officer...</option>
+                {% for off in station_officers %}
+                    <option value="{{ off.id }}">{{ off.name }} ({{ off.badge_number }})</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-sm btn-primary">Assign Officer</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+(function () {
+    var STATION = {% if station_obj %}[{{ station_obj.latitude }}, {{ station_obj.longitude }}]{% else %}null{% endif %};
+    var map = null, layer = null;
+
+    function dot(color) {
+        return L.divIcon({
+            className: '',
+            html: '<div style="width:18px;height:18px;border-radius:50%;background:' + color + ';border:3px solid #fff;box-shadow:0 0 4px rgba(0,0,0,.6);"></div>',
+            iconSize: [18, 18], iconAnchor: [9, 9]
+        });
+    }
+
+    function draw(crime, me, meLabel) {
+        layer.clearLayers();
+        L.marker(crime, {icon: dot('#c0392b')}).addTo(layer).bindPopup('Crime location');
+        var pts = [crime];
+        if (me) {
+            L.marker(me, {icon: dot('#2980b9')}).addTo(layer).bindPopup(meLabel);
+            L.polyline([me, crime], {color: '#555', dashArray: '6 6', weight: 2}).addTo(layer);
+            pts.push(me);
+            var km = map.distance(me, crime) / 1000;
+            document.getElementById('mapDist').textContent = km.toFixed(1) + ' km away (' + meLabel.toLowerCase() + ')';
+        } else {
+            document.getElementById('mapDist').textContent = 'Your location is unavailable';
+        }
+        map.fitBounds(L.latLngBounds(pts), {padding: [40, 40], maxZoom: 16});
+    }
+
+    window.openCrimeMap = function (btn) {
+        var lat = parseFloat(btn.dataset.mapLat), lon = parseFloat(btn.dataset.mapLon);
+        document.getElementById('mapTitle').textContent = btn.dataset.mapId + ' - ' + btn.dataset.mapTitle;
+        document.getElementById('mapAddr').textContent = btn.dataset.mapAddr;
+        document.getElementById('mapComplaintId').value = btn.dataset.mapId;
+        document.getElementById('mapAssignForm').style.display = btn.dataset.mapPending ? 'flex' : 'none';
+        document.getElementById('mapModal').style.display = 'flex';
+        document.getElementById('mapDist').textContent = 'Finding your location...';
+
+        if (!map) {
+            map = L.map('crimeMap');
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'}).addTo(map);
+            layer = L.layerGroup().addTo(map);
+        }
+        setTimeout(function () { map.invalidateSize(); }, 50);
+        if (isNaN(lat) || isNaN(lon)) {
+            layer.clearLayers();
+            document.getElementById('mapDist').textContent = 'This complaint has no coordinates.';
+            return;
+        }
+        var crime = [lat, lon];
+        var fallback = STATION ? function () { draw(crime, STATION, 'Station location'); } : function () { draw(crime, null); };
+        draw(crime, null);
+        if (!navigator.geolocation) { fallback(); return; }
+        navigator.geolocation.getCurrentPosition(
+            function (p) { draw(crime, [p.coords.latitude, p.coords.longitude], 'Your current location'); },
+            fallback,
+            {enableHighAccuracy: true, timeout: 8000}
+        );
+    };
+
+    window.closeCrimeMap = function () { document.getElementById('mapModal').style.display = 'none'; };
+})();
+</script>
+<script src="{% static 'firstapp/ambient.js' %}"></script>
 <script src="{% static 'firstapp/script.js' %}"></script>
+<script src="{% static 'firstapp/ui.js' %}"></script>
 </body>
 </html>

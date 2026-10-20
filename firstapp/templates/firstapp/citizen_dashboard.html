@@ -4,6 +4,7 @@
 <head>
     <title>Citizen Dashboard - CISP</title>
     <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+    <link rel="stylesheet" href="{% static 'firstapp/animations.css' %}">
 </head>
 <body>
 
@@ -43,24 +44,24 @@
         <div class="content-area">
             <!-- Stats Cards -->
             <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">📋</div>
-                    <div class="stat-number">{{ total_complaints|default:0 }}</div>
+                <div class="stat-card accent-blue">
+                    <div class="stat-icon-wrap">📋</div>
+                    <div class="stat-number" data-count="{{ total_complaints|default:0 }}">{{ total_complaints|default:0 }}</div>
                     <div class="stat-label">Total Complaints</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🔄</div>
-                    <div class="stat-number">{{ active_complaints|default:0 }}</div>
+                <div class="stat-card accent-amber">
+                    <div class="stat-icon-wrap">🔄</div>
+                    <div class="stat-number" data-count="{{ active_complaints|default:0 }}">{{ active_complaints|default:0 }}</div>
                     <div class="stat-label">Active Complaints</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">✅</div>
-                    <div class="stat-number">{{ resolved_complaints|default:0 }}</div>
-                    <div class="stat-label">Resolved Complaints</div>
+                <div class="stat-card accent-green">
+                    <div class="stat-icon-wrap">✅</div>
+                    <div class="stat-number" data-count="{{ resolved_complaints|default:0 }}">{{ resolved_complaints|default:0 }}</div>
+                    <div class="stat-label">Resolved</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🆘</div>
-                    <div class="stat-number">{{ sos_count|default:0 }}</div>
+                <div class="stat-card accent-red">
+                    <div class="stat-icon-wrap">🆘</div>
+                    <div class="stat-number" data-count="{{ sos_count|default:0 }}">{{ sos_count|default:0 }}</div>
                     <div class="stat-label">SOS Alerts</div>
                 </div>
             </div>
@@ -123,10 +124,15 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- Crime Hotspot Map (Leaflet) -->
+            {% include 'firstapp/partials/hotspot_map.html' %}
         </div>
     </div>
 </div>
 
+<script src="{% static 'firstapp/ambient.js' %}"></script>
 <script src="{% static 'firstapp/script.js' %}"></script>
+<script src="{% static 'firstapp/ui.js' %}"></script>
 </body>
 </html>

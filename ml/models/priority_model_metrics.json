@@ -1,0 +1,77 @@
+{
+  "trained_at": "2026-09-24 07:53:02",
+  "dataset": "ml\\dataset\\complaint_priority_dataset.csv",
+  "records": 1500,
+  "train_size": 1200,
+  "test_size": 300,
+  "class_distribution": {
+    "Low": 534,
+    "Medium": 580,
+    "High": 386
+  },
+  "train_accuracy": 0.9083,
+  "test_accuracy": 0.7467,
+  "test_macro_f1": 0.7519,
+  "baseline_accuracy": 0.3867,
+  "cv_accuracy_mean": 0.8058,
+  "cv_accuracy_std": 0.0184,
+  "classification_report": {
+    "Low": {
+      "precision": 0.8076923076923077,
+      "recall": 0.7850467289719626,
+      "f1-score": 0.7962085308056872,
+      "support": 107.0
+    },
+    "Medium": {
+      "precision": 0.6880733944954128,
+      "recall": 0.646551724137931,
+      "f1-score": 0.6666666666666666,
+      "support": 116.0
+    },
+    "High": {
+      "precision": 0.7471264367816092,
+      "recall": 0.8441558441558441,
+      "f1-score": 0.7926829268292683,
+      "support": 77.0
+    },
+    "accuracy": 0.7466666666666667,
+    "macro avg": {
+      "precision": 0.7476307129897766,
+      "recall": 0.7585847657552459,
+      "f1-score": 0.7518527081005407,
+      "support": 300.0
+    },
+    "weighted avg": {
+      "precision": 0.7458944210557623,
+      "recall": 0.7466666666666667,
+      "f1-score": 0.7452141049846517,
+      "support": 300.0
+    }
+  },
+  "confusion_matrix": {
+    "labels": [
+      "Low",
+      "Medium",
+      "High"
+    ],
+    "matrix": [
+      [
+        84,
+        23,
+        0
+      ],
+      [
+        19,
+        75,
+        22
+      ],
+      [
+        1,
+        11,
+        65
+      ]
+    ]
+  },
+  "sklearn_version": "1.9.1",
+  "note": "Trained on SYNTHETIC data; metrics show method behaviour, not real-world accuracy."
+}

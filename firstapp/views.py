@@ -9,6 +9,8 @@ from .models import (
 )
 from .ai_detector import check_duplicate_complaint
 from .geo_router import find_jurisdiction_station
+from .hotspots import get_hotspots
+from .priority_predictor import apply_ai_priority
 
 
 def get_current_user(request):
@@ -68,7 +70,12 @@ def _complaint_to_dict(c):
 # ==============================================================================
 
 def index(request):
-    return render(request, 'firstapp/index.html')
+    # Live platform numbers for the home page hero.
+    return render(request, 'firstapp/index.html', {
+        'stat_stations': PoliceStation.objects.count(),
+        'stat_locations': Location.objects.count(),
+        'stat_officers': User.objects.filter(role__in=['officer', 'inspector'], is_verified=True).count(),
+    })
 
 
 def register(request):
@@ -357,6 +364,10 @@ def complaint_form(request):
             ai_matched_title=dup_result['matched_title'] or '',
             created_at=datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         )
+
+        # 3. AI Priority Prediction (decision support only; stored with the complaint).
+        #    Runs after the complaint is saved, so a missing model never blocks submission.
+        apply_ai_priority(new_complaint)
         return redirect(f'/citizen/complaint/detail/?id={new_complaint.complaint_id}')
 
     return render(request, 'firstapp/complaint_form.html', {
@@ -401,20 +412,41 @@ def sos(request):
     user = get_current_user(request)
     now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     if request.method == 'POST':
-        count = SOS.objects.count()
-        new_id = f"SOS-{count + 1:03d}"
+        latitude = request.POST.get('latitude', '').strip()
+        longitude = request.POST.get('longitude', '').strip()
+        description = request.POST.get('description', '').strip()
+        if not description:
+            return JsonResponse({'status': 'error', 'message': 'Please tell us what happened.'}, status=400)
+        if not latitude or not longitude:
+            latitude, longitude = user.get('latitude', ''), user.get('longitude', '')
+
+        # Route the SOS to the nearest police station
+        station, dist_km, _reason = find_jurisdiction_station(
+            complaint_lat=latitude, complaint_lon=longitude,
+            city=user.get('city', ''), stations=list(PoliceStation.objects.all())
+        )
+
+        new_id = f"SOS-{SOS.objects.count() + 1:03d}"
         SOS.objects.create(
             sos_id=new_id,
             citizen_name=user.get('name', ''),
             citizen_email=user.get('email', ''),
             citizen_phone=user.get('phone', ''),
             time=now_str,
-            location=request.POST.get('location', 'Emergency Location, Madurai'),
-            latitude=request.POST.get('latitude', '9.9135'),
-            longitude=request.POST.get('longitude', '78.1205'),
+            location=request.POST.get('location', '').strip() or f"{latitude}, {longitude}",
+            latitude=latitude,
+            longitude=longitude,
+            description=description,
+            assigned_station_id=station.station_id if station else '',
+            assigned_station_name=station.name if station else '',
+            distance_km=str(dist_km) if dist_km is not None else '',
             status='Active'
         )
-        return JsonResponse({'status': 'success', 'sos_id': new_id})
+        return JsonResponse({
+            'status': 'success', 'sos_id': new_id,
+            'station_name': station.name if station else '',
+            'distance_km': dist_km,
+        })
     return render(request, 'firstapp/sos.html', {'current_user': user, 'current_time': now_str})
 
 
@@ -527,9 +559,10 @@ def inspector_dashboard(request):
         'assigned_count': complaints_qs.filter(status__in=['Assigned', 'Under Investigation']).count(),
         'active_firs_count': firs_qs.count(),
         'active_cases_count': cases_qs.exclude(status='Closed').count(),
-        'station_complaints': [_complaint_to_dict(c) for c in complaints_qs[:10]],
+        'station_complaints': [_complaint_to_dict(c) for c in complaints_qs.order_by('-pk')],
         'station_officers': list(officers_qs.values()),
         'monitored_cases': list(cases_qs[:8]),
+        'station_obj': PoliceStation.objects.filter(station_id=station_id).first() if station_id else None,
     })
 
 
@@ -793,9 +826,13 @@ def police_sos(request):
     if action == 'resolve' and sos_id:
         SOS.objects.filter(sos_id=sos_id).update(status='Resolved')
         return redirect('police_sos')
+    sos_qs = SOS.objects.all()
+    station_id = user.get('station_id', '')
+    if station_id:
+        sos_qs = sos_qs.filter(assigned_station_id=station_id)
     return render(request, 'firstapp/police_sos.html', {
         'current_user': user,
-        'sos_alerts': list(SOS.objects.values())
+        'sos_alerts': list(sos_qs.order_by('-pk').values())
     })
 
 
@@ -811,6 +848,11 @@ def crime_intelligence(request):
         'harassment_count': complaints_qs.filter(category__icontains='harass').count(),
         'fraud_count': complaints_qs.filter(category__icontains='fraud').count(),
     })
+
+
+def hotspots_api(request):
+    """Crime hotspots built from stored complaints, for the Leaflet map shown on every dashboard."""
+    return JsonResponse(get_hotspots(request.GET.get('crime_type', ''), request.GET.get('year', '')))
 
 
 # ==============================================================================

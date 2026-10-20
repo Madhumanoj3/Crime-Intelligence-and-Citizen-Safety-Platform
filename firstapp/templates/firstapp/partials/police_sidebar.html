@@ -1,0 +1,50 @@
+{# Police-side sidebar chosen by the logged-in user's role. The current page is highlighted from the URL name. #}
+{% with page=request.resolver_match.url_name %}
+<aside class="sidebar">
+    {% if current_user.role == 'inspector' %}
+    <div class="sidebar-header">
+        <h2>🛡️ CISP</h2>
+        <p>Inspector (Station In-Charge)</p>
+    </div>
+    <nav class="sidebar-menu">
+        <a href="{% url 'inspector_dashboard' %}"{% if page == 'inspector_dashboard' %} class="active"{% endif %}>📊 Station Dashboard</a>
+        <a href="{% url 'inspector_monitoring' %}"{% if page == 'inspector_monitoring' %} class="active"{% endif %}>👁️ Officer Monitoring</a>
+        <a href="{% url 'fir' %}"{% if page == 'fir' %} class="active"{% endif %}>📄 FIR Records</a>
+        <a href="{% url 'cases' %}"{% if page == 'cases' %} class="active"{% endif %}>📁 Station Cases</a>
+        <a href="{% url 'evidence' %}"{% if page == 'evidence' %} class="active"{% endif %}>🔍 Evidence Vault</a>
+        <a href="{% url 'accused' %}"{% if page == 'accused' %} class="active"{% endif %}>👤 Accused Records</a>
+        <a href="{% url 'police_sos' %}"{% if page == 'police_sos' %} class="active"{% endif %}>🆘 Emergency SOS</a>
+        <a href="{% url 'crime_intelligence' %}"{% if page == 'crime_intelligence' %} class="active"{% endif %}>🗺️ Crime Intelligence</a>
+    </nav>
+    {% elif current_user.role == 'officer' or current_user.role == 'police' %}
+    <div class="sidebar-header">
+        <h2>🛡️ CISP</h2>
+        <p>Police Officer (IO)</p>
+    </div>
+    <nav class="sidebar-menu">
+        <a href="{% url 'officer_dashboard' %}"{% if page == 'officer_dashboard' %} class="active"{% endif %}>📊 My Assigned Work</a>
+        <a href="{% url 'fir' %}"{% if page == 'fir' %} class="active"{% endif %}>📄 File / View FIRs</a>
+        <a href="{% url 'cases' %}"{% if page == 'cases' %} class="active"{% endif %}>📁 Case Diary</a>
+        <a href="{% url 'evidence' %}"{% if page == 'evidence' %} class="active"{% endif %}>🔍 Evidence Log</a>
+        <a href="{% url 'accused' %}"{% if page == 'accused' %} class="active"{% endif %}>👤 Suspects &amp; Accused</a>
+        <a href="{% url 'police_sos' %}"{% if page == 'police_sos' %} class="active"{% endif %}>🆘 Emergency SOS</a>
+        <a href="{% url 'crime_intelligence' %}"{% if page == 'crime_intelligence' %} class="active"{% endif %}>🗺️ Crime Intelligence</a>
+    </nav>
+    {% else %}
+    <div class="sidebar-header">
+        <h2>🛡️ CISP</h2>
+        <p>Police Panel</p>
+    </div>
+    <nav class="sidebar-menu">
+        <a href="{% url 'police_dashboard' %}"{% if page == 'police_dashboard' %} class="active"{% endif %}>📊 Dashboard</a>
+        <a href="{% url 'police_complaints' %}"{% if page == 'police_complaints' %} class="active"{% endif %}>📋 Complaints</a>
+        <a href="{% url 'fir' %}"{% if page == 'fir' %} class="active"{% endif %}>📄 FIR</a>
+        <a href="{% url 'cases' %}"{% if page == 'cases' %} class="active"{% endif %}>📁 Cases</a>
+        <a href="{% url 'evidence' %}"{% if page == 'evidence' %} class="active"{% endif %}>🔍 Evidence</a>
+        <a href="{% url 'accused' %}"{% if page == 'accused' %} class="active"{% endif %}>👤 Accused</a>
+        <a href="{% url 'police_sos' %}"{% if page == 'police_sos' %} class="active"{% endif %}>🆘 SOS Alerts</a>
+        <a href="{% url 'crime_intelligence' %}"{% if page == 'crime_intelligence' %} class="active"{% endif %}>🗺️ Crime Intelligence</a>
+    </nav>
+    {% endif %}
+</aside>
+{% endwith %}

@@ -95,9 +95,8 @@ def test_system():
             'email': anna_inspector.official_email,
             'password': 'password123'
         })
-        print(f"Inspector Login Redirect: {ins_login.get('Location', '')}")
-
-    print("\n✅ All End-to-End Tests Passed Successfully!")
+    print("\n[SUCCESS] All End-to-End Tests Passed Successfully!")
 
 if __name__ == '__main__':
     test_system()
+

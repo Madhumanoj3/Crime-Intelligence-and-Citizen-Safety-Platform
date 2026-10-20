@@ -1,30 +1,16 @@
-{% load static %}
+﻿{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Crime Intelligence - CISP</title>
     <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+    <link rel="stylesheet" href="{% static 'firstapp/animations.css' %}">
 </head>
 <body>
 
 <div class="dashboard-layout">
     <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <h2>🛡️ CISP</h2>
-            <p>Police Panel</p>
-        </div>
-        <nav class="sidebar-menu">
-            <a href="{% url 'police_dashboard' %}">📊 Dashboard</a>
-            <a href="{% url 'police_complaints' %}">📋 Complaints</a>
-            <a href="{% url 'fir' %}">📄 FIR</a>
-            <a href="{% url 'cases' %}">📁 Cases</a>
-            <a href="{% url 'evidence' %}">🔍 Evidence</a>
-            <a href="{% url 'accused' %}">👤 Accused</a>
-            <a href="{% url 'police_sos' %}">🆘 SOS Alerts</a>
-            <a href="{% url 'crime_intelligence' %}" class="active">🗺️ Crime Intelligence</a>
-        </nav>
-    </aside>
+    {% include 'firstapp/partials/police_sidebar.html' %}
 
     <!-- Main Content -->
     <div class="main-content">
@@ -76,93 +62,15 @@
                 </div>
             </div>
 
-            <!-- Crime Hotspot Map -->
-            <div class="card">
-                <div class="card-header">Crime Hotspot Map</div>
-                <div class="card-body">
-                    <div class="map-placeholder" style="height:350px;">
-                        🗺️ Crime Hotspot Map — K-Means Clustering visualization will appear here (Madurai District)
-                    </div>
-
-                    <div class="legend">
-                        <div class="legend-item">
-                            <div class="legend-dot high"></div>
-                            <span>High Crime Area</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-dot medium"></div>
-                            <span>Medium Crime Area</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-dot low"></div>
-                            <span>Low Crime Area</span>
-                        </div>
-                    </div>
-
-                    <div class="info-box info">
-                        ℹ️ Crime hotspot analysis will be generated using K-Means Clustering. The algorithm will group crime locations into clusters and display high-crime areas on the map.
-                    </div>
-                </div>
-            </div>
-
-            <!-- Crime Hotspot Data -->
-            <div class="card">
-                <div class="card-header">Hotspot Summary (Madurai Region)</div>
-                <div class="card-body">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Cluster</th>
-                                <th>Area</th>
-                                <th>Complaints</th>
-                                <th>Primary Crime Type</th>
-                                <th>Risk Level</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Cluster 1</td>
-                                <td>Periyar Bus Stand, Madurai</td>
-                                <td>42</td>
-                                <td>Theft</td>
-                                <td><span class="badge badge-danger">High</span></td>
-                            </tr>
-                            <tr>
-                                <td>Cluster 2</td>
-                                <td>Mattuthavani, Madurai</td>
-                                <td>28</td>
-                                <td>Cybercrime</td>
-                                <td><span class="badge badge-warning">Medium</span></td>
-                            </tr>
-                            <tr>
-                                <td>Cluster 3</td>
-                                <td>Tallakulam, Madurai</td>
-                                <td>15</td>
-                                <td>Accident</td>
-                                <td><span class="badge badge-success">Low</span></td>
-                            </tr>
-                            <tr>
-                                <td>Cluster 4</td>
-                                <td>Goripalayam, Madurai</td>
-                                <td>35</td>
-                                <td>Harassment</td>
-                                <td><span class="badge badge-danger">High</span></td>
-                            </tr>
-                            <tr>
-                                <td>Cluster 5</td>
-                                <td>Anna Nagar, Madurai</td>
-                                <td>18</td>
-                                <td>Fraud</td>
-                                <td><span class="badge badge-warning">Medium</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <!-- Crime Hotspot Map (Leaflet + DBSCAN) -->
+            {% include 'firstapp/partials/hotspot_map.html' with show_table=True map_height=480 %}
         </div>
     </div>
 </div>
 
+<script src="{% static 'firstapp/ambient.js' %}"></script>
 <script src="{% static 'firstapp/script.js' %}"></script>
+<script src="{% static 'firstapp/ui.js' %}"></script>
 </body>
 </html>
+

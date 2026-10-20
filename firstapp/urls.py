@@ -36,6 +36,7 @@ urlpatterns = [
     path('police/accused/', views.accused, name='accused'),
     path('police/sos/', views.police_sos, name='police_sos'),
     path('police/crime-intelligence/', views.crime_intelligence, name='crime_intelligence'),
+    path('api/hotspots/', views.hotspots_api, name='hotspots_api'),
 
     # Admin Panel (Station & User Hierarchy)
     path('admin-panel/dashboard/', views.admin_dashboard, name='admin_dashboard'),

@@ -88,7 +88,7 @@ class Complaint(models.Model):
     # Station & Officer Assignment (Hierarchy)
     assigned_station_id = models.CharField(max_length=30, blank=True)
     assigned_station_name = models.CharField(max_length=200, blank=True)
-    assigned_officer_id = models.CharField(max_length=30, blank=True)
+    assigned_officer_id = models.CharField(max_length=254, blank=True)  # stores the officer's email
     assigned_officer_name = models.CharField(max_length=100, blank=True)
     assigned_by_inspector = models.CharField(max_length=100, blank=True)
     assigned_date = models.CharField(max_length=30, blank=True)
@@ -103,6 +103,10 @@ class Complaint(models.Model):
     ai_similarity_score = models.CharField(max_length=20, blank=True)
     ai_matched_complaint_id = models.CharField(max_length=30, blank=True)
     ai_matched_title = models.CharField(max_length=200, blank=True)
+
+    # AI Priority Prediction (decision support only; Inspector makes the final decision)
+    ai_priority = models.CharField(max_length=10, blank=True, default='')  # Low / Medium / High, '' = not predicted
+    ai_priority_confidence = models.CharField(max_length=10, blank=True, default='')  # e.g. '87.5%'
 
     # Investigation & Rejection notes
     investigation_notes = models.TextField(blank=True)
@@ -137,6 +141,10 @@ class SOS(models.Model):
     latitude = models.CharField(max_length=20, blank=True)
     longitude = models.CharField(max_length=20, blank=True)
     status = models.CharField(max_length=20, default='Active')
+    description = models.TextField(blank=True, default='')
+    assigned_station_id = models.CharField(max_length=20, blank=True, default='')
+    assigned_station_name = models.CharField(max_length=200, blank=True, default='')
+    distance_km = models.CharField(max_length=20, blank=True, default='')
 
     def __str__(self):
         return self.sos_id

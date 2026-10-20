@@ -1,0 +1,11 @@
+{# AI Predicted Priority badge. Usage: {% include 'firstapp/partials/ai_priority_badge.html' with c=complaint %} #}
+{% if c.ai_priority == 'High' %}
+    <span class="badge-priority badge-priority-high" title="AI recommendation only - Inspector decides">High</span>
+{% elif c.ai_priority == 'Medium' %}
+    <span class="badge-priority badge-priority-medium" title="AI recommendation only - Inspector decides">Medium</span>
+{% elif c.ai_priority == 'Low' %}
+    <span class="badge-priority badge-priority-low" title="AI recommendation only - Inspector decides">Low</span>
+{% else %}
+    <span class="badge-priority badge-priority-none" title="No prediction available for this complaint">Not predicted</span>
+{% endif %}
+{% if c.ai_priority and c.ai_priority_confidence %}<small class="priority-confidence">Model confidence: {{ c.ai_priority_confidence }}</small>{% endif %}

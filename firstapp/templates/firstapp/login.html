@@ -1,70 +1,74 @@
-{% load static %}
+﻿{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Login - CISP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+    <link rel="stylesheet" href="{% static 'firstapp/animations.css' %}">
 </head>
 <body>
 
-<div class="auth-wrapper">
+<div class="auth-split">
+    <div class="auth-split-left">{% include 'firstapp/partials/auth_brand_panel.html' %}</div>
+    <div class="auth-split-right">
     <div class="auth-card">
-        <h2 style="margin-bottom: 2px;">🛡️ CISP</h2>
-        <p class="subtitle" style="margin-bottom: 15px;">Login to your account</p>
+        <h2 style="margin-bottom:2px;font-size:26px;">
+            <span class="auth-logo">&#128737;</span> CISP
+        </h2>
+        <p class="subtitle" style="margin-bottom:15px;">Sign in to your account</p>
 
-        <!-- Auth Navigation Tabs -->
         <div class="auth-tabs">
-            <a href="{% url 'register' %}" class="auth-tab">👤 Citizen Register</a>
-            <a href="{% url 'police_register' %}" class="auth-tab">👮 Police Register</a>
-            <a href="{% url 'login' %}" class="auth-tab active">🔐 Login</a>
+            <a href="{% url 'register' %}" class="auth-tab">&#128100; Citizen Register</a>
+            <a href="{% url 'police_register' %}" class="auth-tab">&#128110; Police Register</a>
+            <a href="{% url 'login' %}" class="auth-tab active">&#128272; Login</a>
         </div>
 
         {% if error %}
-        <div class="info-box danger" style="margin-bottom: 15px;">
-            ⚠️ {{ error }}
+        <div class="info-box danger anim-in" style="margin-bottom:15px;display:flex;align-items:center;gap:8px;">
+            <span class="pulse-dot"></span> {{ error }}
         </div>
         {% endif %}
 
         {% if success %}
-        <div class="info-box success" style="margin-bottom: 15px;">
-            ✅ {{ success }}
+        <div class="info-box success anim-in" style="margin-bottom:15px;">
+            &#9989; {{ success }}
         </div>
         {% endif %}
 
         <form method="POST" action="{% url 'login' %}">
             {% csrf_token %}
-
             <div class="form-group">
                 <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="name@gmail.com or officer@tnpolice.gov.in" required>
+                <input type="email" id="email" name="email" placeholder="name@gmail.com or officer@tnpolice.gov.in" required autofocus>
             </div>
-
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="Enter your password" required>
             </div>
-
-            <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px; padding: 12px; font-size: 15px;">Login to CISP</button>
+            <button type="submit" class="btn btn-primary" style="width:100%;margin-top:12px;padding:13px;font-size:15px;">&#128272; Login to CISP</button>
         </form>
 
-        <div class="info-box info" style="margin-top: 15px; font-size: 12px; text-align: left; line-height: 1.6;">
-            <strong>Login Guidance:</strong><br>
-            👤 <strong>Citizen:</strong> Registered <code>@gmail.com</code> email<br>
-            👮 <strong>Police Officer:</strong> Official <code>@tnpolice.gov.in</code> email<br>
-            🛡️ <strong>Admin:</strong> Use your administrator account credentials
+        <div class="info-box info" style="margin-top:15px;font-size:12px;text-align:left;line-height:1.7;">
+            <strong>Login Guide:</strong><br>
+            &#128100; <strong>Citizen:</strong> Use your registered <code>@gmail.com</code> email<br>
+            &#128110; <strong>Police Officer:</strong> Official <code>@tnpolice.gov.in</code> email<br>
+            &#128737; <strong>Admin:</strong> Use your administrator account credentials
         </div>
 
-        <div class="auth-links" style="margin-top: 15px;">
-            Don't have an account? <br>
-            <a href="{% url 'register' %}">Citizen Register</a> | 
+        <div class="auth-links" style="margin-top:15px;">
+            Don't have an account?<br>
+            <a href="{% url 'register' %}">Citizen Register</a> |
             <a href="{% url 'police_register' %}">Police Register</a>
         </div>
-
         <div class="auth-links" style="margin-top:10px;">
             <a href="{% url 'index' %}">&larr; View Platform Overview</a>
         </div>
     </div>
+    </div>
 </div>
 
+<script src="{% static 'firstapp/ambient.js' %}"></script>
+<script src="{% static 'firstapp/ui.js' %}"></script>
 </body>
 </html>

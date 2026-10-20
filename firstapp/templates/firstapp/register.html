@@ -1,16 +1,20 @@
-{% load static %}
+﻿{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Citizen Registration - CISP</title>
     <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+    <link rel="stylesheet" href="{% static 'firstapp/animations.css' %}">
 </head>
 <body>
 
-<div class="auth-wrapper">
+<div class="auth-split">
+    <div class="auth-split-left">{% include 'firstapp/partials/auth_brand_panel.html' %}</div>
+    <div class="auth-split-right">
     <div class="auth-card wide">
         <h2 style="margin-bottom: 2px;">🛡️ CISP</h2>
-        <p class="subtitle" style="margin-bottom: 15px;">Crime Intelligence &amp; Citizen Safety Platform</p>
+        <p class="subtitle" style="margin-bottom: 15px;">Create your citizen account</p>
 
         <!-- Auth Navigation Tabs -->
         <div class="auth-tabs">
@@ -125,6 +129,7 @@
             <a href="{% url 'index' %}">&larr; View Platform Overview</a>
         </div>
     </div>
+    </div>
 </div>
 
 <script>
@@ -143,5 +148,8 @@
     }
 </script>
 
+<script src="{% static 'firstapp/ambient.js' %}"></script>
+<script src="{% static 'firstapp/ui.js' %}"></script>
 </body>
 </html>
+

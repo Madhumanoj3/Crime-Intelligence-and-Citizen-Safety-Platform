@@ -1,70 +1,196 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Crime Intelligence and Citizen Safety Platform</title>
+    <meta charset="utf-8">
+    <title>Crime Intelligence and Citizen Safety Platform - CISP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+    <link rel="stylesheet" href="{% static 'firstapp/animations.css' %}">
 </head>
-<body>
+<body class="home-page">
 
 <!-- Navbar -->
 <nav class="navbar">
-    <div class="navbar-brand">🛡️ CISP</div>
+    <div class="navbar-brand">
+        <span class="auth-logo" style="margin-right:6px;">&#128737;</span> CISP
+    </div>
     <div class="navbar-links">
         <a href="{% url 'index' %}">Home</a>
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
         <a href="#about">About</a>
-        <a href="#features">Safety Features</a>
         <a href="#contact">Contact</a>
-        <a href="{% url 'register' %}" class="btn btn-sm btn-primary">Citizen Register</a>
-        <a href="{% url 'police_register' %}" class="btn btn-sm btn-outline">Police Register</a>
-        <a href="{% url 'login' %}" class="btn btn-sm btn-outline">Login</a>
+        <a href="#signin" class="btn btn-sm btn-outline">Sign In</a>
     </div>
 </nav>
 
-<!-- Hero Section -->
-<section class="hero">
-    <h1>Crime Intelligence and Citizen Safety Platform</h1>
-    <p>A comprehensive platform for reporting incidents, requesting emergency help and improving community safety.</p>
-    <div class="hero-buttons">
-        <a href="{% url 'register' %}" class="btn btn-primary">Register as Citizen</a>
-        <a href="{% url 'police_register' %}" class="btn btn-outline">Police Portal Register</a>
-        <a href="{% url 'login' %}" class="btn btn-warning">Sign In</a>
+<!-- HERO: project on the left, sign in / register on the right -->
+<section class="hero-cinematic home-hero">
+    <!-- City canvas is injected by ui.js -->
+    <div class="home-hero-grid">
+
+        <!-- Left: project name and description -->
+        <div class="home-hero-left">
+            <div class="hero-badge">
+                <span class="pulse-dot green"></span>
+                Live Platform &nbsp;&middot;&nbsp; Madurai, Tamil Nadu
+            </div>
+            <h1>Crime Intelligence &amp;<br><span class="home-accent">Citizen Safety Platform</span></h1>
+            <p class="hero-sub">
+                A digital platform that connects citizens with law enforcement. Citizens report incidents in minutes,
+                complaints are routed to the right police station automatically, and AI helps inspectors act on
+                what matters most.
+            </p>
+
+            <ul class="home-highlights">
+                <li>
+                    <span class="hl-icon">&#129302;</span>
+                    <div><strong>AI Priority Prediction</strong><span>Flags High, Medium and Low priority complaints for the inspector.</span></div>
+                </li>
+                <li>
+                    <span class="hl-icon">&#128269;</span>
+                    <div><strong>Duplicate Detection</strong><span>Spots repeat complaints about the same incident.</span></div>
+                </li>
+                <li>
+                    <span class="hl-icon">&#128506;</span>
+                    <div><strong>Crime Hotspot Map</strong><span>Clusters complaints to show high-risk areas.</span></div>
+                </li>
+                <li>
+                    <span class="hl-icon">&#128680;</span>
+                    <div><strong>Emergency SOS</strong><span>Sends your live location to the police instantly.</span></div>
+                </li>
+            </ul>
+
+            <div class="hero-live-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-number stat-number" data-count="{{ stat_stations|default:0 }}">{{ stat_stations|default:0 }}</span>
+                    <span class="hero-stat-label">Police Stations</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number stat-number" data-count="{{ stat_locations|default:0 }}">{{ stat_locations|default:0 }}</span>
+                    <span class="hero-stat-label">Locations Covered</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number stat-number" data-count="{{ stat_officers|default:0 }}">{{ stat_officers|default:0 }}</span>
+                    <span class="hero-stat-label">Police Personnel</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-static">24/7</span>
+                    <span class="hero-stat-label">Always Active</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: sign in and register -->
+        <div class="home-hero-right" id="signin">
+            <div class="home-auth-card">
+                <div class="home-auth-head">
+                    <span class="home-auth-icon">&#128272;</span>
+                    <div>
+                        <h2>Welcome to CISP</h2>
+                        <p>Sign in to continue to your portal</p>
+                    </div>
+                </div>
+
+                <form method="POST" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="home-email">Email Address</label>
+                        <input type="email" id="home-email" name="email" placeholder="name@gmail.com or officer@tnpolice.gov.in" autocomplete="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="home-password">Password</label>
+                        <input type="password" id="home-password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary home-signin-btn">Sign In</button>
+                </form>
+
+                <p class="home-login-hint">
+                    Citizens use their registered email. Police use their official <strong>@tnpolice.gov.in</strong> email.
+                </p>
+
+                <div class="home-divider"><span>New to CISP? Create an account</span></div>
+
+                <div class="home-register-grid">
+                    <a href="{% url 'register' %}" class="home-register-option">
+                        <span class="ro-icon">&#128100;</span>
+                        <strong>Citizen</strong>
+                        <small>Report &amp; track complaints</small>
+                    </a>
+                    <a href="{% url 'police_register' %}" class="home-register-option">
+                        <span class="ro-icon">&#128110;</span>
+                        <strong>Police</strong>
+                        <small>Officer &amp; inspector access</small>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
 <!-- Features Section -->
 <section class="section" id="features">
-    <h2 class="section-title">Safety Features</h2>
+    <h2 class="section-title">
+        <span class="section-title-accent">Platform Features</span>
+    </h2>
     <div class="features-grid">
-        <div class="feature-card">
-            <div class="icon">📝</div>
+        <div class="feature-card anim-in d-50">
+            <div class="icon">&#128221;</div>
             <h3>Crime Reporting</h3>
-            <p>Report crimes and complaints easily with location and evidence details.</p>
+            <p>Report crimes easily with location tagging and evidence uploads. Each complaint is routed to the nearest police station.</p>
         </div>
-        <div class="feature-card">
-            <div class="icon">🆘</div>
+        <div class="feature-card anim-in d-100">
+            <div class="icon">&#129302;</div>
+            <h3>AI Complaint Analysis</h3>
+            <p>A trained model predicts complaint priority and a similarity engine flags possible duplicates, as decision support for inspectors.</p>
+        </div>
+        <div class="feature-card anim-in d-150">
+            <div class="icon">&#128680;</div>
             <h3>Emergency SOS</h3>
-            <p>Send emergency alerts with your location to get immediate help.</p>
+            <p>Send emergency alerts with your precise GPS location to get immediate police response and assistance.</p>
         </div>
-        <div class="feature-card">
-            <div class="icon">👤</div>
-            <h3>Missing Person</h3>
-            <p>Report and search for missing persons in your area.</p>
+        <div class="feature-card anim-in d-200">
+            <div class="icon">&#128100;</div>
+            <h3>Missing Person &amp; Lost and Found</h3>
+            <p>Report missing persons and lost or found items, with detailed profiles and status tracking.</p>
         </div>
-        <div class="feature-card">
-            <div class="icon">🔍</div>
-            <h3>Lost &amp; Found</h3>
-            <p>Report lost or found items and connect with the rightful owners.</p>
-        </div>
-        <div class="feature-card">
-            <div class="icon">📢</div>
+        <div class="feature-card anim-in d-250">
+            <div class="icon">&#128226;</div>
             <h3>Community Alerts</h3>
-            <p>Stay updated with safety alerts and warnings in your area.</p>
+            <p>Stay updated with real-time safety alerts, crime warnings, and police advisories in your area.</p>
         </div>
-        <div class="feature-card">
-            <div class="icon">📊</div>
+        <div class="feature-card anim-in d-300">
+            <div class="icon">&#128202;</div>
             <h3>Crime Intelligence</h3>
-            <p>View crime statistics and hotspot analysis for better awareness.</p>
+            <p>View live crime statistics and interactive hotspot maps built from real complaint locations.</p>
+        </div>
+    </div>
+</section>
+
+<!-- How it works -->
+<section class="section home-steps-section" id="how-it-works">
+    <h2 class="section-title"><span class="section-title-accent">How It Works</span></h2>
+    <div class="home-steps">
+        <div class="home-step anim-in d-50">
+            <span class="home-step-num">1</span>
+            <h3>Citizen Reports</h3>
+            <p>A citizen files a complaint with the category, location and details.</p>
+        </div>
+        <div class="home-step anim-in d-100">
+            <span class="home-step-num">2</span>
+            <h3>AI Analyses</h3>
+            <p>The complaint is routed to its station, checked for duplicates and given a predicted priority.</p>
+        </div>
+        <div class="home-step anim-in d-150">
+            <span class="home-step-num">3</span>
+            <h3>Inspector Validates</h3>
+            <p>The station inspector reviews the AI advice, validates the complaint and assigns an officer.</p>
+        </div>
+        <div class="home-step anim-in d-200">
+            <span class="home-step-num">4</span>
+            <h3>Officer Investigates</h3>
+            <p>The officer investigates, files the FIR and updates the case. The citizen tracks progress live.</p>
         </div>
     </div>
 </section>
@@ -72,26 +198,30 @@
 <!-- About Section -->
 <section class="about-section" id="about">
     <div class="about-content">
-        <h2 class="section-title">About the Platform</h2>
-        <p>The Crime Intelligence and Citizen Safety Platform is designed to bridge the gap between citizens and law enforcement agencies. It provides a simple and accessible way to report incidents, track complaints, and stay informed about community safety.</p>
-        <p>This platform serves three user roles: Citizens can report complaints and emergencies, Police Officers can manage cases and investigations, and Administrators can oversee the entire system.</p>
+        <h2 class="section-title"><span class="section-title-accent">About the Platform</span></h2>
+        <p>The Crime Intelligence and Citizen Safety Platform bridges the gap between citizens and law enforcement agencies. It provides a simple and accessible way to report incidents, track complaints, and stay informed about community safety.</p>
+        <p>The platform serves four user roles: <strong>Citizens</strong> report complaints and emergencies, <strong>Station Inspectors</strong> validate complaints and assign officers, <strong>Police Officers</strong> investigate cases, and <strong>Administrators</strong> oversee the entire system.</p>
+        <div style="display:flex;justify-content:center;gap:20px;margin-top:24px;flex-wrap:wrap;">
+            <a href="{% url 'register' %}" class="btn btn-primary">Get Started</a>
+            <a href="#signin" class="btn btn-outline-primary">Sign In</a>
+        </div>
     </div>
 </section>
 
 <!-- Contact Section -->
 <section class="contact-section" id="contact">
-    <h2 class="section-title">Contact Us</h2>
+    <h2 class="section-title"><span class="section-title-accent">Contact Us</span></h2>
     <div class="contact-info">
-        <div class="contact-item">
-            <div class="icon">📧</div>
+        <div class="contact-item anim-in">
+            <div class="icon">&#128231;</div>
             <p>support@cisp.gov.in</p>
         </div>
-        <div class="contact-item">
-            <div class="icon">📞</div>
+        <div class="contact-item anim-in d-100">
+            <div class="icon">&#128222;</div>
             <p>+91 1800-XXX-XXXX</p>
         </div>
-        <div class="contact-item">
-            <div class="icon">📍</div>
+        <div class="contact-item anim-in d-200">
+            <div class="icon">&#128205;</div>
             <p>Madurai, Tamil Nadu, India</p>
         </div>
     </div>
@@ -99,9 +229,10 @@
 
 <!-- Footer -->
 <footer class="footer">
-    <p>&copy; 2026 Crime Intelligence and Citizen Safety Platform. All rights reserved.</p>
+    <p>&copy; 2026 Crime Intelligence and Citizen Safety Platform. All rights reserved. | <a href="{% url 'login' %}">Login</a></p>
 </footer>
 
-<script src="{% static 'firstapp/script.js' %}"></script>
+<script src="{% static 'firstapp/ambient.js' %}"></script>
+<script src="{% static 'firstapp/ui.js' %}"></script>
 </body>
 </html>

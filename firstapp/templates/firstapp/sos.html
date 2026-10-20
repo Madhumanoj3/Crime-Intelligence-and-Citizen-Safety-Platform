@@ -4,6 +4,7 @@
 <head>
     <title>SOS Emergency - CISP</title>
     <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+    <link rel="stylesheet" href="{% static 'firstapp/animations.css' %}">
 </head>
 <body>
 
@@ -43,23 +44,24 @@
         <div class="content-area">
             <div class="sos-container">
                 <h2 class="page-title" style="text-align:center;">Emergency SOS Alert</h2>
-                <p style="color:#666; margin-bottom:10px;">Press the button below to send an emergency SOS alert</p>
+                <p style="color:#666; margin-bottom:10px;">Press the button, tell us what happened, and your live location goes to the nearest police station.</p>
 
-                <button class="sos-button" onclick="sendSOS()">SEND SOS</button>
+                <button class="sos-button" onclick="openSOSDialog()">SEND SOS</button>
 
                 <!-- Location Info -->
                 <div class="sos-location">
-                    <p><strong>Current Location:</strong> South Gate, Madurai</p>
-                    <p><strong>Latitude:</strong> 9.9135</p>
-                    <p><strong>Longitude:</strong> 78.1205</p>
+                    <p><strong>Current Location:</strong> <span id="sos-place">Detecting your location...</span></p>
+                    <p><strong>Latitude:</strong> <span id="sos-lat">-</span></p>
+                    <p><strong>Longitude:</strong> <span id="sos-lon">-</span></p>
                     <p><strong>Time:</strong> <span id="current-time">{% now "Y-m-d H:i:s" %}</span></p>
+                    <p><strong>Nearest Station:</strong> <span id="sos-station">Chosen when you send</span></p>
                     <p><strong>SOS Status:</strong> <span id="sos-status" class="badge badge-pending">Not Sent</span></p>
                 </div>
 
                 <!-- Info -->
                 <div class="sos-info">
                     <div class="info-box info">
-                        ℹ️ Your location will be shared with the responsible police personnel when SOS functionality is connected.
+                        ℹ️ Your GPS location is shared with the nearest police station when you send an SOS. Allow location access in your browser for the most accurate result.
                     </div>
                 </div>
             </div>
@@ -67,6 +69,133 @@
     </div>
 </div>
 
+<!-- What happened dialog -->
+<div class="modal-overlay" id="sosModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+    <div class="modal-box" style="background:#fff; border-radius:8px; max-width:480px; width:90%; padding:24px; box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+        <h3 style="margin:0 0 6px 0; color:#c0392b;">🆘 What happened?</h3>
+        <p style="margin:0 0 12px 0; font-size:13px; color:#666;">Describe the emergency in a few words. Your location is added automatically.</p>
+        <div id="sosChips" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px;">
+            <button type="button" class="btn btn-sm btn-outline" data-text="I am being followed or threatened">Threatened</button>
+            <button type="button" class="btn btn-sm btn-outline" data-text="Theft or robbery in progress">Robbery</button>
+            <button type="button" class="btn btn-sm btn-outline" data-text="Road accident, need help">Accident</button>
+            <button type="button" class="btn btn-sm btn-outline" data-text="Harassment or assault">Assault</button>
+            <button type="button" class="btn btn-sm btn-outline" data-text="Medical emergency">Medical</button>
+        </div>
+        <textarea id="sosDescription" rows="4" placeholder="What happened?" style="width:100%; padding:10px; border:1px solid #ced4da; border-radius:6px; font-family:inherit; box-sizing:border-box;"></textarea>
+        <p style="font-size:13px; margin:10px 0;">📍 <span id="sosModalLoc">Detecting your location...</span></p>
+        <p id="sosError" style="color:#c0392b; font-size:13px; margin:0 0 8px 0; display:none;"></p>
+        <div style="display:flex; gap:8px; justify-content:flex-end;">
+            <button type="button" class="btn btn-sm btn-outline" onclick="closeSOSDialog()">Cancel</button>
+            <button type="button" class="btn btn-sm btn-danger" id="sosSubmit" onclick="submitSOS()">Send SOS</button>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'firstapp/ambient.js' %}"></script>
 <script src="{% static 'firstapp/script.js' %}"></script>
+<script src="{% static 'firstapp/ui.js' %}"></script>
+<script>
+var sosPos = null;
+
+function setPos(lat, lon) {
+    sosPos = {lat: lat, lon: lon};
+    document.getElementById('sos-lat').textContent = lat.toFixed(6);
+    document.getElementById('sos-lon').textContent = lon.toFixed(6);
+    var coords = lat.toFixed(4) + ', ' + lon.toFixed(4);
+    document.getElementById('sos-place').textContent = 'Live GPS location (' + coords + ')';
+    document.getElementById('sosModalLoc').textContent = 'Live GPS location (' + coords + ')';
+    fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lon)
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+            if (!d || !d.display_name) return;
+            sosPos.address = d.display_name;
+            document.getElementById('sos-place').textContent = d.display_name;
+            document.getElementById('sosModalLoc').textContent = d.display_name;
+        }).catch(function () {});
+}
+
+function locate() {
+    if (!navigator.geolocation) {
+        document.getElementById('sos-place').textContent = 'Location is not supported by this browser';
+        return;
+    }
+    navigator.geolocation.getCurrentPosition(
+        function (p) { setPos(p.coords.latitude, p.coords.longitude); },
+        function () {
+            document.getElementById('sos-place').textContent = 'Location blocked. Allow location access for faster help.';
+            document.getElementById('sosModalLoc').textContent = 'Location unavailable. Your registered location will be used.';
+        },
+        {enableHighAccuracy: true, timeout: 10000, maximumAge: 0}
+    );
+}
+
+function openSOSDialog() {
+    document.getElementById('sosError').style.display = 'none';
+    document.getElementById('sosModal').style.display = 'flex';
+    document.getElementById('sosDescription').focus();
+    locate();
+}
+
+function closeSOSDialog() {
+    document.getElementById('sosModal').style.display = 'none';
+}
+
+document.querySelectorAll('#sosChips button').forEach(function (b) {
+    b.addEventListener('click', function () {
+        document.getElementById('sosDescription').value = b.getAttribute('data-text');
+    });
+});
+
+function submitSOS() {
+    var desc = document.getElementById('sosDescription').value.trim();
+    var err = document.getElementById('sosError');
+    if (!desc) {
+        err.textContent = 'Please tell us what happened.';
+        err.style.display = 'block';
+        return;
+    }
+    var btn = document.getElementById('sosSubmit');
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    var body = new URLSearchParams();
+    body.append('description', desc);
+    if (sosPos) {
+        body.append('latitude', sosPos.lat);
+        body.append('longitude', sosPos.lon);
+        if (sosPos.address) body.append('location', sosPos.address);
+    }
+    fetch('/citizen/sos/', {
+        method: 'POST',
+        headers: {'X-CSRFToken': getCookie('csrftoken') || ''},
+        body: body
+    })
+    .then(function (r) { return r.json().then(function (d) { return {ok: r.ok, d: d}; }); })
+    .then(function (res) {
+        if (!res.ok) throw new Error(res.d.message || 'Failed');
+        closeSOSDialog();
+        var sb = document.querySelector('.sos-button');
+        sb.textContent = 'SOS SENT';
+        sb.style.background = '#27ae60';
+        sb.style.borderColor = '#1e8449';
+        sb.disabled = true;
+        var st = document.getElementById('sos-status');
+        st.textContent = 'Active (Sent to Police)';
+        st.className = 'badge badge-danger';
+        var d = res.d;
+        document.getElementById('sos-station').textContent = d.station_name
+            ? d.station_name + (d.distance_km != null ? ' (' + d.distance_km + ' km away)' : '')
+            : 'No station available';
+    })
+    .catch(function (e) {
+        err.textContent = e.message || 'Could not send SOS. Try again.';
+        err.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Send SOS';
+    });
+}
+
+locate();
+</script>
 </body>
 </html>

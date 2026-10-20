@@ -1,0 +1,1001 @@
+crime_id,crime_type,location,latitude,longitude,date
+SYN-CR-0001,Vehicle Theft,Pollachi,10.656972,77.012999,2024-01-01
+SYN-CR-0002,Theft,"Mattuthavani, Madurai",9.943298,78.160870,2024-01-03
+SYN-CR-0003,Theft,"Meenakshi Amman Temple, Madurai",9.917067,78.118515,2024-01-04
+SYN-CR-0004,Theft,"New Bus Stand, Salem",11.674634,78.142726,2024-01-04
+SYN-CR-0005,Assault,"Vellore Fort, Vellore",12.916184,79.128577,2024-01-06
+SYN-CR-0006,Vandalism,"Chennai Central, Chennai",13.079504,80.279095,2024-01-07
+SYN-CR-0007,Chain Snatching,"Ukkadam, Coimbatore",10.987915,76.964176,2024-01-07
+SYN-CR-0008,Vehicle Theft,Karur,10.959478,78.079638,2024-01-09
+SYN-CR-0009,Vehicle Theft,Hosur,12.743939,77.815954,2024-01-10
+SYN-CR-0010,Assault,"Katpadi, Vellore",12.972892,79.143654,2024-01-10
+SYN-CR-0011,Vehicle Theft,"T. Nagar, Chennai",13.036993,80.232816,2024-01-10
+SYN-CR-0012,Chain Snatching,"Meenakshi Amman Temple, Madurai",9.917659,78.119396,2024-01-11
+SYN-CR-0013,Theft,"Periyar Bus Stand, Madurai",9.918867,78.114397,2024-01-11
+SYN-CR-0014,Vehicle Theft,"Koyambedu, Chennai",13.072624,80.198212,2024-01-12
+SYN-CR-0015,Cyber Crime,"Anna Nagar, Madurai",9.939033,78.126977,2024-01-13
+SYN-CR-0016,Vandalism,"Arapalayam, Madurai",9.934980,78.099327,2024-01-13
+SYN-CR-0017,Assault,"Chennai Central, Chennai",13.082688,80.275485,2024-01-13
+SYN-CR-0018,Vehicle Theft,"New Bus Stand, Salem",11.678798,78.144560,2024-01-16
+SYN-CR-0019,Chain Snatching,"Mattuthavani, Madurai",9.943376,78.152748,2024-01-18
+SYN-CR-0020,Chain Snatching,"Bus Stand, Sivakasi",9.456101,77.803064,2024-01-19
+SYN-CR-0021,Vehicle Theft,"Central Bus Stand, Erode",11.341557,77.720928,2024-01-19
+SYN-CR-0022,Assault,"Mylapore, Chennai",13.033720,80.255146,2024-01-21
+SYN-CR-0023,Chain Snatching,"Thiruparankundram, Madurai",9.877837,78.075003,2024-01-27
+SYN-CR-0024,Chain Snatching,"Velachery, Chennai",12.978304,80.220204,2024-01-28
+SYN-CR-0025,Chain Snatching,"Mylapore, Chennai",13.040904,80.257882,2024-01-30
+SYN-CR-0026,Vehicle Theft,"Chennai Central, Chennai",13.082479,80.271940,2024-02-02
+SYN-CR-0027,Theft,"Ukkadam, Coimbatore",10.993359,76.956669,2024-02-02
+SYN-CR-0028,Burglary,"Chennai Central, Chennai",13.079634,80.275906,2024-02-03
+SYN-CR-0029,Burglary,Kanchipuram,12.821991,79.714391,2024-02-04
+SYN-CR-0030,Theft,"Tirunelveli Junction, Tirunelveli",8.729028,77.708200,2024-02-04
+SYN-CR-0031,Vehicle Theft,"Peelamedu, Coimbatore",11.018622,77.002584,2024-02-06
+SYN-CR-0032,Vandalism,"Chennai Central, Chennai",13.083445,80.270053,2024-02-08
+SYN-CR-0033,Theft,"Koyambedu, Chennai",13.066341,80.191964,2024-02-09
+SYN-CR-0034,Vehicle Theft,"Old Bus Stand, Thanjavur",10.779681,79.145479,2024-02-09
+SYN-CR-0035,Cyber Crime,"Tirunelveli Junction, Tirunelveli",8.726722,77.711945,2024-02-09
+SYN-CR-0036,Cyber Crime,"R.S. Puram, Coimbatore",11.019830,76.936355,2024-02-10
+SYN-CR-0037,Vehicle Theft,"Meenakshi Amman Temple, Madurai",9.914717,78.116658,2024-02-12
+SYN-CR-0038,Chain Snatching,Pollachi,10.650599,77.001811,2024-02-13
+SYN-CR-0039,Theft,"T. Nagar, Chennai",13.041320,80.234734,2024-02-14
+SYN-CR-0040,Theft,"Meenakshi Amman Temple, Madurai",9.917400,78.115362,2024-02-15
+SYN-CR-0041,Theft,"Old Bus Stand, Tiruppur",11.113307,77.345372,2024-02-15
+SYN-CR-0042,Chain Snatching,"Koyambedu, Chennai",13.070357,80.196304,2024-02-17
+SYN-CR-0043,Cyber Crime,"Anna Nagar, Madurai",9.938493,78.132279,2024-02-19
+SYN-CR-0044,Robbery,"T. Nagar, Chennai",13.041748,80.236021,2024-02-19
+SYN-CR-0045,Theft,"Mylapore, Chennai",13.034535,80.260759,2024-02-20
+SYN-CR-0046,Cyber Crime,"Peelamedu, Coimbatore",11.025127,77.005633,2024-02-20
+SYN-CR-0047,Chain Snatching,"T. Nagar, Chennai",13.040177,80.232920,2024-02-21
+SYN-CR-0048,Vehicle Theft,"Srirangam, Tiruchirappalli",10.861337,78.689043,2024-02-23
+SYN-CR-0049,Theft,"Egmore, Chennai",13.067603,80.268752,2024-02-25
+SYN-CR-0050,Chain Snatching,Krishnagiri,12.517796,78.217876,2024-02-25
+SYN-CR-0051,Chain Snatching,"Adyar, Chennai",13.001534,80.254947,2024-02-27
+SYN-CR-0052,Cyber Crime,Dindigul,10.361717,77.990419,2024-02-27
+SYN-CR-0053,Vandalism,"Meenakshi Amman Temple, Madurai",9.919651,78.120832,2024-02-27
+SYN-CR-0054,Theft,"T. Nagar, Chennai",13.039388,80.236789,2024-02-27
+SYN-CR-0055,Theft,"Anna Nagar, Madurai",9.939714,78.130823,2024-03-01
+SYN-CR-0056,Burglary,"Anna Nagar, Madurai",9.942470,78.131723,2024-03-02
+SYN-CR-0057,Vehicle Theft,"Tambaram, Chennai",12.929106,80.096854,2024-03-02
+SYN-CR-0058,Vandalism,Villupuram,11.931733,79.499577,2024-03-02
+SYN-CR-0059,Chain Snatching,"Meenakshi Amman Temple, Madurai",9.919246,78.118450,2024-03-04
+SYN-CR-0060,Chain Snatching,"Chennai Central, Chennai",13.078999,80.271883,2024-03-06
+SYN-CR-0061,Theft,"Tambaram, Chennai",12.922401,80.102558,2024-03-06
+SYN-CR-0062,Theft,"Chennai Central, Chennai",13.080110,80.269957,2024-03-07
+SYN-CR-0063,Theft,"Periyar Bus Stand, Madurai",9.915411,78.113979,2024-03-07
+SYN-CR-0064,Vandalism,"Mattuthavani, Madurai",9.947473,78.156431,2024-03-08
+SYN-CR-0065,Vandalism,"Thillai Nagar, Tiruchirappalli",10.830722,78.684717,2024-03-11
+SYN-CR-0066,Burglary,"Adyar, Chennai",13.011176,80.253724,2024-03-12
+SYN-CR-0067,Vandalism,"Mattuthavani, Madurai",9.948774,78.159252,2024-03-13
+SYN-CR-0068,Assault,"Ukkadam, Coimbatore",10.984821,76.960991,2024-03-14
+SYN-CR-0069,Vehicle Theft,"Mylapore, Chennai",13.036469,80.262298,2024-03-15
+SYN-CR-0070,Theft,"Meenakshi Amman Temple, Madurai",9.918485,78.118784,2024-03-16
+SYN-CR-0071,Theft,"Tirunelveli Junction, Tirunelveli",8.722869,77.710592,2024-03-17
+SYN-CR-0072,Vandalism,"K. Pudur, Madurai",9.962986,78.148605,2024-03-18
+SYN-CR-0073,Robbery,"Mylapore, Chennai",13.034699,80.263432,2024-03-18
+SYN-CR-0074,Vehicle Theft,"Tambaram, Chennai",12.929986,80.102158,2024-03-19
+SYN-CR-0075,Chain Snatching,"Meenakshi Amman Temple, Madurai",9.919382,78.116948,2024-03-20
+SYN-CR-0076,Theft,"Gandhipuram, Coimbatore",11.014841,76.966928,2024-03-21
+SYN-CR-0077,Robbery,"Katpadi, Vellore",12.973235,79.131648,2024-03-21
+SYN-CR-0078,Vehicle Theft,"Meenakshi Amman Temple, Madurai",9.917617,78.119050,2024-03-21
+SYN-CR-0079,Chain Snatching,"Ukkadam, Coimbatore",10.988967,76.964308,2024-03-23
+SYN-CR-0080,Theft,"Meenakshi Amman Temple, Madurai",9.921642,78.119352,2024-03-24
+SYN-CR-0081,Robbery,"Gandhipuram, Coimbatore",11.013173,76.967376,2024-03-25
+SYN-CR-0082,Chain Snatching,"Srirangam, Tiruchirappalli",10.864538,78.689012,2024-03-27
+SYN-CR-0083,Vandalism,"Ukkadam, Coimbatore",10.996607,76.958504,2024-03-28
+SYN-CR-0084,Theft,"Ukkadam, Coimbatore",10.989771,76.955238,2024-03-29
+SYN-CR-0085,Vehicle Theft,"Gandhipuram, Coimbatore",11.011391,76.971466,2024-04-02
+SYN-CR-0086,Vehicle Theft,"Tirunelveli Junction, Tirunelveli",8.732689,77.705423,2024-04-02
+SYN-CR-0087,Cyber Crime,"Velachery, Chennai",12.989393,80.228998,2024-04-03
+SYN-CR-0088,Burglary,"Velachery, Chennai",12.976719,80.211698,2024-04-04
+SYN-CR-0089,Vandalism,"Periyar Bus Stand, Madurai",9.916287,78.109149,2024-04-05
+SYN-CR-0090,Robbery,"Tambaram, Chennai",12.926884,80.100966,2024-04-07
+SYN-CR-0091,Vandalism,Dindigul,10.368289,77.984789,2024-04-08
+SYN-CR-0092,Robbery,"New Bus Stand, Salem",11.670421,78.140325,2024-04-09
+SYN-CR-0093,Theft,"Tambaram, Chennai",12.928258,80.105274,2024-04-09
+SYN-CR-0094,Cyber Crime,"Arapalayam, Madurai",9.931215,78.102746,2024-04-12
+SYN-CR-0095,Burglary,"Koyambedu, Chennai",13.065172,80.192920,2024-04-12
+SYN-CR-0096,Theft,"Katpadi, Vellore",12.974807,79.142423,2024-04-13
+SYN-CR-0097,Vehicle Theft,"Mattuthavani, Madurai",9.947245,78.159185,2024-04-15
+SYN-CR-0098,Theft,"Meenakshi Amman Temple, Madurai",9.919022,78.120687,2024-04-15
+SYN-CR-0099,Chain Snatching,"Mylapore, Chennai",13.035604,80.258042,2024-04-15
+SYN-CR-0100,Chain Snatching,Dindigul,10.365165,77.983034,2024-04-19
+SYN-CR-0101,Theft,"Mylapore, Chennai",13.038888,80.259053,2024-04-19
+SYN-CR-0102,Chain Snatching,"T. Nagar, Chennai",13.044608,80.228652,2024-04-23
+SYN-CR-0103,Chain Snatching,"Egmore, Chennai",13.076991,80.256513,2024-04-26
+SYN-CR-0104,Assault,"Ukkadam, Coimbatore",10.990133,76.959936,2024-04-27
+SYN-CR-0105,Burglary,"Meenakshi Amman Temple, Madurai",9.922208,78.118978,2024-04-28
+SYN-CR-0106,Burglary,"Central Bus Stand, Erode",11.348025,77.717679,2024-04-30
+SYN-CR-0107,Robbery,"T. Nagar, Chennai",13.057814,80.230515,2024-04-30
+SYN-CR-0108,Chain Snatching,"Tirunelveli Junction, Tirunelveli",8.730909,77.705244,2024-04-30
+SYN-CR-0109,Robbery,"Bus Stand, Sivakasi",9.454172,77.797426,2024-05-03
+SYN-CR-0110,Theft,Namakkal,11.211726,78.173058,2024-05-03
+SYN-CR-0111,Theft,"Periyar Bus Stand, Madurai",9.913366,78.115484,2024-05-04
+SYN-CR-0112,Theft,"Thiruparankundram, Madurai",9.884311,78.067208,2024-05-04
+SYN-CR-0113,Burglary,"Anna Nagar, Madurai",9.941920,78.127922,2024-05-05
+SYN-CR-0114,Theft,"Meenakshi Amman Temple, Madurai",9.920458,78.123888,2024-05-06
+SYN-CR-0115,Vehicle Theft,"Tambaram, Chennai",12.926750,80.096283,2024-05-06
+SYN-CR-0116,Robbery,"Tambaram, Chennai",12.924460,80.098095,2024-05-09
+SYN-CR-0117,Robbery,"Tambaram, Chennai",12.927178,80.104386,2024-05-09
+SYN-CR-0118,Chain Snatching,"Gandhipuram, Coimbatore",11.020794,76.965666,2024-05-10
+SYN-CR-0119,Robbery,"Mattuthavani, Madurai",9.950501,78.158737,2024-05-11
+SYN-CR-0120,Cyber Crime,"Chathiram Bus Stand, Tiruchirappalli",10.836918,78.691009,2024-05-13
+SYN-CR-0121,Chain Snatching,"Chennai Central, Chennai",13.088261,80.271191,2024-05-13
+SYN-CR-0122,Chain Snatching,"Katpadi, Vellore",12.976772,79.133001,2024-05-13
+SYN-CR-0123,Assault,"Arapalayam, Madurai",9.931957,78.102062,2024-05-14
+SYN-CR-0124,Theft,"Mattuthavani, Madurai",9.946903,78.155687,2024-05-14
+SYN-CR-0125,Theft,"Mattuthavani, Madurai",9.948522,78.154667,2024-05-15
+SYN-CR-0126,Theft,"Bus Stand, Sivakasi",9.450223,77.800036,2024-05-16
+SYN-CR-0127,Robbery,"Gandhipuram, Coimbatore",11.017429,76.971076,2024-05-16
+SYN-CR-0128,Theft,"Mattuthavani, Madurai",9.939630,78.154235,2024-05-16
+SYN-CR-0129,Assault,"Meenakshi Amman Temple, Madurai",9.924470,78.122042,2024-05-16
+SYN-CR-0130,Assault,"Central Bus Stand, Erode",11.334586,77.716418,2024-05-18
+SYN-CR-0131,Theft,"Ukkadam, Coimbatore",10.988932,76.964399,2024-05-18
+SYN-CR-0132,Vehicle Theft,"Gandhipuram, Coimbatore",11.021919,76.965949,2024-05-20
+SYN-CR-0133,Robbery,"Velachery, Chennai",12.979150,80.210099,2024-05-20
+SYN-CR-0134,Burglary,"Anna Nagar, Madurai",9.934630,78.135792,2024-05-23
+SYN-CR-0135,Chain Snatching,"New Bus Stand, Salem",11.673124,78.138162,2024-05-23
+SYN-CR-0136,Cyber Crime,"R.S. Puram, Coimbatore",11.018893,76.951155,2024-05-24
+SYN-CR-0137,Cyber Crime,"Periyar Bus Stand, Madurai",9.918346,78.106989,2024-05-25
+SYN-CR-0138,Chain Snatching,"T. Nagar, Chennai",13.047671,80.237194,2024-05-25
+SYN-CR-0139,Cyber Crime,"Chathiram Bus Stand, Tiruchirappalli",10.831032,78.691397,2024-05-26
+SYN-CR-0140,Cyber Crime,"Periyar Bus Stand, Madurai",9.918039,78.116535,2024-05-26
+SYN-CR-0141,Vandalism,"Tirunelveli Junction, Tirunelveli",8.725281,77.706374,2024-05-26
+SYN-CR-0142,Cyber Crime,"Peelamedu, Coimbatore",11.028099,76.996964,2024-05-29
+SYN-CR-0143,Vandalism,"Ukkadam, Coimbatore",10.991702,76.959337,2024-05-31
+SYN-CR-0144,Cyber Crime,"Velachery, Chennai",12.979192,80.219500,2024-05-31
+SYN-CR-0145,Chain Snatching,"Gandhipuram, Coimbatore",11.017484,76.964411,2024-06-01
+SYN-CR-0146,Chain Snatching,"Bus Stand, Sivakasi",9.460831,77.807023,2024-06-02
+SYN-CR-0147,Theft,"T. Nagar, Chennai",13.045009,80.237856,2024-06-03
+SYN-CR-0148,Chain Snatching,"Tirunelveli Junction, Tirunelveli",8.728151,77.709500,2024-06-05
+SYN-CR-0149,Robbery,"Central Bus Stand, Tiruchirappalli",10.791693,78.671525,2024-06-06
+SYN-CR-0150,Robbery,"Chennai Central, Chennai",13.084836,80.275369,2024-06-06
+SYN-CR-0151,Vehicle Theft,"Gandhipuram, Coimbatore",11.020264,76.963997,2024-06-06
+SYN-CR-0152,Assault,Dindigul,10.359275,77.975817,2024-06-07
+SYN-CR-0153,Vehicle Theft,"Mattuthavani, Madurai",9.949316,78.156069,2024-06-07
+SYN-CR-0154,Theft,Villupuram,11.946655,79.482194,2024-06-07
+SYN-CR-0155,Vehicle Theft,"Tambaram, Chennai",12.916417,80.102262,2024-06-09
+SYN-CR-0156,Cyber Crime,"Peelamedu, Coimbatore",11.025772,76.999630,2024-06-10
+SYN-CR-0157,Vehicle Theft,"Srirangam, Tiruchirappalli",10.859960,78.691535,2024-06-10
+SYN-CR-0158,Vehicle Theft,"Vadapalani, Chennai",13.052269,80.208629,2024-06-10
+SYN-CR-0159,Vehicle Theft,"Chathiram Bus Stand, Tiruchirappalli",10.834737,78.688877,2024-06-11
+SYN-CR-0160,Cyber Crime,Pollachi,10.646568,77.018315,2024-06-11
+SYN-CR-0161,Chain Snatching,"K. Pudur, Madurai",9.958411,78.146765,2024-06-13
+SYN-CR-0162,Chain Snatching,"New Bus Stand, Salem",11.673236,78.143784,2024-06-13
+SYN-CR-0163,Chain Snatching,"Srirangam, Tiruchirappalli",10.854554,78.692052,2024-06-13
+SYN-CR-0164,Theft,"Ukkadam, Coimbatore",10.985765,76.959460,2024-06-13
+SYN-CR-0165,Robbery,"Egmore, Chennai",13.083574,80.260780,2024-06-14
+SYN-CR-0166,Theft,Villupuram,11.929597,79.481025,2024-06-14
+SYN-CR-0167,Robbery,"Gandhipuram, Coimbatore",11.015140,76.966042,2024-06-16
+SYN-CR-0168,Theft,Krishnagiri,12.519782,78.212243,2024-06-16
+SYN-CR-0169,Theft,"Bus Stand, Sivakasi",9.454210,77.801439,2024-06-17
+SYN-CR-0170,Chain Snatching,"Srirangam, Tiruchirappalli",10.864352,78.688545,2024-06-17
+SYN-CR-0171,Assault,"Koyambedu, Chennai",13.072340,80.189558,2024-06-18
+SYN-CR-0172,Assault,"Mattuthavani, Madurai",9.944889,78.156531,2024-06-19
+SYN-CR-0173,Chain Snatching,"Meenakshi Amman Temple, Madurai",9.914301,78.115842,2024-06-20
+SYN-CR-0174,Vehicle Theft,Namakkal,11.218804,78.160121,2024-06-20
+SYN-CR-0175,Chain Snatching,"Srirangam, Tiruchirappalli",10.858364,78.689266,2024-06-21
+SYN-CR-0176,Vehicle Theft,"Old Bus Stand, Tiruppur",11.109318,77.341266,2024-06-22
+SYN-CR-0177,Chain Snatching,"Meenakshi Amman Temple, Madurai",9.918956,78.120844,2024-06-25
+SYN-CR-0178,Theft,"Old Bus Stand, Tiruppur",11.108999,77.342642,2024-06-25
+SYN-CR-0179,Chain Snatching,"Periyar Bus Stand, Madurai",9.913193,78.110493,2024-06-26
+SYN-CR-0180,Theft,"T. Nagar, Chennai",13.040189,80.234741,2024-06-27
+SYN-CR-0181,Assault,Villupuram,11.942577,79.493558,2024-06-27
+SYN-CR-0182,Theft,"Arapalayam, Madurai",9.931535,78.111488,2024-06-28
+SYN-CR-0183,Chain Snatching,"Peelamedu, Coimbatore",11.027870,77.004370,2024-06-28
+SYN-CR-0184,Vandalism,"Katpadi, Vellore",12.969817,79.138591,2024-06-29
+SYN-CR-0185,Theft,"Srirangam, Tiruchirappalli",10.860419,78.686175,2024-06-30
+SYN-CR-0186,Cyber Crime,"Bus Stand, Sivakasi",9.456332,77.803646,2024-07-01
+SYN-CR-0187,Vehicle Theft,"Ukkadam, Coimbatore",10.988287,76.960288,2024-07-02
+SYN-CR-0188,Vandalism,"Chathiram Bus Stand, Tiruchirappalli",10.825455,78.688719,2024-07-04
+SYN-CR-0189,Theft,"Meenakshi Amman Temple, Madurai",9.922614,78.114671,2024-07-04
+SYN-CR-0190,Theft,"Chennai Central, Chennai",13.084465,80.277035,2024-07-06
+SYN-CR-0191,Robbery,"Katpadi, Vellore",12.970635,79.142558,2024-07-09
+SYN-CR-0192,Vehicle Theft,"Meenakshi Amman Temple, Madurai",9.920861,78.115478,2024-07-09
+SYN-CR-0193,Chain Snatching,Namakkal,11.220800,78.167633,2024-07-09
+SYN-CR-0194,Theft,"New Bus Stand, Salem",11.676195,78.147380,2024-07-09
+SYN-CR-0195,Vehicle Theft,"Periyar Bus Stand, Madurai",9.909443,78.117930,2024-07-10
+SYN-CR-0196,Chain Snatching,Pollachi,10.654768,77.005276,2024-07-11
+SYN-CR-0197,Chain Snatching,Kumbakonam,10.952918,79.381968,2024-07-12
+SYN-CR-0198,Chain Snatching,"Tambaram, Chennai",12.927371,80.096603,2024-07-12
+SYN-CR-0199,Vandalism,"Anna Nagar, Madurai",9.935166,78.131838,2024-07-13
+SYN-CR-0200,Vehicle Theft,"Old Bus Stand, Tiruppur",11.106782,77.338890,2024-07-14
+SYN-CR-0201,Vehicle Theft,Kumbakonam,10.962071,79.385821,2024-07-15
+SYN-CR-0202,Theft,"Peelamedu, Coimbatore",11.024491,76.999457,2024-07-15
+SYN-CR-0203,Assault,"Mylapore, Chennai",13.039033,80.260773,2024-07-17
+SYN-CR-0204,Theft,"Old Bus Stand, Tiruppur",11.113087,77.338682,2024-07-17
+SYN-CR-0205,Vehicle Theft,"Chathiram Bus Stand, Tiruchirappalli",10.832006,78.690979,2024-07-18
+SYN-CR-0206,Robbery,Kumbakonam,10.964246,79.380898,2024-07-19
+SYN-CR-0207,Vehicle Theft,"Gandhipuram, Coimbatore",11.018278,76.966624,2024-07-21
+SYN-CR-0208,Assault,"Anna Nagar, Madurai",9.939706,78.133275,2024-07-22
+SYN-CR-0209,Theft,"T. Nagar, Chennai",13.042613,80.238172,2024-07-22
+SYN-CR-0210,Chain Snatching,"T. Nagar, Chennai",13.042903,80.234333,2024-07-22
+SYN-CR-0211,Chain Snatching,"Meenakshi Amman Temple, Madurai",9.918605,78.122414,2024-07-23
+SYN-CR-0212,Vehicle Theft,"Meenakshi Amman Temple, Madurai",9.920151,78.121960,2024-07-24
+SYN-CR-0213,Theft,"Periyar Bus Stand, Madurai",9.917645,78.115971,2024-07-24
+SYN-CR-0214,Robbery,"Gandhipuram, Coimbatore",11.013270,76.970000,2024-07-26
+SYN-CR-0215,Theft,"Mylapore, Chennai",13.026668,80.262899,2024-07-26
+SYN-CR-0216,Theft,"Anna Nagar, Madurai",9.939466,78.134778,2024-07-27
+SYN-CR-0217,Theft,"Periyar Bus Stand, Madurai",9.919842,78.113069,2024-07-28
+SYN-CR-0218,Chain Snatching,"Thiruparankundram, Madurai",9.879789,78.069751,2024-07-30
+SYN-CR-0219,Theft,"Ukkadam, Coimbatore",10.989286,76.959661,2024-07-30
+SYN-CR-0220,Chain Snatching,Kanchipuram,12.824208,79.706110,2024-08-01
+SYN-CR-0221,Chain Snatching,"Old Bus Stand, Tiruppur",11.103409,77.340698,2024-08-02
+SYN-CR-0222,Theft,Krishnagiri,12.509714,78.215977,2024-08-03
+SYN-CR-0223,Theft,"Central Bus Stand, Erode",11.334052,77.719304,2024-08-04
+SYN-CR-0224,Theft,"Thiruparankundram, Madurai",9.877435,78.071077,2024-08-04
+SYN-CR-0225,Robbery,"Chennai Central, Chennai",13.065987,80.279735,2024-08-05
+SYN-CR-0226,Theft,"T. Nagar, Chennai",13.040312,80.240294,2024-08-05
+SYN-CR-0227,Robbery,"Chennai Central, Chennai",13.080360,80.279592,2024-08-07
+SYN-CR-0228,Vehicle Theft,"Arapalayam, Madurai",9.930047,78.102266,2024-08-11
+SYN-CR-0229,Robbery,Kumbakonam,10.965671,79.399997,2024-08-11
+SYN-CR-0230,Theft,"Periyar Bus Stand, Madurai",9.918270,78.112130,2024-08-11
+SYN-CR-0231,Vehicle Theft,"Mattuthavani, Madurai",9.945046,78.163382,2024-08-12
+SYN-CR-0232,Chain Snatching,"Mattuthavani, Madurai",9.946566,78.155157,2024-08-12
+SYN-CR-0233,Chain Snatching,"Tambaram, Chennai",12.918455,80.096211,2024-08-12
+SYN-CR-0234,Chain Snatching,"Meenakshi Amman Temple, Madurai",9.921586,78.119257,2024-08-13
+SYN-CR-0235,Robbery,"Chathiram Bus Stand, Tiruchirappalli",10.828725,78.693774,2024-08-15
+SYN-CR-0236,Burglary,"Mattuthavani, Madurai",9.940235,78.156594,2024-08-17
+SYN-CR-0237,Theft,"Periyar Bus Stand, Madurai",9.917703,78.114401,2024-08-18
+SYN-CR-0238,Chain Snatching,"Periyar Bus Stand, Madurai",9.914979,78.112475,2024-08-19
+SYN-CR-0239,Vandalism,"T. Nagar, Chennai",13.036569,80.238593,2024-08-20
+SYN-CR-0240,Vehicle Theft,"Periyar Bus Stand, Madurai",9.918420,78.114704,2024-08-21
+SYN-CR-0241,Chain Snatching,"Mattuthavani, Madurai",9.945292,78.153507,2024-08-23
+SYN-CR-0242,Chain Snatching,"Arapalayam, Madurai",9.933614,78.100059,2024-08-24
+SYN-CR-0243,Chain Snatching,"Goripalayam, Madurai",9.930667,78.129882,2024-08-25
+SYN-CR-0244,Theft,"T. Nagar, Chennai",13.043066,80.229627,2024-08-25
+SYN-CR-0245,Chain Snatching,"Central Bus Stand, Erode",11.334017,77.720506,2024-08-26
+SYN-CR-0246,Theft,"Tambaram, Chennai",12.926338,80.098584,2024-08-27
+SYN-CR-0247,Burglary,"Gandhipuram, Coimbatore",11.015665,76.966344,2024-08-28
+SYN-CR-0248,Chain Snatching,"T. Nagar, Chennai",13.038723,80.234958,2024-08-28
+SYN-CR-0249,Vehicle Theft,"Anna Nagar, Madurai",9.944668,78.129044,2024-08-29
+SYN-CR-0250,Theft,"Mylapore, Chennai",13.038826,80.258571,2024-08-31
+SYN-CR-0251,Robbery,"Vellore Fort, Vellore",12.923158,79.137704,2024-08-31
+SYN-CR-0252,Chain Snatching,"New Bus Stand, Salem",11.668599,78.140112,2024-09-01
+SYN-CR-0253,Chain Snatching,"Mylapore, Chennai",13.033904,80.263870,2024-09-03
+SYN-CR-0254,Vehicle Theft,"Gandhipuram, Coimbatore",11.018649,76.972478,2024-09-06
+SYN-CR-0255,Robbery,"Gandhipuram, Coimbatore",11.014745,76.966804,2024-09-06
+SYN-CR-0256,Theft,"Gandhipuram, Coimbatore",11.017170,76.969703,2024-09-07
+SYN-CR-0257,Burglary,"Anna Nagar, Madurai",9.942332,78.129679,2024-09-10
+SYN-CR-0258,Theft,"Bus Stand, Sivakasi",9.451345,77.800887,2024-09-10
+SYN-CR-0259,Theft,"Periyar Bus Stand, Madurai",9.916020,78.109358,2024-09-10
+SYN-CR-0260,Robbery,"Chathiram Bus Stand, Tiruchirappalli",10.827203,78.695353,2024-09-11
+SYN-CR-0261,Burglary,"Peelamedu, Coimbatore",11.024288,77.002684,2024-09-11
+SYN-CR-0262,Robbery,"Meenakshi Amman Temple, Madurai",9.920962,78.116542,2024-09-12
+SYN-CR-0263,Vehicle Theft,"Koyambedu, Chennai",13.071954,80.193651,2024-09-13
+SYN-CR-0264,Vehicle Theft,Krishnagiri,12.513492,78.212592,2024-09-13
+SYN-CR-0265,Vehicle Theft,"New Bus Stand, Salem",11.659493,78.139084,2024-09-13
+SYN-CR-0266,Cyber Crime,"Velachery, Chennai",12.983626,80.218002,2024-09-13
+SYN-CR-0267,Burglary,Hosur,12.742789,77.822840,2024-09-14
+SYN-CR-0268,Burglary,"R.S. Puram, Coimbatore",11.003070,76.935428,2024-09-14
+SYN-CR-0269,Vehicle Theft,"Srirangam, Tiruchirappalli",10.863227,78.686692,2024-09-16
+SYN-CR-0270,Theft,"Meenakshi Amman Temple, Madurai",9.919975,78.119057,2024-09-18
+SYN-CR-0271,Chain Snatching,"Meenakshi Amman Temple, Madurai",9.917160,78.120654,2024-09-18
+SYN-CR-0272,Theft,"Meenakshi Amman Temple, Madurai",9.919341,78.120959,2024-09-19
+SYN-CR-0273,Vehicle Theft,"New Bus Stand, Salem",11.667626,78.141019,2024-09-20
+SYN-CR-0274,Chain Snatching,"Mattuthavani, Madurai",9.946806,78.155025,2024-09-21
+SYN-CR-0275,Chain Snatching,Virudhunagar,9.580351,77.955306,2024-09-22
+SYN-CR-0276,Theft,"Central Bus Stand, Erode",11.341070,77.716454,2024-09-25
+SYN-CR-0277,Burglary,"Anna Nagar, Chennai",13.102510,80.199438,2024-09-26
+SYN-CR-0278,Theft,"Chennai Central, Chennai",13.080564,80.277268,2024-09-26
+SYN-CR-0279,Theft,"Gandhipuram, Coimbatore",11.016911,76.974534,2024-09-26
+SYN-CR-0280,Vehicle Theft,"Old Bus Stand, Tiruppur",11.121731,77.343271,2024-09-27
+SYN-CR-0281,Theft,"Singanallur, Coimbatore",11.007740,77.015910,2024-09-27
+SYN-CR-0282,Robbery,"Bus Stand, Sivakasi",9.446797,77.803444,2024-09-28
+SYN-CR-0283,Theft,"Old Bus Stand, Tiruppur",11.109670,77.341071,2024-09-28
+SYN-CR-0284,Cyber Crime,"Velachery, Chennai",12.976735,80.219876,2024-09-29
+SYN-CR-0285,Theft,"Arapalayam, Madurai",9.931358,78.105191,2024-09-30
+SYN-CR-0286,Assault,"Gandhipuram, Coimbatore",11.014566,76.975343,2024-09-30
+SYN-CR-0287,Burglary,Namakkal,11.219615,78.172589,2024-09-30
+SYN-CR-0288,Robbery,"Arapalayam, Madurai",9.932606,78.099041,2024-10-01
+SYN-CR-0289,Chain Snatching,"Peelamedu, Coimbatore",11.026309,77.004381,2024-10-02
+SYN-CR-0290,Vehicle Theft,"Meenakshi Amman Temple, Madurai",9.918505,78.121354,2024-10-04
+SYN-CR-0291,Vehicle Theft,"Tambaram, Chennai",12.924185,80.100710,2024-10-06
+SYN-CR-0292,Theft,"Peelamedu, Coimbatore",11.028367,76.984161,2024-10-07
+SYN-CR-0293,Theft,"Chennai Central, Chennai",13.083341,80.279289,2024-10-08
+SYN-CR-0294,Theft,"Chennai Central, Chennai",13.082945,80.280681,2024-10-08
+SYN-CR-0295,Chain Snatching,"Tirunelveli Junction, Tirunelveli",8.730627,77.707673,2024-10-08
+SYN-CR-0296,Chain Snatching,"Thiruparankundram, Madurai",9.882532,78.076646,2024-10-09
+SYN-CR-0297,Chain Snatching,"Koyambedu, Chennai",13.075073,80.194828,2024-10-11
+SYN-CR-0298,Chain Snatching,"Ukkadam, Coimbatore",10.989558,76.958016,2024-10-11
+SYN-CR-0299,Theft,"Mattuthavani, Madurai",9.946202,78.156344,2024-10-12
+SYN-CR-0300,Theft,"Periyar Bus Stand, Madurai",9.921409,78.111522,2024-10-12
+SYN-CR-0301,Theft,"Tambaram, Chennai",12.928783,80.096233,2024-10-13
+SYN-CR-0302,Theft,"Ukkadam, Coimbatore",10.992464,76.961972,2024-10-13
+SYN-CR-0303,Chain Snatching,"Adyar, Chennai",13.001957,80.251124,2024-10-14
+SYN-CR-0304,Theft,"Mattuthavani, Madurai",9.946506,78.156831,2024-10-15
+SYN-CR-0305,Vehicle Theft,"Central Bus Stand, Erode",11.343051,77.713740,2024-10-16
+SYN-CR-0306,Chain Snatching,"Meenakshi Amman Temple, Madurai",9.918012,78.121417,2024-10-16
+SYN-CR-0307,Vehicle Theft,"Velachery, Chennai",12.984808,80.219268,2024-10-16
+SYN-CR-0308,Theft,"Gandhipuram, Coimbatore",11.016085,76.967429,2024-10-18
+SYN-CR-0309,Theft,"Koyambedu, Chennai",13.068630,80.195874,2024-10-18
+SYN-CR-0310,Assault,"T. Nagar, Chennai",13.036842,80.237596,2024-10-19
+SYN-CR-0311,Theft,"Arapalayam, Madurai",9.936161,78.101928,2024-10-20
+SYN-CR-0312,Chain Snatching,"Chennai Central, Chennai",13.081893,80.275898,2024-10-20
+SYN-CR-0313,Vehicle Theft,"Velachery, Chennai",12.989040,80.214012,2024-10-20
+SYN-CR-0314,Robbery,"Old Bus Stand, Tiruppur",11.106172,77.336997,2024-10-24
+SYN-CR-0315,Chain Snatching,"Central Bus Stand, Erode",11.340968,77.712427,2024-10-25
+SYN-CR-0316,Vandalism,"Velachery, Chennai",12.979846,80.214450,2024-10-25
+SYN-CR-0317,Vandalism,"Velachery, Chennai",12.984409,80.214423,2024-10-25
+SYN-CR-0318,Chain Snatching,"Arapalayam, Madurai",9.941533,78.110476,2024-10-27
+SYN-CR-0319,Theft,"Mattuthavani, Madurai",9.950700,78.161390,2024-10-27
+SYN-CR-0320,Assault,"Ukkadam, Coimbatore",10.991112,76.962002,2024-10-28
+SYN-CR-0321,Vehicle Theft,"Peelamedu, Coimbatore",11.026626,77.006958,2024-10-30
+SYN-CR-0322,Vandalism,"Central Bus Stand, Erode",11.337386,77.716542,2024-10-31
+SYN-CR-0323,Theft,"Katpadi, Vellore",12.973793,79.131446,2024-11-01
+SYN-CR-0324,Robbery,"Koyambedu, Chennai",13.075983,80.193915,2024-11-01
+SYN-CR-0325,Robbery,"Koyambedu, Chennai",13.071320,80.190165,2024-11-02
+SYN-CR-0326,Robbery,"Central Bus Stand, Erode",11.338834,77.717571,2024-11-03
+SYN-CR-0327,Vehicle Theft,"Ukkadam, Coimbatore",10.990714,76.964004,2024-11-03
+SYN-CR-0328,Chain Snatching,"Peelamedu, Coimbatore",11.014789,77.006209,2024-11-04
+SYN-CR-0329,Assault,"Meenakshi Amman Temple, Madurai",9.924320,78.119170,2024-11-05
+SYN-CR-0330,Burglary,"Mylapore, Chennai",13.033508,80.262356,2024-11-05
+SYN-CR-0331,Chain Snatching,"Periyar Bus Stand, Madurai",9.913915,78.110003,2024-11-05
+SYN-CR-0332,Vandalism,"Gandhipuram, Coimbatore",11.017293,76.969745,2024-11-06
+SYN-CR-0333,Vehicle Theft,"Gandhipuram, Coimbatore",11.017645,76.969278,2024-11-07
+SYN-CR-0334,Chain Snatching,"Srirangam, Tiruchirappalli",10.863484,78.692539,2024-11-07
+SYN-CR-0335,Vehicle Theft,"Periyar Bus Stand, Madurai",9.914352,78.115682,2024-11-09
+SYN-CR-0336,Theft,"Periyar Bus Stand, Madurai",9.908343,78.104922,2024-11-10
+SYN-CR-0337,Assault,"T. Nagar, Chennai",13.048288,80.231002,2024-11-10
+SYN-CR-0338,Theft,Namakkal,11.214622,78.167895,2024-11-11
+SYN-CR-0339,Cyber Crime,"Peelamedu, Coimbatore",11.028800,77.002124,2024-11-11
+SYN-CR-0340,Chain Snatching,"Anna Nagar, Madurai",9.940337,78.126958,2024-11-13
+SYN-CR-0341,Theft,"Srirangam, Tiruchirappalli",10.857930,78.691100,2024-11-15
+SYN-CR-0342,Chain Snatching,"Meenakshi Amman Temple, Madurai",9.918021,78.119447,2024-11-16
+SYN-CR-0343,Theft,"Old Bus Stand, Tiruppur",11.108812,77.337825,2024-11-18
+SYN-CR-0344,Vehicle Theft,"Bus Stand, Sivakasi",9.439341,77.812652,2024-11-19
+SYN-CR-0345,Chain Snatching,"Thiruparankundram, Madurai",9.869168,78.064172,2024-11-19
+SYN-CR-0346,Robbery,"Periyar Bus Stand, Madurai",9.915607,78.112973,2024-11-21
+SYN-CR-0347,Theft,"Tambaram, Chennai",12.930880,80.102538,2024-11-23
+SYN-CR-0348,Theft,"Velachery, Chennai",12.982372,80.216222,2024-11-23
+SYN-CR-0349,Theft,"Gandhipuram, Coimbatore",11.016239,76.965619,2024-11-25
+SYN-CR-0350,Chain Snatching,"Srirangam, Tiruchirappalli",10.861809,78.693195,2024-11-25
+SYN-CR-0351,Theft,"Chennai Central, Chennai",13.083251,80.276970,2024-11-28
+SYN-CR-0352,Chain Snatching,"Peelamedu, Coimbatore",11.033721,76.996643,2024-11-29
+SYN-CR-0353,Theft,"Periyar Bus Stand, Madurai",9.916888,78.113060,2024-12-01
+SYN-CR-0354,Theft,"Srirangam, Tiruchirappalli",10.862792,78.690350,2024-12-02
+SYN-CR-0355,Robbery,"Ukkadam, Coimbatore",10.993807,76.962948,2024-12-02
+SYN-CR-0356,Assault,"Periyar Bus Stand, Madurai",9.918183,78.110262,2024-12-03
+SYN-CR-0357,Burglary,"T. Nagar, Chennai",13.041246,80.231712,2024-12-04
+SYN-CR-0358,Vehicle Theft,"Central Bus Stand, Tiruchirappalli",10.804048,78.681740,2024-12-05
+SYN-CR-0359,Assault,"Mylapore, Chennai",13.027675,80.263411,2024-12-05
+SYN-CR-0360,Chain Snatching,"T. Nagar, Chennai",13.041947,80.233536,2024-12-05
+SYN-CR-0361,Chain Snatching,"Thiruparankundram, Madurai",9.879768,78.070661,2024-12-05
+SYN-CR-0362,Vehicle Theft,"Srirangam, Tiruchirappalli",10.863194,78.689244,2024-12-06
+SYN-CR-0363,Robbery,"Central Bus Stand, Erode",11.342944,77.712978,2024-12-09
+SYN-CR-0364,Robbery,"Velachery, Chennai",12.981468,80.217331,2024-12-09
+SYN-CR-0365,Vehicle Theft,"Chennai Central, Chennai",13.076960,80.274455,2024-12-10
+SYN-CR-0366,Vandalism,"Meenakshi Amman Temple, Madurai",9.919913,78.120990,2024-12-11
+SYN-CR-0367,Assault,"Koyambedu, Chennai",13.074679,80.200254,2024-12-14
+SYN-CR-0368,Vehicle Theft,"Srirangam, Tiruchirappalli",10.868127,78.689922,2024-12-14
+SYN-CR-0369,Chain Snatching,"Srirangam, Tiruchirappalli",10.864982,78.679476,2024-12-14
+SYN-CR-0370,Vehicle Theft,"Gandhipuram, Coimbatore",11.013106,76.965548,2024-12-18
+SYN-CR-0371,Vandalism,"Tambaram, Chennai",12.927607,80.095523,2024-12-18
+SYN-CR-0372,Vehicle Theft,"Anna Nagar, Madurai",9.937982,78.125264,2024-12-19
+SYN-CR-0373,Theft,"Gandhipuram, Coimbatore",11.015901,76.968887,2024-12-19
+SYN-CR-0374,Chain Snatching,"Thiruparankundram, Madurai",9.877018,78.069826,2024-12-19
+SYN-CR-0375,Vehicle Theft,"Palayamkottai, Tirunelveli",8.716811,77.744399,2024-12-23
+SYN-CR-0376,Assault,"Mattuthavani, Madurai",9.945098,78.158539,2024-12-24
+SYN-CR-0377,Theft,"Chennai Central, Chennai",13.078903,80.274105,2024-12-25
+SYN-CR-0378,Robbery,"Gandhipuram, Coimbatore",11.014544,76.966961,2024-12-25
+SYN-CR-0379,Vandalism,"T. Nagar, Chennai",13.043122,80.233235,2024-12-25
+SYN-CR-0380,Theft,"Mattuthavani, Madurai",9.949397,78.155693,2024-12-26
+SYN-CR-0381,Theft,"Mattuthavani, Madurai",9.944510,78.153708,2024-12-28
+SYN-CR-0382,Vehicle Theft,"Gandhipuram, Coimbatore",11.015727,76.972557,2024-12-29
+SYN-CR-0383,Vandalism,"Guindy, Chennai",13.004240,80.224021,2024-12-31
+SYN-CR-0384,Cyber Crime,"Chennai Central, Chennai",13.081221,80.272241,2025-01-02
+SYN-CR-0385,Chain Snatching,"Anna Nagar, Madurai",9.942327,78.132596,2025-01-04
+SYN-CR-0386,Vehicle Theft,"Meenakshi Amman Temple, Madurai",9.919143,78.120433,2025-01-05
+SYN-CR-0387,Theft,"Ukkadam, Coimbatore",10.991164,76.964185,2025-01-06
+SYN-CR-0388,Burglary,"K. Pudur, Madurai",9.957247,78.148289,2025-01-07
+SYN-CR-0389,Robbery,"Ukkadam, Coimbatore",10.994150,76.960793,2025-01-07
+SYN-CR-0390,Theft,"Gandhipuram, Coimbatore",11.022782,76.968913,2025-01-08
+SYN-CR-0391,Vehicle Theft,"Mylapore, Chennai",13.035850,80.263335,2025-01-08
+SYN-CR-0392,Theft,"T. Nagar, Chennai",13.038363,80.235565,2025-01-09
+SYN-CR-0393,Theft,"Periyar Bus Stand, Madurai",9.915370,78.111074,2025-01-10
+SYN-CR-0394,Vehicle Theft,"Central Bus Stand, Erode",11.345643,77.715976,2025-01-11
+SYN-CR-0395,Chain Snatching,"Chathiram Bus Stand, Tiruchirappalli",10.830677,78.692525,2025-01-12
+SYN-CR-0396,Vehicle Theft,"Koyambedu, Chennai",13.069603,80.194018,2025-01-12
+SYN-CR-0397,Theft,"Peelamedu, Coimbatore",11.025138,77.006218,2025-01-15
+SYN-CR-0398,Chain Snatching,"Arapalayam, Madurai",9.933886,78.099891,2025-01-17
+SYN-CR-0399,Theft,"Central Bus Stand, Erode",11.343324,77.716382,2025-01-17
+SYN-CR-0400,Theft,"Gandhipuram, Coimbatore",11.013971,76.966401,2025-01-17
+SYN-CR-0401,Chain Snatching,"T. Nagar, Chennai",13.041121,80.234831,2025-01-17
+SYN-CR-0402,Cyber Crime,"T. Nagar, Chennai",13.035156,80.231533,2025-01-18
+SYN-CR-0403,Theft,"Peelamedu, Coimbatore",11.022099,77.004312,2025-01-20
+SYN-CR-0404,Chain Snatching,"Periyar Bus Stand, Madurai",9.919689,78.111251,2025-01-20
+SYN-CR-0405,Chain Snatching,"Thiruparankundram, Madurai",9.891705,78.062347,2025-01-22
+SYN-CR-0406,Assault,"Gandhipuram, Coimbatore",11.014107,76.971485,2025-01-24
+SYN-CR-0407,Assault,"Koyambedu, Chennai",13.066077,80.198310,2025-01-24
+SYN-CR-0408,Theft,"Tambaram, Chennai",12.926185,80.105803,2025-01-24
+SYN-CR-0409,Chain Snatching,"Velachery, Chennai",12.985320,80.215745,2025-01-24
+SYN-CR-0410,Robbery,"Central Bus Stand, Tiruchirappalli",10.796938,78.684851,2025-01-25
+SYN-CR-0411,Chain Snatching,"Tambaram, Chennai",12.922722,80.097304,2025-01-25
+SYN-CR-0412,Vehicle Theft,"Katpadi, Vellore",12.972372,79.132602,2025-01-26
+SYN-CR-0413,Theft,"Old Bus Stand, Tiruppur",11.114438,77.334105,2025-01-26
+SYN-CR-0414,Theft,"Srirangam, Tiruchirappalli",10.864989,78.691434,2025-01-26
+SYN-CR-0415,Theft,"Katpadi, Vellore",12.974742,79.142758,2025-01-27
+SYN-CR-0416,Theft,"Ukkadam, Coimbatore",10.992543,76.957885,2025-01-27
+SYN-CR-0417,Vehicle Theft,"Gandhipuram, Coimbatore",11.016160,76.967429,2025-01-29
+SYN-CR-0418,Vehicle Theft,"Arapalayam, Madurai",9.934417,78.106047,2025-02-04
+SYN-CR-0419,Theft,"Chennai Central, Chennai",13.089744,80.265953,2025-02-04
+SYN-CR-0420,Theft,"Tirunelveli Junction, Tirunelveli",8.728133,77.711940,2025-02-05
+SYN-CR-0421,Chain Snatching,"Tirunelveli Junction, Tirunelveli",8.729947,77.712434,2025-02-06
+SYN-CR-0422,Chain Snatching,"Old Bus Stand, Thanjavur",10.785344,79.149658,2025-02-08
+SYN-CR-0423,Chain Snatching,"Tambaram, Chennai",12.918190,80.113912,2025-02-08
+SYN-CR-0424,Chain Snatching,"Bus Stand, Sivakasi",9.453799,77.800522,2025-02-10
+SYN-CR-0425,Chain Snatching,"Chathiram Bus Stand, Tiruchirappalli",10.827726,78.694968,2025-02-11
+SYN-CR-0426,Vehicle Theft,"Chennai Central, Chennai",13.079664,80.276163,2025-02-11
+SYN-CR-0427,Cyber Crime,"Peelamedu, Coimbatore",11.028331,77.000567,2025-02-13
+SYN-CR-0428,Vehicle Theft,"Anna Nagar, Madurai",9.946678,78.131940,2025-02-20
+SYN-CR-0429,Theft,"Katpadi, Vellore",12.977943,79.139937,2025-02-22
+SYN-CR-0430,Theft,"Bus Stand, Sivakasi",9.453123,77.799129,2025-02-23
+SYN-CR-0431,Vandalism,Kumbakonam,10.959562,79.397756,2025-02-26
+SYN-CR-0432,Chain Snatching,"Ukkadam, Coimbatore",10.994130,76.962176,2025-02-26
+SYN-CR-0433,Burglary,"Bus Stand, Sivakasi",9.452209,77.803114,2025-02-28
+SYN-CR-0434,Chain Snatching,"Chathiram Bus Stand, Tiruchirappalli",10.828389,78.690452,2025-02-28
+SYN-CR-0435,Robbery,"Ukkadam, Coimbatore",10.991332,76.963823,2025-03-01
+SYN-CR-0436,Robbery,"New Bus Stand, Salem",11.668519,78.139206,2025-03-03
+SYN-CR-0437,Assault,"Koyambedu, Chennai",13.072959,80.202817,2025-03-04
+SYN-CR-0438,Chain Snatching,"Chathiram Bus Stand, Tiruchirappalli",10.830826,78.692074,2025-03-05
+SYN-CR-0439,Vehicle Theft,"Tirunelveli Junction, Tirunelveli",8.727096,77.712030,2025-03-05
+SYN-CR-0440,Burglary,Kanchipuram,12.835072,79.704155,2025-03-06
+SYN-CR-0441,Theft,"Ukkadam, Coimbatore",10.991966,76.962260,2025-03-06
+SYN-CR-0442,Robbery,Hosur,12.746707,77.818979,2025-03-07
+SYN-CR-0443,Chain Snatching,"Old Bus Stand, Tiruppur",11.103636,77.340599,2025-03-09
+SYN-CR-0444,Vehicle Theft,"Chennai Central, Chennai",13.082642,80.274337,2025-03-12
+SYN-CR-0445,Chain Snatching,"Chathiram Bus Stand, Tiruchirappalli",10.835449,78.695199,2025-03-15
+SYN-CR-0446,Cyber Crime,"Peelamedu, Coimbatore",11.030936,77.007873,2025-03-15
+SYN-CR-0447,Theft,Pollachi,10.664756,77.006265,2025-03-16
+SYN-CR-0448,Theft,"Meenakshi Amman Temple, Madurai",9.920454,78.119373,2025-03-17
+SYN-CR-0449,Robbery,"Periyar Bus Stand, Madurai",9.921234,78.111470,2025-03-17
+SYN-CR-0450,Vehicle Theft,"Gandhipuram, Coimbatore",11.019832,76.971042,2025-03-19
+SYN-CR-0451,Vehicle Theft,"Tirunelveli Junction, Tirunelveli",8.725207,77.703453,2025-03-19
+SYN-CR-0452,Robbery,"Central Bus Stand, Erode",11.341249,77.713289,2025-03-21
+SYN-CR-0453,Theft,"Koyambedu, Chennai",13.073643,80.193512,2025-03-21
+SYN-CR-0454,Cyber Crime,"Srirangam, Tiruchirappalli",10.864909,78.691943,2025-03-21
+SYN-CR-0455,Theft,"Velachery, Chennai",12.975128,80.231967,2025-03-25
+SYN-CR-0456,Theft,"Periyar Bus Stand, Madurai",9.920784,78.116402,2025-03-28
+SYN-CR-0457,Theft,"Srirangam, Tiruchirappalli",10.860164,78.693372,2025-03-28
+SYN-CR-0458,Chain Snatching,"Chathiram Bus Stand, Tiruchirappalli",10.834834,78.693555,2025-03-29
+SYN-CR-0459,Robbery,"New Bus Stand, Salem",11.674016,78.139717,2025-03-30
+SYN-CR-0460,Assault,"Bus Stand, Sivakasi",9.459554,77.804395,2025-04-01
+SYN-CR-0461,Assault,"Srirangam, Tiruchirappalli",10.858555,78.692164,2025-04-01
+SYN-CR-0462,Assault,"New Bus Stand, Salem",11.671730,78.137138,2025-04-02
+SYN-CR-0463,Theft,"Periyar Bus Stand, Madurai",9.916844,78.112045,2025-04-06
+SYN-CR-0464,Cyber Crime,"Velachery, Chennai",12.975573,80.215595,2025-04-09
+SYN-CR-0465,Chain Snatching,"Periyar Bus Stand, Madurai",9.915417,78.107865,2025-04-10
+SYN-CR-0466,Vehicle Theft,"Arapalayam, Madurai",9.931333,78.099917,2025-04-11
+SYN-CR-0467,Chain Snatching,"Chennai Central, Chennai",13.082971,80.277244,2025-04-11
+SYN-CR-0468,Chain Snatching,"Ukkadam, Coimbatore",10.987435,76.958031,2025-04-12
+SYN-CR-0469,Vandalism,"Gandhipuram, Coimbatore",11.015165,76.966557,2025-04-13
+SYN-CR-0470,Assault,"Ukkadam, Coimbatore",10.991811,76.961412,2025-04-15
+SYN-CR-0471,Vehicle Theft,"Anna Nagar, Madurai",9.948652,78.131957,2025-04-16
+SYN-CR-0472,Robbery,"Chathiram Bus Stand, Tiruchirappalli",10.826202,78.693344,2025-04-16
+SYN-CR-0473,Chain Snatching,"Koyambedu, Chennai",13.071138,80.191023,2025-04-19
+SYN-CR-0474,Vehicle Theft,"Periyar Bus Stand, Madurai",9.914153,78.109873,2025-04-20
+SYN-CR-0475,Theft,"Velachery, Chennai",12.982881,80.215257,2025-04-20
+SYN-CR-0476,Vandalism,"Peelamedu, Coimbatore",11.023854,77.003561,2025-04-23
+SYN-CR-0477,Assault,"Central Bus Stand, Erode",11.339303,77.722822,2025-04-24
+SYN-CR-0478,Chain Snatching,"Periyar Bus Stand, Madurai",9.918486,78.111552,2025-04-25
+SYN-CR-0479,Burglary,"Old Bus Stand, Tiruppur",11.109303,77.336036,2025-04-26
+SYN-CR-0480,Vehicle Theft,"Mattuthavani, Madurai",9.940501,78.147286,2025-04-27
+SYN-CR-0481,Theft,"New Bus Stand, Salem",11.668685,78.142799,2025-04-27
+SYN-CR-0482,Cyber Crime,"Koyambedu, Chennai",13.059683,80.185304,2025-04-28
+SYN-CR-0483,Assault,"T. Nagar, Chennai",13.043222,80.235158,2025-04-28
+SYN-CR-0484,Cyber Crime,"Chennai Central, Chennai",13.083843,80.279822,2025-04-29
+SYN-CR-0485,Theft,"Mylapore, Chennai",13.029626,80.264123,2025-04-29
+SYN-CR-0486,Theft,"Velachery, Chennai",12.982368,80.213697,2025-04-29
+SYN-CR-0487,Robbery,"Ukkadam, Coimbatore",10.990926,76.958458,2025-04-30
+SYN-CR-0488,Vandalism,"Arapalayam, Madurai",9.935002,78.099594,2025-05-02
+SYN-CR-0489,Chain Snatching,"Mattuthavani, Madurai",9.947500,78.152546,2025-05-02
+SYN-CR-0490,Theft,"Arapalayam, Madurai",9.930433,78.095476,2025-05-05
+SYN-CR-0491,Chain Snatching,"Chathiram Bus Stand, Tiruchirappalli",10.833484,78.691716,2025-05-06
+SYN-CR-0492,Theft,Dindigul,10.367049,77.972726,2025-05-07
+SYN-CR-0493,Assault,"Bus Stand, Sivakasi",9.453933,77.799314,2025-05-08
+SYN-CR-0494,Robbery,"Chathiram Bus Stand, Tiruchirappalli",10.824364,78.693258,2025-05-09
+SYN-CR-0495,Chain Snatching,"Mylapore, Chennai",13.033704,80.263027,2025-05-09
+SYN-CR-0496,Robbery,"Central Bus Stand, Erode",11.336604,77.705701,2025-05-10
+SYN-CR-0497,Chain Snatching,"Central Bus Stand, Erode",11.322052,77.716992,2025-05-10
+SYN-CR-0498,Chain Snatching,"Chennai Central, Chennai",13.076504,80.278076,2025-05-11
+SYN-CR-0499,Burglary,"New Bus Stand, Salem",11.670823,78.136604,2025-05-11
+SYN-CR-0500,Robbery,Virudhunagar,9.582971,77.960411,2025-05-11
+SYN-CR-0501,Theft,"Central Bus Stand, Erode",11.343516,77.722217,2025-05-12
+SYN-CR-0502,Vandalism,"Periyar Bus Stand, Madurai",9.917248,78.113283,2025-05-12
+SYN-CR-0503,Vehicle Theft,"Thiruparankundram, Madurai",9.875701,78.070474,2025-05-12
+SYN-CR-0504,Vehicle Theft,"Ukkadam, Coimbatore",10.995729,76.960359,2025-05-13
+SYN-CR-0505,Vehicle Theft,"Central Bus Stand, Erode",11.346936,77.713854,2025-05-15
+SYN-CR-0506,Robbery,"Koyambedu, Chennai",13.069994,80.192753,2025-05-15
+SYN-CR-0507,Cyber Crime,"Chathiram Bus Stand, Tiruchirappalli",10.828460,78.695356,2025-05-17
+SYN-CR-0508,Vandalism,"Arapalayam, Madurai",9.937051,78.100868,2025-05-19
+SYN-CR-0509,Vehicle Theft,"Koyambedu, Chennai",13.064620,80.198393,2025-05-21
+SYN-CR-0510,Burglary,"Tambaram, Chennai",12.931942,80.102514,2025-05-21
+SYN-CR-0511,Theft,"Chennai Central, Chennai",13.086945,80.272024,2025-05-25
+SYN-CR-0512,Theft,"Mattuthavani, Madurai",9.951772,78.154847,2025-05-27
+SYN-CR-0513,Theft,"Peelamedu, Coimbatore",11.024429,76.993654,2025-05-28
+SYN-CR-0514,Vehicle Theft,"Velachery, Chennai",12.983128,80.211030,2025-05-28
+SYN-CR-0515,Theft,"Arapalayam, Madurai",9.929461,78.099461,2025-05-29
+SYN-CR-0516,Chain Snatching,Krishnagiri,12.520685,78.207181,2025-05-29
+SYN-CR-0517,Chain Snatching,"T. Nagar, Chennai",13.040595,80.236307,2025-05-29
+SYN-CR-0518,Theft,"Mattuthavani, Madurai",9.948142,78.157230,2025-05-30
+SYN-CR-0519,Vandalism,"Mattuthavani, Madurai",9.947543,78.156366,2025-06-01
+SYN-CR-0520,Chain Snatching,"Chathiram Bus Stand, Tiruchirappalli",10.826028,78.691180,2025-06-02
+SYN-CR-0521,Vehicle Theft,"Chennai Central, Chennai",13.086580,80.271257,2025-06-03
+SYN-CR-0522,Theft,"Meenakshi Amman Temple, Madurai",9.918926,78.120967,2025-06-03
+SYN-CR-0523,Robbery,"Chennai Central, Chennai",13.088385,80.277439,2025-06-05
+SYN-CR-0524,Chain Snatching,"Tambaram, Chennai",12.930366,80.102548,2025-06-05
+SYN-CR-0525,Theft,"Periyar Bus Stand, Madurai",9.915544,78.113575,2025-06-06
+SYN-CR-0526,Burglary,"Palayamkottai, Tirunelveli",8.720027,77.724459,2025-06-10
+SYN-CR-0527,Theft,"Bus Stand, Sivakasi",9.453435,77.799539,2025-06-11
+SYN-CR-0528,Robbery,"New Bus Stand, Salem",11.668235,78.139293,2025-06-11
+SYN-CR-0529,Burglary,"Chennai Central, Chennai",13.081037,80.276546,2025-06-14
+SYN-CR-0530,Vehicle Theft,"Chennai Central, Chennai",13.082975,80.276877,2025-06-15
+SYN-CR-0531,Vandalism,"Koyambedu, Chennai",13.071695,80.193803,2025-06-15
+SYN-CR-0532,Vandalism,"Ukkadam, Coimbatore",10.994192,76.966641,2025-06-16
+SYN-CR-0533,Theft,"New Bus Stand, Salem",11.669964,78.141536,2025-06-17
+SYN-CR-0534,Theft,Namakkal,11.215927,78.169230,2025-06-19
+SYN-CR-0535,Robbery,"Chennai Central, Chennai",13.081934,80.272749,2025-06-20
+SYN-CR-0536,Vandalism,"Velachery, Chennai",12.989686,80.211172,2025-06-20
+SYN-CR-0537,Vandalism,"T. Nagar, Chennai",13.040978,80.233790,2025-06-21
+SYN-CR-0538,Robbery,"Chathiram Bus Stand, Tiruchirappalli",10.829289,78.689343,2025-06-22
+SYN-CR-0539,Chain Snatching,"Periyar Bus Stand, Madurai",9.914530,78.110162,2025-06-24
+SYN-CR-0540,Vehicle Theft,"Gandhipuram, Coimbatore",11.015535,76.969193,2025-06-25
+SYN-CR-0541,Theft,"Central Bus Stand, Tiruchirappalli",10.797904,78.675378,2025-06-26
+SYN-CR-0542,Vehicle Theft,"Mattuthavani, Madurai",9.942944,78.157117,2025-06-26
+SYN-CR-0543,Vehicle Theft,"Gandhipuram, Coimbatore",11.015216,76.969211,2025-06-27
+SYN-CR-0544,Theft,"Srirangam, Tiruchirappalli",10.864890,78.688917,2025-06-27
+SYN-CR-0545,Theft,"Katpadi, Vellore",12.975357,79.134706,2025-06-28
+SYN-CR-0546,Theft,"Chennai Central, Chennai",13.079516,80.275752,2025-06-29
+SYN-CR-0547,Chain Snatching,"Meenakshi Amman Temple, Madurai",9.918704,78.122868,2025-06-30
+SYN-CR-0548,Theft,"Katpadi, Vellore",12.970322,79.136469,2025-07-02
+SYN-CR-0549,Chain Snatching,"Mattuthavani, Madurai",9.949863,78.159831,2025-07-03
+SYN-CR-0550,Vehicle Theft,"New Bus Stand, Salem",11.676779,78.141345,2025-07-03
+SYN-CR-0551,Theft,"Mattuthavani, Madurai",9.946036,78.162157,2025-07-04
+SYN-CR-0552,Theft,"T. Nagar, Chennai",13.043538,80.234056,2025-07-04
+SYN-CR-0553,Burglary,"Tambaram, Chennai",12.929553,80.104588,2025-07-04
+SYN-CR-0554,Robbery,"Gandhipuram, Coimbatore",11.017997,76.968901,2025-07-05
+SYN-CR-0555,Robbery,"Gandhipuram, Coimbatore",11.015238,76.966125,2025-07-06
+SYN-CR-0556,Chain Snatching,"Central Bus Stand, Erode",11.336291,77.712617,2025-07-08
+SYN-CR-0557,Vehicle Theft,"Koyambedu, Chennai",13.063324,80.192135,2025-07-09
+SYN-CR-0558,Vehicle Theft,"Meenakshi Amman Temple, Madurai",9.921177,78.114355,2025-07-10
+SYN-CR-0559,Chain Snatching,"Central Bus Stand, Erode",11.343617,77.714680,2025-07-13
+SYN-CR-0560,Chain Snatching,"Egmore, Chennai",13.072883,80.270975,2025-07-14
+SYN-CR-0561,Vandalism,"Central Bus Stand, Erode",11.355925,77.726360,2025-07-16
+SYN-CR-0562,Cyber Crime,"Guindy, Chennai",12.997998,80.222392,2025-07-17
+SYN-CR-0563,Chain Snatching,"Periyar Bus Stand, Madurai",9.918261,78.111378,2025-07-17
+SYN-CR-0564,Robbery,"Bus Stand, Sivakasi",9.454077,77.799436,2025-07-18
+SYN-CR-0565,Theft,"Old Bus Stand, Salem",11.658445,78.152663,2025-07-18
+SYN-CR-0566,Chain Snatching,"Thiruparankundram, Madurai",9.880643,78.071610,2025-07-19
+SYN-CR-0567,Chain Snatching,"Ukkadam, Coimbatore",10.990982,76.961655,2025-07-19
+SYN-CR-0568,Theft,"Meenakshi Amman Temple, Madurai",9.917463,78.117899,2025-07-20
+SYN-CR-0569,Robbery,"New Bus Stand, Salem",11.674426,78.138512,2025-07-20
+SYN-CR-0570,Cyber Crime,"Chennai Central, Chennai",13.086815,80.272178,2025-07-21
+SYN-CR-0571,Assault,"Old Bus Stand, Tiruppur",11.108143,77.341568,2025-07-21
+SYN-CR-0572,Chain Snatching,"Arapalayam, Madurai",9.930446,78.102373,2025-07-22
+SYN-CR-0573,Vehicle Theft,Pollachi,10.658142,77.003849,2025-07-24
+SYN-CR-0574,Vehicle Theft,"Periyar Bus Stand, Madurai",9.915767,78.111483,2025-07-25
+SYN-CR-0575,Theft,"T. Nagar, Chennai",13.039650,80.231785,2025-07-25
+SYN-CR-0576,Theft,"Old Bus Stand, Tiruppur",11.109704,77.341171,2025-07-27
+SYN-CR-0577,Vandalism,"Chennai Central, Chennai",13.082769,80.276372,2025-07-28
+SYN-CR-0578,Chain Snatching,"Mattuthavani, Madurai",9.938005,78.167166,2025-07-28
+SYN-CR-0579,Vehicle Theft,"New Bus Stand, Salem",11.674766,78.140336,2025-07-28
+SYN-CR-0580,Robbery,"Gandhipuram, Coimbatore",11.018349,76.964352,2025-07-29
+SYN-CR-0581,Vandalism,"Periyar Bus Stand, Madurai",9.915551,78.108058,2025-07-29
+SYN-CR-0582,Theft,"Meenakshi Amman Temple, Madurai",9.915225,78.120192,2025-07-31
+SYN-CR-0583,Theft,"Srirangam, Tiruchirappalli",10.869736,78.692672,2025-07-31
+SYN-CR-0584,Assault,"Periyar Bus Stand, Madurai",9.913722,78.110302,2025-08-02
+SYN-CR-0585,Theft,"Tambaram, Chennai",12.927139,80.105080,2025-08-02
+SYN-CR-0586,Theft,"Ukkadam, Coimbatore",10.985445,76.955811,2025-08-02
+SYN-CR-0587,Theft,"Vadapalani, Chennai",13.050393,80.212299,2025-08-02
+SYN-CR-0588,Vehicle Theft,Pollachi,10.651304,77.005780,2025-08-03
+SYN-CR-0589,Assault,"Srirangam, Tiruchirappalli",10.861797,78.690346,2025-08-03
+SYN-CR-0590,Theft,"Chennai Central, Chennai",13.080673,80.279413,2025-08-04
+SYN-CR-0591,Cyber Crime,"Peelamedu, Coimbatore",11.024752,77.005021,2025-08-06
+SYN-CR-0592,Theft,"Periyar Bus Stand, Madurai",9.913194,78.114549,2025-08-07
+SYN-CR-0593,Vehicle Theft,Namakkal,11.214883,78.171952,2025-08-08
+SYN-CR-0594,Vehicle Theft,"Tirunelveli Junction, Tirunelveli",8.728691,77.706369,2025-08-08
+SYN-CR-0595,Theft,"Mylapore, Chennai",13.033947,80.263191,2025-08-10
+SYN-CR-0596,Vehicle Theft,"New Bus Stand, Salem",11.674574,78.137282,2025-08-11
+SYN-CR-0597,Vandalism,"Koyambedu, Chennai",13.071954,80.194695,2025-08-12
+SYN-CR-0598,Vehicle Theft,"New Bus Stand, Salem",11.672700,78.141831,2025-08-13
+SYN-CR-0599,Chain Snatching,"Mylapore, Chennai",13.036162,80.263073,2025-08-14
+SYN-CR-0600,Vehicle Theft,"Peelamedu, Coimbatore",11.019458,77.007448,2025-08-14
+SYN-CR-0601,Chain Snatching,"Srirangam, Tiruchirappalli",10.863025,78.685206,2025-08-14
+SYN-CR-0602,Assault,"Velachery, Chennai",12.983155,80.220159,2025-08-16
+SYN-CR-0603,Robbery,"Meenakshi Amman Temple, Madurai",9.922237,78.121231,2025-08-17
+SYN-CR-0604,Chain Snatching,"Meenakshi Amman Temple, Madurai",9.918283,78.117580,2025-08-19
+SYN-CR-0605,Vehicle Theft,"Tambaram, Chennai",12.919925,80.087745,2025-08-19
+SYN-CR-0606,Theft,"Periyar Bus Stand, Madurai",9.915515,78.111761,2025-08-20
+SYN-CR-0607,Theft,"Mylapore, Chennai",13.034344,80.259149,2025-08-22
+SYN-CR-0608,Vandalism,"Anna Nagar, Madurai",9.937371,78.131932,2025-08-25
+SYN-CR-0609,Chain Snatching,"Arapalayam, Madurai",9.934392,78.102929,2025-08-25
+SYN-CR-0610,Cyber Crime,"Chennai Central, Chennai",13.080618,80.278814,2025-08-26
+SYN-CR-0611,Theft,"Ukkadam, Coimbatore",10.991916,76.962765,2025-08-26
+SYN-CR-0612,Theft,"Ukkadam, Coimbatore",10.990711,76.965757,2025-08-26
+SYN-CR-0613,Chain Snatching,"Old Bus Stand, Tiruppur",11.114581,77.340276,2025-08-27
+SYN-CR-0614,Chain Snatching,"T. Nagar, Chennai",13.040413,80.236029,2025-08-27
+SYN-CR-0615,Chain Snatching,"Vadapalani, Chennai",13.045419,80.210917,2025-08-27
+SYN-CR-0616,Assault,"T. Nagar, Chennai",13.041473,80.239437,2025-08-31
+SYN-CR-0617,Chain Snatching,"Periyar Bus Stand, Madurai",9.919937,78.111213,2025-09-01
+SYN-CR-0618,Chain Snatching,"Chennai Central, Chennai",13.083264,80.275744,2025-09-02
+SYN-CR-0619,Vehicle Theft,"Srirangam, Tiruchirappalli",10.864835,78.688958,2025-09-02
+SYN-CR-0620,Robbery,"Chathiram Bus Stand, Tiruchirappalli",10.838953,78.685677,2025-09-03
+SYN-CR-0621,Chain Snatching,"Gandhipuram, Coimbatore",11.019129,76.962652,2025-09-03
+SYN-CR-0622,Chain Snatching,"Srirangam, Tiruchirappalli",10.864031,78.686036,2025-09-03
+SYN-CR-0623,Chain Snatching,"Periyar Bus Stand, Madurai",9.916137,78.114108,2025-09-04
+SYN-CR-0624,Burglary,"Vadapalani, Chennai",13.048355,80.211839,2025-09-05
+SYN-CR-0625,Chain Snatching,"Arapalayam, Madurai",9.933489,78.100986,2025-09-11
+SYN-CR-0626,Chain Snatching,"Chennai Central, Chennai",13.078259,80.277636,2025-09-12
+SYN-CR-0627,Chain Snatching,"Koyambedu, Chennai",13.067272,80.192823,2025-09-12
+SYN-CR-0628,Vehicle Theft,"Gandhipuram, Coimbatore",11.018787,76.966711,2025-09-13
+SYN-CR-0629,Assault,"Mattuthavani, Madurai",9.947930,78.155205,2025-09-13
+SYN-CR-0630,Theft,"Thiruparankundram, Madurai",9.881186,78.072024,2025-09-15
+SYN-CR-0631,Theft,"Meenakshi Amman Temple, Madurai",9.921554,78.118724,2025-09-16
+SYN-CR-0632,Theft,"Koyambedu, Chennai",13.070582,80.193643,2025-09-17
+SYN-CR-0633,Vehicle Theft,"New Bus Stand, Salem",11.673484,78.136782,2025-09-17
+SYN-CR-0634,Vehicle Theft,Hosur,12.736689,77.823974,2025-09-19
+SYN-CR-0635,Assault,"Srirangam, Tiruchirappalli",10.858288,78.683638,2025-09-19
+SYN-CR-0636,Assault,"Palayamkottai, Tirunelveli",8.727033,77.744898,2025-09-20
+SYN-CR-0637,Burglary,Kumbakonam,10.962784,79.391991,2025-09-25
+SYN-CR-0638,Cyber Crime,"Velachery, Chennai",12.985214,80.215899,2025-09-26
+SYN-CR-0639,Chain Snatching,"Chennai Central, Chennai",13.083872,80.269583,2025-09-27
+SYN-CR-0640,Theft,"Mattuthavani, Madurai",9.952241,78.153568,2025-09-28
+SYN-CR-0641,Chain Snatching,"Anna Nagar, Madurai",9.937572,78.125744,2025-10-01
+SYN-CR-0642,Theft,"Chennai Central, Chennai",13.080479,80.271971,2025-10-02
+SYN-CR-0643,Theft,Virudhunagar,9.587004,77.954168,2025-10-02
+SYN-CR-0644,Vandalism,"Adyar, Chennai",13.010961,80.260604,2025-10-03
+SYN-CR-0645,Vandalism,"T. Nagar, Chennai",13.048630,80.231810,2025-10-03
+SYN-CR-0646,Burglary,Virudhunagar,9.583351,77.962113,2025-10-03
+SYN-CR-0647,Robbery,Hosur,12.738060,77.826826,2025-10-07
+SYN-CR-0648,Theft,"Katpadi, Vellore",12.971948,79.132703,2025-10-07
+SYN-CR-0649,Vandalism,"Mylapore, Chennai",13.030561,80.259513,2025-10-08
+SYN-CR-0650,Chain Snatching,"Periyar Bus Stand, Madurai",9.916226,78.111082,2025-10-08
+SYN-CR-0651,Burglary,Pollachi,10.662820,77.004743,2025-10-08
+SYN-CR-0652,Assault,Krishnagiri,12.522183,78.220960,2025-10-13
+SYN-CR-0653,Burglary,Kanchipuram,12.836505,79.700569,2025-10-14
+SYN-CR-0654,Chain Snatching,"T. Nagar, Chennai",13.038980,80.236009,2025-10-14
+SYN-CR-0655,Vandalism,"Tirunelveli Junction, Tirunelveli",8.729814,77.704195,2025-10-15
+SYN-CR-0656,Vehicle Theft,"Katpadi, Vellore",12.973337,79.140916,2025-10-16
+SYN-CR-0657,Vehicle Theft,"Tambaram, Chennai",12.927144,80.098951,2025-10-16
+SYN-CR-0658,Cyber Crime,"Periyar Bus Stand, Madurai",9.917222,78.112402,2025-10-17
+SYN-CR-0659,Theft,"Tambaram, Chennai",12.921484,80.096583,2025-10-18
+SYN-CR-0660,Theft,"T. Nagar, Chennai",13.038389,80.239639,2025-10-19
+SYN-CR-0661,Chain Snatching,"Gandhipuram, Coimbatore",11.015781,76.967027,2025-10-20
+SYN-CR-0662,Chain Snatching,Hosur,12.735679,77.825700,2025-10-22
+SYN-CR-0663,Vehicle Theft,"Koyambedu, Chennai",13.070263,80.196308,2025-10-22
+SYN-CR-0664,Chain Snatching,"Meenakshi Amman Temple, Madurai",9.920299,78.117751,2025-10-23
+SYN-CR-0665,Vandalism,"Chathiram Bus Stand, Tiruchirappalli",10.831044,78.692601,2025-10-24
+SYN-CR-0666,Vehicle Theft,"Koyambedu, Chennai",13.072449,80.191378,2025-10-24
+SYN-CR-0667,Assault,"Koyambedu, Chennai",13.061258,80.190827,2025-10-24
+SYN-CR-0668,Chain Snatching,"Meenakshi Amman Temple, Madurai",9.920853,78.121106,2025-10-24
+SYN-CR-0669,Theft,"New Bus Stand, Salem",11.669537,78.141323,2025-10-24
+SYN-CR-0670,Robbery,"Old Bus Stand, Salem",11.643979,78.155864,2025-10-24
+SYN-CR-0671,Robbery,"Chathiram Bus Stand, Tiruchirappalli",10.826433,78.689485,2025-10-25
+SYN-CR-0672,Chain Snatching,"Koyambedu, Chennai",13.067672,80.190665,2025-10-28
+SYN-CR-0673,Robbery,"T. Nagar, Chennai",13.046610,80.235513,2025-10-28
+SYN-CR-0674,Assault,"Bus Stand, Sivakasi",9.452263,77.795519,2025-10-29
+SYN-CR-0675,Burglary,"Periyar Bus Stand, Madurai",9.916060,78.115069,2025-10-29
+SYN-CR-0676,Cyber Crime,"Anna Nagar, Madurai",9.940843,78.136788,2025-11-01
+SYN-CR-0677,Vandalism,"Arapalayam, Madurai",9.929665,78.099600,2025-11-01
+SYN-CR-0678,Robbery,"T. Nagar, Chennai",13.040947,80.237711,2025-11-01
+SYN-CR-0679,Robbery,"Central Bus Stand, Erode",11.346276,77.718192,2025-11-02
+SYN-CR-0680,Cyber Crime,"Peelamedu, Coimbatore",11.026666,77.000290,2025-11-05
+SYN-CR-0681,Vandalism,"Thiruparankundram, Madurai",9.879776,78.067283,2025-11-05
+SYN-CR-0682,Assault,"Velachery, Chennai",12.977365,80.213771,2025-11-05
+SYN-CR-0683,Chain Snatching,"New Bus Stand, Salem",11.670917,78.143819,2025-11-07
+SYN-CR-0684,Robbery,"Old Bus Stand, Tiruppur",11.109519,77.334712,2025-11-09
+SYN-CR-0685,Chain Snatching,"Srirangam, Tiruchirappalli",10.861587,78.690539,2025-11-09
+SYN-CR-0686,Theft,"Gandhipuram, Coimbatore",11.023244,76.967717,2025-11-10
+SYN-CR-0687,Theft,Hosur,12.748676,77.833715,2025-11-10
+SYN-CR-0688,Theft,"T. Nagar, Chennai",13.037104,80.233122,2025-11-10
+SYN-CR-0689,Chain Snatching,"Chathiram Bus Stand, Tiruchirappalli",10.830473,78.688168,2025-11-11
+SYN-CR-0690,Burglary,"Palayamkottai, Tirunelveli",8.710108,77.742064,2025-11-11
+SYN-CR-0691,Theft,"Katpadi, Vellore",12.974681,79.139750,2025-11-13
+SYN-CR-0692,Vehicle Theft,"Old Bus Stand, Tiruppur",11.111235,77.341800,2025-11-13
+SYN-CR-0693,Robbery,"T. Nagar, Chennai",13.038419,80.233978,2025-11-13
+SYN-CR-0694,Chain Snatching,"Meenakshi Amman Temple, Madurai",9.920287,78.118613,2025-11-14
+SYN-CR-0695,Chain Snatching,"Mattuthavani, Madurai",9.942130,78.156103,2025-11-15
+SYN-CR-0696,Theft,"Bus Stand, Sivakasi",9.451543,77.802399,2025-11-16
+SYN-CR-0697,Cyber Crime,"Chathiram Bus Stand, Tiruchirappalli",10.830609,78.689569,2025-11-16
+SYN-CR-0698,Theft,"Gandhipuram, Coimbatore",11.014000,76.966184,2025-11-16
+SYN-CR-0699,Theft,"Arapalayam, Madurai",9.932262,78.100598,2025-11-17
+SYN-CR-0700,Assault,"Velachery, Chennai",12.981288,80.212009,2025-11-18
+SYN-CR-0701,Chain Snatching,"Chathiram Bus Stand, Tiruchirappalli",10.834707,78.693325,2025-11-19
+SYN-CR-0702,Robbery,"New Bus Stand, Salem",11.673125,78.146280,2025-11-20
+SYN-CR-0703,Theft,"Anna Nagar, Madurai",9.937679,78.125191,2025-11-21
+SYN-CR-0704,Vehicle Theft,"Meenakshi Amman Temple, Madurai",9.922259,78.115815,2025-11-22
+SYN-CR-0705,Robbery,Namakkal,11.220487,78.169767,2025-11-23
+SYN-CR-0706,Vehicle Theft,"Chennai Central, Chennai",13.081438,80.275731,2025-11-24
+SYN-CR-0707,Vandalism,"Tambaram, Chennai",12.927448,80.102622,2025-11-24
+SYN-CR-0708,Vandalism,"Old Bus Stand, Thanjavur",10.786916,79.137620,2025-11-25
+SYN-CR-0709,Burglary,Kumbakonam,10.958253,79.393231,2025-11-26
+SYN-CR-0710,Robbery,"Koyambedu, Chennai",13.066198,80.198914,2025-11-30
+SYN-CR-0711,Vehicle Theft,"Srirangam, Tiruchirappalli",10.859988,78.684758,2025-12-02
+SYN-CR-0712,Vandalism,"Velachery, Chennai",12.967505,80.225092,2025-12-02
+SYN-CR-0713,Vehicle Theft,Namakkal,11.219491,78.162901,2025-12-03
+SYN-CR-0714,Vehicle Theft,"Peelamedu, Coimbatore",11.024010,77.001355,2025-12-04
+SYN-CR-0715,Vehicle Theft,"Chennai Central, Chennai",13.083570,80.280596,2025-12-05
+SYN-CR-0716,Burglary,Namakkal,11.221104,78.161340,2025-12-06
+SYN-CR-0717,Burglary,"Central Bus Stand, Erode",11.338375,77.719522,2025-12-07
+SYN-CR-0718,Vandalism,"Gandhipuram, Coimbatore",11.013935,76.969434,2025-12-08
+SYN-CR-0719,Chain Snatching,Kanchipuram,12.823495,79.702479,2025-12-11
+SYN-CR-0720,Vehicle Theft,"Gandhipuram, Coimbatore",11.019573,76.964947,2025-12-12
+SYN-CR-0721,Assault,"Chathiram Bus Stand, Tiruchirappalli",10.832245,78.694601,2025-12-13
+SYN-CR-0722,Theft,"Bus Stand, Sivakasi",9.449297,77.800834,2025-12-14
+SYN-CR-0723,Vehicle Theft,Kumbakonam,10.963269,79.381229,2025-12-14
+SYN-CR-0724,Chain Snatching,"Peelamedu, Coimbatore",11.039685,76.991649,2025-12-14
+SYN-CR-0725,Theft,"Chennai Central, Chennai",13.081048,80.273621,2025-12-17
+SYN-CR-0726,Burglary,Namakkal,11.214206,78.172663,2025-12-18
+SYN-CR-0727,Theft,"Arapalayam, Madurai",9.931084,78.098434,2025-12-19
+SYN-CR-0728,Chain Snatching,"Mattuthavani, Madurai",9.949878,78.159111,2025-12-19
+SYN-CR-0729,Robbery,"Peelamedu, Coimbatore",11.025296,77.001038,2025-12-19
+SYN-CR-0730,Robbery,"Peelamedu, Coimbatore",11.025611,76.995042,2025-12-21
+SYN-CR-0731,Vehicle Theft,"Periyar Bus Stand, Madurai",9.916098,78.110373,2025-12-21
+SYN-CR-0732,Chain Snatching,"Srirangam, Tiruchirappalli",10.858312,78.685656,2025-12-22
+SYN-CR-0733,Theft,"Srirangam, Tiruchirappalli",10.864213,78.690411,2025-12-22
+SYN-CR-0734,Robbery,"Mylapore, Chennai",13.027738,80.262043,2025-12-23
+SYN-CR-0735,Robbery,"Central Bus Stand, Tiruchirappalli",10.806463,78.686393,2025-12-30
+SYN-CR-0736,Burglary,"Anna Nagar, Madurai",9.942911,78.136149,2025-12-31
+SYN-CR-0737,Assault,"Gandhipuram, Coimbatore",11.015689,76.971572,2025-12-31
+SYN-CR-0738,Theft,"Central Bus Stand, Erode",11.339290,77.717836,2026-01-01
+SYN-CR-0739,Vehicle Theft,"Mattuthavani, Madurai",9.948351,78.155106,2026-01-02
+SYN-CR-0740,Burglary,Virudhunagar,9.589748,77.953561,2026-01-02
+SYN-CR-0741,Chain Snatching,"Arapalayam, Madurai",9.931254,78.101169,2026-01-04
+SYN-CR-0742,Robbery,"Ukkadam, Coimbatore",10.997338,76.961073,2026-01-06
+SYN-CR-0743,Theft,"Chennai Central, Chennai",13.087505,80.272615,2026-01-07
+SYN-CR-0744,Assault,"Gandhipuram, Coimbatore",11.015333,76.970061,2026-01-07
+SYN-CR-0745,Vehicle Theft,"Koyambedu, Chennai",13.071291,80.194073,2026-01-07
+SYN-CR-0746,Vehicle Theft,"Central Bus Stand, Erode",11.337958,77.718065,2026-01-08
+SYN-CR-0747,Vandalism,Hosur,12.749955,77.824114,2026-01-08
+SYN-CR-0748,Chain Snatching,"Mylapore, Chennai",13.032507,80.260113,2026-01-08
+SYN-CR-0749,Theft,"Chathiram Bus Stand, Tiruchirappalli",10.830396,78.690248,2026-01-09
+SYN-CR-0750,Vehicle Theft,"Gandhipuram, Coimbatore",11.016921,76.968301,2026-01-10
+SYN-CR-0751,Vehicle Theft,"Periyar Bus Stand, Madurai",9.916567,78.112925,2026-01-10
+SYN-CR-0752,Assault,"Central Bus Stand, Erode",11.345955,77.723048,2026-01-11
+SYN-CR-0753,Robbery,"Thiruparankundram, Madurai",9.880267,78.070211,2026-01-11
+SYN-CR-0754,Burglary,"Mylapore, Chennai",13.032531,80.263883,2026-01-12
+SYN-CR-0755,Theft,"Meenakshi Amman Temple, Madurai",9.921651,78.120303,2026-01-13
+SYN-CR-0756,Assault,"Central Bus Stand, Erode",11.345390,77.717040,2026-01-14
+SYN-CR-0757,Vehicle Theft,"Chennai Central, Chennai",13.079329,80.275488,2026-01-14
+SYN-CR-0758,Assault,"Chennai Central, Chennai",13.085047,80.272360,2026-01-17
+SYN-CR-0759,Chain Snatching,"Mattuthavani, Madurai",9.944959,78.155820,2026-01-18
+SYN-CR-0760,Vehicle Theft,"Mattuthavani, Madurai",9.944851,78.158248,2026-01-18
+SYN-CR-0761,Chain Snatching,"Meenakshi Amman Temple, Madurai",9.920069,78.119923,2026-01-18
+SYN-CR-0762,Theft,"Mylapore, Chennai",13.034123,80.265777,2026-01-19
+SYN-CR-0763,Vandalism,"Anna Nagar, Chennai",13.081809,80.206317,2026-01-20
+SYN-CR-0764,Chain Snatching,"Mylapore, Chennai",13.033260,80.267161,2026-01-20
+SYN-CR-0765,Robbery,"Periyar Bus Stand, Madurai",9.915869,78.110547,2026-01-20
+SYN-CR-0766,Theft,"Meenakshi Amman Temple, Madurai",9.918179,78.119779,2026-01-21
+SYN-CR-0767,Theft,"Meenakshi Amman Temple, Madurai",9.919804,78.118316,2026-01-23
+SYN-CR-0768,Theft,"Gandhipuram, Coimbatore",11.019573,76.967839,2026-01-24
+SYN-CR-0769,Vehicle Theft,Kumbakonam,10.956195,79.395187,2026-01-24
+SYN-CR-0770,Robbery,"Mylapore, Chennai",13.034106,80.265600,2026-01-24
+SYN-CR-0771,Theft,"Meenakshi Amman Temple, Madurai",9.916809,78.120045,2026-01-25
+SYN-CR-0772,Vandalism,"Chennai Central, Chennai",13.084395,80.274070,2026-01-30
+SYN-CR-0773,Theft,"Ukkadam, Coimbatore",10.995432,76.964500,2026-01-31
+SYN-CR-0774,Vehicle Theft,"Anna Nagar, Madurai",9.942741,78.127603,2026-02-02
+SYN-CR-0775,Vandalism,"New Bus Stand, Salem",11.671393,78.142431,2026-02-02
+SYN-CR-0776,Theft,"Srirangam, Tiruchirappalli",10.864114,78.691328,2026-02-05
+SYN-CR-0777,Chain Snatching,"T. Nagar, Chennai",13.041767,80.232402,2026-02-06
+SYN-CR-0778,Vehicle Theft,"Katpadi, Vellore",12.975286,79.133982,2026-02-09
+SYN-CR-0779,Burglary,"Anna Nagar, Chennai",13.080261,80.216626,2026-02-10
+SYN-CR-0780,Theft,"Katpadi, Vellore",12.974026,79.131884,2026-02-11
+SYN-CR-0781,Burglary,"Meenakshi Amman Temple, Madurai",9.919272,78.119857,2026-02-12
+SYN-CR-0782,Theft,"Srirangam, Tiruchirappalli",10.863077,78.691611,2026-02-12
+SYN-CR-0783,Chain Snatching,"Arapalayam, Madurai",9.929597,78.100322,2026-02-13
+SYN-CR-0784,Vehicle Theft,"Periyar Bus Stand, Madurai",9.918443,78.108487,2026-02-15
+SYN-CR-0785,Vandalism,"Ukkadam, Coimbatore",10.993021,76.957431,2026-02-16
+SYN-CR-0786,Robbery,"Arapalayam, Madurai",9.932723,78.104819,2026-02-17
+SYN-CR-0787,Robbery,"Koyambedu, Chennai",13.069985,80.190756,2026-02-17
+SYN-CR-0788,Chain Snatching,"Meenakshi Amman Temple, Madurai",9.922338,78.116058,2026-02-17
+SYN-CR-0789,Vehicle Theft,"Koyambedu, Chennai",13.072488,80.195423,2026-02-19
+SYN-CR-0790,Vandalism,"Mattuthavani, Madurai",9.948560,78.150337,2026-02-19
+SYN-CR-0791,Chain Snatching,"Chathiram Bus Stand, Tiruchirappalli",10.831956,78.695497,2026-02-20
+SYN-CR-0792,Robbery,"T. Nagar, Chennai",13.040223,80.234702,2026-02-20
+SYN-CR-0793,Vehicle Theft,"T. Nagar, Chennai",13.046615,80.227175,2026-02-21
+SYN-CR-0794,Vehicle Theft,Pollachi,10.656977,77.008084,2026-02-22
+SYN-CR-0795,Robbery,"Gandhipuram, Coimbatore",11.012669,76.965141,2026-02-24
+SYN-CR-0796,Theft,Kumbakonam,10.966319,79.377828,2026-02-25
+SYN-CR-0797,Vehicle Theft,"Periyar Bus Stand, Madurai",9.920105,78.111891,2026-02-26
+SYN-CR-0798,Theft,"Mattuthavani, Madurai",9.941476,78.157339,2026-02-27
+SYN-CR-0799,Vehicle Theft,"Peelamedu, Coimbatore",11.029341,77.010892,2026-02-28
+SYN-CR-0800,Theft,"Chennai Central, Chennai",13.081110,80.274164,2026-03-02
+SYN-CR-0801,Theft,"Velachery, Chennai",12.982641,80.216533,2026-03-02
+SYN-CR-0802,Vehicle Theft,"Katpadi, Vellore",12.970052,79.139941,2026-03-03
+SYN-CR-0803,Theft,"Chathiram Bus Stand, Tiruchirappalli",10.836073,78.691601,2026-03-04
+SYN-CR-0804,Vehicle Theft,"T. Nagar, Chennai",13.035873,80.229866,2026-03-04
+SYN-CR-0805,Cyber Crime,"Velachery, Chennai",12.979358,80.210304,2026-03-04
+SYN-CR-0806,Cyber Crime,"Periyar Bus Stand, Madurai",9.917563,78.109739,2026-03-05
+SYN-CR-0807,Robbery,"Ukkadam, Coimbatore",10.992561,76.950323,2026-03-05
+SYN-CR-0808,Vehicle Theft,"Meenakshi Amman Temple, Madurai",9.919330,78.118157,2026-03-06
+SYN-CR-0809,Robbery,"Periyar Bus Stand, Madurai",9.915997,78.107442,2026-03-07
+SYN-CR-0810,Vehicle Theft,"Mattuthavani, Madurai",9.945275,78.153676,2026-03-08
+SYN-CR-0811,Theft,"T. Nagar, Chennai",13.044602,80.227952,2026-03-08
+SYN-CR-0812,Vandalism,"Mattuthavani, Madurai",9.944728,78.154104,2026-03-09
+SYN-CR-0813,Vehicle Theft,"Gandhipuram, Coimbatore",11.013656,76.969258,2026-03-11
+SYN-CR-0814,Cyber Crime,"Gandhipuram, Coimbatore",11.019240,76.969406,2026-03-11
+SYN-CR-0815,Vehicle Theft,"Koodal Nagar, Madurai",9.873114,78.090586,2026-03-13
+SYN-CR-0816,Chain Snatching,"T. Nagar, Chennai",13.043753,80.237728,2026-03-14
+SYN-CR-0817,Chain Snatching,"R.S. Puram, Coimbatore",11.017419,76.947587,2026-03-16
+SYN-CR-0818,Chain Snatching,"Chennai Central, Chennai",13.078906,80.272657,2026-03-18
+SYN-CR-0819,Cyber Crime,"Velachery, Chennai",12.983531,80.218000,2026-03-18
+SYN-CR-0820,Robbery,"Mattuthavani, Madurai",9.951301,78.156512,2026-03-20
+SYN-CR-0821,Vandalism,"Meenakshi Amman Temple, Madurai",9.921251,78.122007,2026-03-21
+SYN-CR-0822,Vandalism,"Periyar Bus Stand, Madurai",9.913490,78.112743,2026-03-21
+SYN-CR-0823,Chain Snatching,"R.S. Puram, Coimbatore",11.011403,76.951192,2026-03-21
+SYN-CR-0824,Vehicle Theft,"Chathiram Bus Stand, Tiruchirappalli",10.833079,78.691424,2026-03-22
+SYN-CR-0825,Cyber Crime,"Koyambedu, Chennai",13.067792,80.196707,2026-03-22
+SYN-CR-0826,Vehicle Theft,"T. Nagar, Chennai",13.047389,80.232306,2026-03-22
+SYN-CR-0827,Vehicle Theft,"Periyar Bus Stand, Madurai",9.913517,78.113081,2026-03-23
+SYN-CR-0828,Theft,"Gandhipuram, Coimbatore",11.014443,76.964958,2026-03-24
+SYN-CR-0829,Theft,Karur,10.960664,78.082978,2026-03-24
+SYN-CR-0830,Robbery,"Old Bus Stand, Salem",11.649181,78.167213,2026-03-24
+SYN-CR-0831,Vandalism,"Koyambedu, Chennai",13.071492,80.196957,2026-03-26
+SYN-CR-0832,Vehicle Theft,"Periyar Bus Stand, Madurai",9.916780,78.109067,2026-03-26
+SYN-CR-0833,Assault,"T. Nagar, Chennai",13.044263,80.234044,2026-03-27
+SYN-CR-0834,Assault,"Central Bus Stand, Erode",11.342972,77.716595,2026-03-30
+SYN-CR-0835,Cyber Crime,"Peelamedu, Coimbatore",11.027698,77.001643,2026-03-30
+SYN-CR-0836,Chain Snatching,"Mattuthavani, Madurai",9.944223,78.156573,2026-04-03
+SYN-CR-0837,Chain Snatching,"Gandhipuram, Coimbatore",11.014637,76.975898,2026-04-04
+SYN-CR-0838,Theft,"Mylapore, Chennai",13.039445,80.259698,2026-04-04
+SYN-CR-0839,Vandalism,"Periyar Bus Stand, Madurai",9.918804,78.114930,2026-04-04
+SYN-CR-0840,Chain Snatching,"Arapalayam, Madurai",9.932269,78.101931,2026-04-06
+SYN-CR-0841,Vehicle Theft,"Koyambedu, Chennai",13.072141,80.190080,2026-04-06
+SYN-CR-0842,Vehicle Theft,"New Bus Stand, Salem",11.674843,78.137574,2026-04-06
+SYN-CR-0843,Burglary,"Peelamedu, Coimbatore",11.021239,77.004360,2026-04-07
+SYN-CR-0844,Cyber Crime,"Velachery, Chennai",12.983531,80.219498,2026-04-07
+SYN-CR-0845,Cyber Crime,"Anna Nagar, Madurai",9.939655,78.135275,2026-04-09
+SYN-CR-0846,Vandalism,"Mattuthavani, Madurai",9.947751,78.156601,2026-04-11
+SYN-CR-0847,Assault,"Egmore, Chennai",13.072799,80.267446,2026-04-12
+SYN-CR-0848,Assault,"Gandhipuram, Coimbatore",11.014771,76.964325,2026-04-16
+SYN-CR-0849,Vehicle Theft,"Mattuthavani, Madurai",9.948033,78.159346,2026-04-16
+SYN-CR-0850,Chain Snatching,"Singanallur, Coimbatore",10.990048,77.037598,2026-04-16
+SYN-CR-0851,Chain Snatching,"Mattuthavani, Madurai",9.947993,78.162983,2026-04-20
+SYN-CR-0852,Robbery,"Central Bus Stand, Erode",11.346034,77.706342,2026-04-21
+SYN-CR-0853,Chain Snatching,"T. Nagar, Chennai",13.038571,80.234173,2026-04-22
+SYN-CR-0854,Cyber Crime,"Velachery, Chennai",12.976024,80.222967,2026-04-24
+SYN-CR-0855,Vehicle Theft,"Tambaram, Chennai",12.929567,80.101495,2026-04-26
+SYN-CR-0856,Theft,"Old Bus Stand, Tiruppur",11.113845,77.340930,2026-04-28
+SYN-CR-0857,Cyber Crime,"Peelamedu, Coimbatore",11.025150,76.999757,2026-04-29
+SYN-CR-0858,Theft,"Periyar Bus Stand, Madurai",9.914711,78.114761,2026-05-01
+SYN-CR-0859,Vehicle Theft,"Peelamedu, Coimbatore",11.027487,77.006834,2026-05-03
+SYN-CR-0860,Vandalism,"Katpadi, Vellore",12.967597,79.136103,2026-05-05
+SYN-CR-0861,Assault,"Mattuthavani, Madurai",9.949068,78.155738,2026-05-07
+SYN-CR-0862,Assault,"Tirunelveli Junction, Tirunelveli",8.728931,77.708355,2026-05-07
+SYN-CR-0863,Chain Snatching,"Mattuthavani, Madurai",9.940607,78.157584,2026-05-08
+SYN-CR-0864,Chain Snatching,"Mattuthavani, Madurai",9.952791,78.161515,2026-05-09
+SYN-CR-0865,Vehicle Theft,"Chathiram Bus Stand, Tiruchirappalli",10.829579,78.692931,2026-05-11
+SYN-CR-0866,Vehicle Theft,"Gandhipuram, Coimbatore",11.020756,76.956087,2026-05-13
+SYN-CR-0867,Theft,"Thiruparankundram, Madurai",9.882100,78.066027,2026-05-14
+SYN-CR-0868,Vehicle Theft,"Bus Stand, Sivakasi",9.451991,77.801362,2026-05-15
+SYN-CR-0869,Cyber Crime,"Velachery, Chennai",12.977474,80.214126,2026-05-17
+SYN-CR-0870,Robbery,"Chathiram Bus Stand, Tiruchirappalli",10.830406,78.691744,2026-05-20
+SYN-CR-0871,Burglary,"Old Bus Stand, Tiruppur",11.104353,77.337728,2026-05-21
+SYN-CR-0872,Theft,"T. Nagar, Chennai",13.046621,80.233131,2026-05-21
+SYN-CR-0873,Assault,"Tambaram, Chennai",12.922065,80.106096,2026-05-22
+SYN-CR-0874,Robbery,"Central Bus Stand, Erode",11.348411,77.710011,2026-05-25
+SYN-CR-0875,Cyber Crime,"Chennai Central, Chennai",13.079966,80.271316,2026-05-25
+SYN-CR-0876,Burglary,"Periyar Bus Stand, Madurai",9.918663,78.112480,2026-05-25
+SYN-CR-0877,Theft,Krishnagiri,12.515814,78.216348,2026-05-27
+SYN-CR-0878,Assault,"Periyar Bus Stand, Madurai",9.917114,78.110072,2026-05-28
+SYN-CR-0879,Burglary,"Guindy, Chennai",13.008444,80.225514,2026-05-29
+SYN-CR-0880,Assault,"Tambaram, Chennai",12.925290,80.098372,2026-05-29
+SYN-CR-0881,Assault,"Gandhipuram, Coimbatore",11.022189,76.967715,2026-05-30
+SYN-CR-0882,Robbery,"Srirangam, Tiruchirappalli",10.862828,78.688402,2026-05-30
+SYN-CR-0883,Vehicle Theft,"Old Bus Stand, Tiruppur",11.110759,77.343773,2026-05-31
+SYN-CR-0884,Theft,"Old Bus Stand, Tiruppur",11.115469,77.340524,2026-05-31
+SYN-CR-0885,Vehicle Theft,"Srirangam, Tiruchirappalli",10.863924,78.694452,2026-05-31
+SYN-CR-0886,Cyber Crime,"Peelamedu, Coimbatore",11.020733,77.005695,2026-06-01
+SYN-CR-0887,Chain Snatching,"Tambaram, Chennai",12.928950,80.100010,2026-06-01
+SYN-CR-0888,Vehicle Theft,Villupuram,11.937166,79.482335,2026-06-02
+SYN-CR-0889,Theft,"Bus Stand, Sivakasi",9.450031,77.805836,2026-06-03
+SYN-CR-0890,Chain Snatching,"Chennai Central, Chennai",13.081181,80.273340,2026-06-03
+SYN-CR-0891,Theft,"Periyar Bus Stand, Madurai",9.917153,78.113724,2026-06-03
+SYN-CR-0892,Theft,"Velachery, Chennai",12.982865,80.222896,2026-06-04
+SYN-CR-0893,Vehicle Theft,"Chennai Central, Chennai",13.083873,80.272234,2026-06-05
+SYN-CR-0894,Cyber Crime,"Central Bus Stand, Erode",11.342495,77.710446,2026-06-06
+SYN-CR-0895,Vehicle Theft,Hosur,12.735792,77.823864,2026-06-07
+SYN-CR-0896,Theft,"Katpadi, Vellore",12.961228,79.151372,2026-06-07
+SYN-CR-0897,Vehicle Theft,"Mattuthavani, Madurai",9.942780,78.152910,2026-06-07
+SYN-CR-0898,Vehicle Theft,"Tirunelveli Junction, Tirunelveli",8.723668,77.708975,2026-06-08
+SYN-CR-0899,Theft,"Chathiram Bus Stand, Tiruchirappalli",10.831730,78.696701,2026-06-09
+SYN-CR-0900,Assault,"Gandhipuram, Coimbatore",11.010250,76.971156,2026-06-09
+SYN-CR-0901,Theft,"Chennai Central, Chennai",13.079910,80.276893,2026-06-10
+SYN-CR-0902,Vehicle Theft,Namakkal,11.222302,78.163307,2026-06-10
+SYN-CR-0903,Theft,"Chathiram Bus Stand, Tiruchirappalli",10.831121,78.693389,2026-06-11
+SYN-CR-0904,Assault,Kanchipuram,12.830196,79.703625,2026-06-12
+SYN-CR-0905,Chain Snatching,"Meenakshi Amman Temple, Madurai",9.919927,78.120071,2026-06-12
+SYN-CR-0906,Theft,"Peelamedu, Coimbatore",11.027460,77.001342,2026-06-12
+SYN-CR-0907,Vandalism,"Ukkadam, Coimbatore",10.993514,76.956619,2026-06-12
+SYN-CR-0908,Vehicle Theft,"Koyambedu, Chennai",13.069090,80.192451,2026-06-18
+SYN-CR-0909,Vehicle Theft,"Arapalayam, Madurai",9.934553,78.097499,2026-06-19
+SYN-CR-0910,Chain Snatching,"Mylapore, Chennai",13.032634,80.260357,2026-06-19
+SYN-CR-0911,Robbery,Pollachi,10.654696,77.012281,2026-06-21
+SYN-CR-0912,Chain Snatching,"Mattuthavani, Madurai",9.944369,78.154528,2026-06-22
+SYN-CR-0913,Robbery,"Tambaram, Chennai",12.920561,80.100399,2026-06-22
+SYN-CR-0914,Theft,"Arapalayam, Madurai",9.932787,78.101853,2026-06-23
+SYN-CR-0915,Assault,"Koyambedu, Chennai",13.066576,80.187966,2026-06-25
+SYN-CR-0916,Cyber Crime,"Peelamedu, Coimbatore",11.024138,77.003550,2026-06-25
+SYN-CR-0917,Chain Snatching,"Old Bus Stand, Tiruppur",11.104572,77.337797,2026-06-26
+SYN-CR-0918,Theft,"Katpadi, Vellore",12.973207,79.133837,2026-06-27
+SYN-CR-0919,Theft,"T. Nagar, Chennai",13.041685,80.235742,2026-06-28
+SYN-CR-0920,Theft,"Meenakshi Amman Temple, Madurai",9.919676,78.122432,2026-06-29
+SYN-CR-0921,Cyber Crime,"Velachery, Chennai",12.977134,80.215873,2026-06-29
+SYN-CR-0922,Assault,"Periyar Bus Stand, Madurai",9.915608,78.115187,2026-07-02
+SYN-CR-0923,Robbery,"Arapalayam, Madurai",9.936434,78.105278,2026-07-04
+SYN-CR-0924,Burglary,Krishnagiri,12.524802,78.210848,2026-07-04
+SYN-CR-0925,Theft,"Tirunelveli Junction, Tirunelveli",8.724621,77.706555,2026-07-04
+SYN-CR-0926,Robbery,"Koyambedu, Chennai",13.068565,80.189838,2026-07-05
+SYN-CR-0927,Vehicle Theft,"Mylapore, Chennai",13.032378,80.259745,2026-07-09
+SYN-CR-0928,Chain Snatching,"Ukkadam, Coimbatore",10.986894,76.963655,2026-07-10
+SYN-CR-0929,Theft,"Periyar Bus Stand, Madurai",9.915757,78.115795,2026-07-11
+SYN-CR-0930,Theft,"Arapalayam, Madurai",9.935078,78.098217,2026-07-12
+SYN-CR-0931,Theft,"Peelamedu, Coimbatore",11.021791,76.997177,2026-07-14
+SYN-CR-0932,Theft,"Chennai Central, Chennai",13.081026,80.275573,2026-07-15
+SYN-CR-0933,Vandalism,"Tambaram, Chennai",12.921393,80.098878,2026-07-15
+SYN-CR-0934,Vehicle Theft,"New Bus Stand, Salem",11.673877,78.141187,2026-07-16
+SYN-CR-0935,Vehicle Theft,"Gandhipuram, Coimbatore",11.015605,76.972885,2026-07-17
+SYN-CR-0936,Vandalism,"Meenakshi Amman Temple, Madurai",9.921658,78.119203,2026-07-17
+SYN-CR-0937,Theft,"Ukkadam, Coimbatore",10.992645,76.958159,2026-07-18
+SYN-CR-0938,Theft,"Velachery, Chennai",12.975586,80.221002,2026-07-18
+SYN-CR-0939,Chain Snatching,Villupuram,11.932232,79.489506,2026-07-19
+SYN-CR-0940,Assault,"T. Nagar, Chennai",13.043825,80.229267,2026-07-20
+SYN-CR-0941,Assault,Villupuram,11.938360,79.500544,2026-07-20
+SYN-CR-0942,Theft,"Periyar Bus Stand, Madurai",9.916618,78.115331,2026-07-21
+SYN-CR-0943,Theft,"Egmore, Chennai",13.070105,80.253383,2026-07-22
+SYN-CR-0944,Robbery,"Koyambedu, Chennai",13.066862,80.191224,2026-07-22
+SYN-CR-0945,Chain Snatching,"Tirunelveli Junction, Tirunelveli",8.725269,77.712023,2026-07-25
+SYN-CR-0946,Burglary,"K. Pudur, Madurai",9.944866,78.142717,2026-07-26
+SYN-CR-0947,Chain Snatching,"Meenakshi Amman Temple, Madurai",9.918040,78.122970,2026-07-26
+SYN-CR-0948,Cyber Crime,Villupuram,11.944833,79.480982,2026-07-26
+SYN-CR-0949,Theft,"Mylapore, Chennai",13.033161,80.265230,2026-07-27
+SYN-CR-0950,Vehicle Theft,"Thiruparankundram, Madurai",9.879676,78.072436,2026-07-27
+SYN-CR-0951,Vehicle Theft,"Bus Stand, Sivakasi",9.452701,77.801397,2026-07-29
+SYN-CR-0952,Vehicle Theft,"Koyambedu, Chennai",13.064452,80.189773,2026-07-30
+SYN-CR-0953,Chain Snatching,"T. Nagar, Chennai",13.041363,80.235134,2026-07-30
+SYN-CR-0954,Theft,Hosur,12.737144,77.830912,2026-08-02
+SYN-CR-0955,Theft,"Peelamedu, Coimbatore",11.024888,76.999279,2026-08-04
+SYN-CR-0956,Vehicle Theft,"Periyar Bus Stand, Madurai",9.918828,78.111538,2026-08-05
+SYN-CR-0957,Chain Snatching,"Chathiram Bus Stand, Tiruchirappalli",10.835036,78.692703,2026-08-06
+SYN-CR-0958,Burglary,"R.S. Puram, Coimbatore",10.995220,76.942582,2026-08-08
+SYN-CR-0959,Burglary,"Mattuthavani, Madurai",9.945149,78.155916,2026-08-09
+SYN-CR-0960,Assault,"T. Nagar, Chennai",13.044485,80.233170,2026-08-10
+SYN-CR-0961,Robbery,"Arapalayam, Madurai",9.935018,78.094153,2026-08-11
+SYN-CR-0962,Theft,Karur,10.966712,78.081658,2026-08-11
+SYN-CR-0963,Assault,"Meenakshi Amman Temple, Madurai",9.919344,78.116578,2026-08-11
+SYN-CR-0964,Theft,"Mylapore, Chennai",13.030998,80.262420,2026-08-11
+SYN-CR-0965,Vehicle Theft,"Katpadi, Vellore",12.977420,79.137989,2026-08-14
+SYN-CR-0966,Vehicle Theft,"Chathiram Bus Stand, Tiruchirappalli",10.835318,78.693886,2026-08-16
+SYN-CR-0967,Theft,"Tirunelveli Junction, Tirunelveli",8.730012,77.709994,2026-08-16
+SYN-CR-0968,Theft,Karur,10.961580,78.082451,2026-08-17
+SYN-CR-0969,Theft,"Mattuthavani, Madurai",9.944504,78.154817,2026-08-21
+SYN-CR-0970,Chain Snatching,"Chennai Central, Chennai",13.088133,80.278172,2026-08-22
+SYN-CR-0971,Vehicle Theft,"Koyambedu, Chennai",13.070183,80.192435,2026-08-23
+SYN-CR-0972,Chain Snatching,"Tambaram, Chennai",12.928771,80.098119,2026-08-24
+SYN-CR-0973,Theft,"Bus Stand, Sivakasi",9.452175,77.803425,2026-08-26
+SYN-CR-0974,Robbery,"Koyambedu, Chennai",13.064404,80.196298,2026-08-26
+SYN-CR-0975,Vehicle Theft,"T. Nagar, Chennai",13.043206,80.235830,2026-08-26
+SYN-CR-0976,Theft,"Meenakshi Amman Temple, Madurai",9.920789,78.119968,2026-08-27
+SYN-CR-0977,Chain Snatching,"Tambaram, Chennai",12.924720,80.101637,2026-08-27
+SYN-CR-0978,Theft,"New Bus Stand, Salem",11.672448,78.143716,2026-08-28
+SYN-CR-0979,Cyber Crime,"Periyar Bus Stand, Madurai",9.917427,78.113663,2026-08-28
+SYN-CR-0980,Theft,"Tambaram, Chennai",12.917364,80.105119,2026-08-28
+SYN-CR-0981,Vehicle Theft,"Ukkadam, Coimbatore",10.992456,76.961615,2026-08-28
+SYN-CR-0982,Chain Snatching,"Katpadi, Vellore",12.971438,79.135019,2026-08-29
+SYN-CR-0983,Theft,Krishnagiri,12.525542,78.210689,2026-08-29
+SYN-CR-0984,Vehicle Theft,"Meenakshi Amman Temple, Madurai",9.920650,78.116565,2026-08-29
+SYN-CR-0985,Robbery,"Gandhipuram, Coimbatore",11.015655,76.968391,2026-08-30
+SYN-CR-0986,Vehicle Theft,"Chennai Central, Chennai",13.079572,80.281242,2026-08-31
+SYN-CR-0987,Chain Snatching,"Arapalayam, Madurai",9.930537,78.096516,2026-09-05
+SYN-CR-0988,Assault,"Old Bus Stand, Tiruppur",11.116474,77.347056,2026-09-08
+SYN-CR-0989,Chain Snatching,"T. Nagar, Chennai",13.043654,80.233219,2026-09-08
+SYN-CR-0990,Vandalism,"Bus Stand, Sivakasi",9.452355,77.801738,2026-09-10
+SYN-CR-0991,Chain Snatching,"Ukkadam, Coimbatore",10.990676,76.964471,2026-09-10
+SYN-CR-0992,Cyber Crime,"Peelamedu, Coimbatore",11.021453,76.994344,2026-09-13
+SYN-CR-0993,Robbery,"Velachery, Chennai",12.984805,80.221770,2026-09-13
+SYN-CR-0994,Chain Snatching,"Mylapore, Chennai",13.036653,80.263010,2026-09-15
+SYN-CR-0995,Vandalism,"Central Bus Stand, Erode",11.338688,77.720990,2026-09-17
+SYN-CR-0996,Chain Snatching,"Ukkadam, Coimbatore",10.993645,76.956677,2026-09-18
+SYN-CR-0997,Vehicle Theft,"Chennai Central, Chennai",13.082540,80.272433,2026-09-19
+SYN-CR-0998,Burglary,Kumbakonam,10.956510,79.385044,2026-09-19
+SYN-CR-0999,Robbery,"Peelamedu, Coimbatore",11.028607,77.003703,2026-09-19
+SYN-CR-1000,Chain Snatching,"Arapalayam, Madurai",9.933205,78.099614,2026-09-20

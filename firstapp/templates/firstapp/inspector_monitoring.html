@@ -1,30 +1,16 @@
-{% load static %}
+﻿{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Officer Monitoring - Inspector Panel</title>
     <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+    <link rel="stylesheet" href="{% static 'firstapp/animations.css' %}">
 </head>
 <body>
 
 <div class="dashboard-layout">
     <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <h2>🛡️ CISP</h2>
-            <p>Inspector (Station In-Charge)</p>
-        </div>
-        <nav class="sidebar-menu">
-            <a href="{% url 'inspector_dashboard' %}">📊 Station Dashboard</a>
-            <a href="{% url 'inspector_monitoring' %}" class="active">👁️ Officer Monitoring</a>
-            <a href="{% url 'fir' %}">📄 FIR Records</a>
-            <a href="{% url 'cases' %}">📁 Station Cases</a>
-            <a href="{% url 'evidence' %}">🔍 Evidence Vault</a>
-            <a href="{% url 'accused' %}">👤 Accused Records</a>
-            <a href="{% url 'police_sos' %}">🆘 Emergency SOS</a>
-            <a href="{% url 'crime_intelligence' %}">🗺️ Crime Intelligence</a>
-        </nav>
-    </aside>
+    {% include 'firstapp/partials/police_sidebar.html' %}
 
     <!-- Main Content -->
     <div class="main-content">
@@ -154,6 +140,9 @@
     </div>
 </div>
 
+<script src="{% static 'firstapp/ambient.js' %}"></script>
 <script src="{% static 'firstapp/script.js' %}"></script>
+<script src="{% static 'firstapp/ui.js' %}"></script>
 </body>
 </html>
+

@@ -1,0 +1,464 @@
+/* =============================================================================
+   CISP AMBIENT BACKGROUND + UI DEPTH  (imported by style.css)
+   Decorative only: the layer sits behind all content (z-index:-1), ignores the
+   pointer, and uses the existing palette (#1a5276 navy, #2e86c1 blue,
+   #85c1e9 sky, #d6eaf8 mist, #f4f6f9 page). Built by ambient.js.
+   This file is @imported at the top of style.css, so rules that restyle existing
+   components are prefixed with `html` to win over style.css's own rules.
+   ============================================================================= */
+
+:root {
+    --amb-navy: 26, 82, 118;     /* #1a5276 */
+    --amb-blue: 46, 134, 193;    /* #2e86c1 */
+    --amb-sky: 133, 193, 233;    /* #85c1e9 */
+    --amb-mist: 214, 234, 248;   /* #d6eaf8 */
+    --amb-amber: 243, 156, 18;   /* #f39c12 */
+    --amb-shadow: 0 1px 2px rgba(var(--amb-navy), 0.05), 0 10px 28px -14px rgba(var(--amb-navy), 0.28);
+    --amb-shadow-hover: 0 2px 4px rgba(var(--amb-navy), 0.06), 0 18px 36px -16px rgba(var(--amb-navy), 0.38);
+    --amb-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ----- Background layer --------------------------------------------------- */
+.amb-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    contain: strict;
+    background:
+        radial-gradient(ellipse at 50% -10%, rgba(var(--amb-mist), 0.55), transparent 60%),
+        linear-gradient(180deg, #f6f9fc 0%, #f4f6f9 55%, #eef3f8 100%);
+}
+
+.amb-bg > * {
+    position: absolute;
+    pointer-events: none;
+}
+
+/* Technical grid / map pattern: oversized and translated by exactly one major
+   cell, so the drift loops seamlessly on the compositor (no repaint). */
+.amb-grid {
+    inset: -240px;
+    background-image:
+        radial-gradient(circle, rgba(var(--amb-navy), 0.10) 1.2px, transparent 1.6px),
+        linear-gradient(rgba(var(--amb-navy), 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(var(--amb-navy), 0.045) 1px, transparent 1px),
+        linear-gradient(rgba(var(--amb-navy), 0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(var(--amb-navy), 0.022) 1px, transparent 1px);
+    background-size: 240px 240px, 240px 240px, 240px 240px, 48px 48px, 48px 48px;
+    background-position: -0.5px -0.5px;
+    -webkit-mask-image: radial-gradient(ellipse at var(--amb-grid-x, 60%) var(--amb-grid-y, 40%), #000 10%, transparent 75%);
+    mask-image: radial-gradient(ellipse at var(--amb-grid-x, 60%) var(--amb-grid-y, 40%), #000 10%, transparent 75%);
+    animation: amb-grid-drift var(--amb-grid-dur, 90s) linear infinite;
+    will-change: transform;
+}
+
+@keyframes amb-grid-drift {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(var(--amb-grid-dx, 240px), var(--amb-grid-dy, 240px), 0); }
+}
+
+/* Ambient light blobs (radial gradients, no filter:blur => cheap). */
+.amb-blob {
+    left: var(--x);
+    top: var(--y);
+    width: var(--s);
+    height: var(--s);
+    margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 50%, rgba(var(--c), var(--a)) 0%, rgba(var(--c), 0) 68%);
+    animation: amb-blob-float var(--dur) ease-in-out var(--delay) infinite alternate;
+    will-change: transform;
+}
+
+@keyframes amb-blob-float {
+    0%   { transform: translate3d(0, 0, 0) scale(1); }
+    50%  { transform: translate3d(calc(var(--dx) * 0.6), calc(var(--dy) * -0.4), 0) scale(1.08); }
+    100% { transform: translate3d(var(--dx), var(--dy), 0) scale(0.96); }
+}
+
+/* Particle network canvas. */
+.amb-net {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Rare floating security symbols (shield, pin, radar, lock, alert, node). */
+.amb-sym {
+    left: var(--x);
+    top: var(--y);
+    width: var(--s);
+    height: var(--s);
+    color: rgba(var(--c), 1);
+    opacity: 0;
+    animation: amb-sym-float var(--dur) ease-in-out var(--delay) infinite;
+    will-change: transform, opacity;
+}
+
+.amb-sym svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+@keyframes amb-sym-float {
+    0%   { opacity: 0; transform: translate3d(0, 12px, 0) rotate(calc(var(--r) * -1)); }
+    20%  { opacity: var(--a); }
+    50%  { transform: translate3d(var(--dx), calc(var(--dy) * 0.5), 0) rotate(0deg); }
+    80%  { opacity: var(--a); }
+    100% { opacity: 0; transform: translate3d(calc(var(--dx) * 1.6), var(--dy), 0) rotate(var(--r)); }
+}
+
+/* Radar ring: concentric pulses from one point. */
+.amb-radar {
+    left: var(--x);
+    top: var(--y);
+    width: var(--s);
+    height: var(--s);
+    margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+}
+
+.amb-radar span {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(var(--amb-blue), 0.35);
+    opacity: 0;
+    animation: amb-radar-pulse 9s var(--amb-ease) infinite;
+}
+
+.amb-radar span:nth-child(2) { animation-delay: 3s; }
+.amb-radar span:nth-child(3) { animation-delay: 6s; }
+
+.amb-radar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, rgba(var(--amb-blue), 0.10), rgba(var(--amb-blue), 0) 22%, transparent 100%);
+    -webkit-mask-image: radial-gradient(circle, #000 0%, #000 60%, transparent 71%);
+    mask-image: radial-gradient(circle, #000 0%, #000 60%, transparent 71%);
+    animation: amb-radar-sweep 14s linear infinite;
+    opacity: 0.55;
+}
+
+@keyframes amb-radar-pulse {
+    0%   { transform: scale(0.15); opacity: 0; }
+    15%  { opacity: 0.55; }
+    100% { transform: scale(1); opacity: 0; }
+}
+
+@keyframes amb-radar-sweep {
+    to { transform: rotate(360deg); }
+}
+
+/* Page-type tuning. Auth pages act as the landing page: a bit more presence. */
+.amb-v-auth .amb-grid {
+    -webkit-mask-image: radial-gradient(ellipse at var(--amb-grid-x, 50%) var(--amb-grid-y, 45%), #000 20%, transparent 85%);
+    mask-image: radial-gradient(ellipse at var(--amb-grid-x, 50%) var(--amb-grid-y, 45%), #000 20%, transparent 85%);
+}
+.amb-v-dashboard .amb-net { opacity: 0.85; }
+.amb-v-dashboard .amb-radar { opacity: 0.7; }
+
+/* ----- Homepage hero (index.html) ---------------------------------------- */
+.hero.amb-hero {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background:
+        radial-gradient(ellipse at 20% 0%, rgba(var(--amb-blue), 0.45), transparent 55%),
+        radial-gradient(ellipse at 85% 110%, rgba(var(--amb-sky), 0.22), transparent 50%),
+        linear-gradient(160deg, #1a5276 0%, #154360 100%);
+    padding-top: 80px;
+    padding-bottom: 80px;
+}
+
+.amb-hero-fx {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.amb-hero-fx canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.amb-hero-fx::before,
+.amb-hero-fx::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    width: 60vmax;
+    height: 60vmax;
+    background: radial-gradient(circle, rgba(var(--amb-sky), 0.20), transparent 62%);
+    animation: amb-blob-float 26s ease-in-out infinite alternate;
+    --dx: 8vmax;
+    --dy: 4vmax;
+}
+
+.amb-hero-fx::before { left: -25vmax; top: -35vmax; }
+.amb-hero-fx::after  { right: -30vmax; bottom: -40vmax; animation-duration: 32s; --dx: -6vmax; --dy: -5vmax; }
+
+.hero.amb-hero h1 {
+    letter-spacing: 0.3px;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.18);
+}
+
+/* ----- Depth: glass surfaces above the background ------------------------ */
+html .card,
+html .stat-card,
+html .table-container,
+html .feature-card,
+html .auth-card,
+html .contact-item {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-color: rgba(var(--amb-navy), 0.1);
+    box-shadow: var(--amb-shadow);
+}
+
+html .dashboard-header {
+    background-color: rgba(255, 255, 255, 0.82);
+    border-bottom-color: rgba(var(--amb-navy), 0.1);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 6px 20px -16px rgba(var(--amb-navy), 0.45);
+}
+
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+    html .card,
+    html .stat-card,
+    html .table-container,
+    html .feature-card,
+    html .auth-card,
+    html .contact-item {
+        background-color: rgba(255, 255, 255, 0.84);
+        -webkit-backdrop-filter: blur(8px) saturate(1.15);
+        backdrop-filter: blur(8px) saturate(1.15);
+    }
+
+    html .dashboard-header {
+        background-color: rgba(255, 255, 255, 0.74);
+        -webkit-backdrop-filter: blur(12px) saturate(1.2);
+        backdrop-filter: blur(12px) saturate(1.2);
+    }
+}
+
+html .auth-card {
+    box-shadow: 0 2px 6px rgba(var(--amb-navy), 0.06), 0 30px 60px -30px rgba(var(--amb-navy), 0.45);
+}
+
+/* Sidebar keeps its navy identity, with a little depth and a faint grid. */
+html .sidebar {
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px) 0 0 / 100% 32px,
+        radial-gradient(ellipse at 0% 0%, rgba(var(--amb-blue), 0.35), transparent 60%),
+        linear-gradient(180deg, #1a5276 0%, #164a6b 60%, #133f5c 100%);
+    box-shadow: 4px 0 24px -12px rgba(var(--amb-navy), 0.6);
+}
+
+html .sidebar-menu a {
+    transition: background-color 0.25s ease, padding-left 0.25s var(--amb-ease), color 0.25s ease;
+}
+
+html .sidebar-menu a:hover {
+    padding-left: 24px;
+}
+
+html .navbar {
+    background: linear-gradient(90deg, #1a5276 0%, #1d5d86 100%);
+    box-shadow: 0 6px 20px -14px rgba(var(--amb-navy), 0.8);
+}
+
+/* ----- Hover polish -------------------------------------------------------- */
+html .stat-card,
+html .feature-card,
+html .action-btn,
+html .contact-item,
+html .card {
+    transition: transform 0.35s var(--amb-ease), box-shadow 0.35s var(--amb-ease), border-color 0.35s ease;
+}
+
+html .stat-card:hover,
+html .feature-card:hover,
+html .contact-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--amb-shadow-hover);
+    border-color: rgba(var(--amb-blue), 0.3);
+}
+
+html .action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--amb-shadow-hover);
+}
+
+html .card:hover {
+    box-shadow: var(--amb-shadow-hover);
+}
+
+html .stat-card .stat-icon,
+html .feature-card .icon {
+    transition: transform 0.45s var(--amb-ease);
+}
+
+html .stat-card:hover .stat-icon,
+html .feature-card:hover .icon {
+    transform: scale(1.12) translateY(-2px);
+}
+
+html .btn {
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease,
+                transform 0.2s var(--amb-ease), box-shadow 0.2s var(--amb-ease);
+}
+
+html .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px -8px rgba(var(--amb-navy), 0.55);
+}
+
+html .btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+html .data-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+/* ----- Entrance on first paint (pure CSS, no dependency on the script) -----
+   fill-mode "backwards" only: once finished the animation releases the element,
+   so hover transforms keep working. */
+@keyframes amb-enter {
+    from { opacity: 0; transform: translate3d(0, 14px, 0); }
+    to   { opacity: 1; transform: none; }
+}
+
+@keyframes amb-enter-soft {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+html .stat-card,
+html .card,
+html .table-container,
+html .feature-card,
+html .auth-card,
+html .contact-item,
+html .quick-actions,
+html .page-title,
+.hero > :not(.amb-hero-fx),
+.section-title,
+.about-content {
+    animation: amb-enter 0.7s var(--amb-ease) backwards;
+}
+
+html .dashboard-header,
+html .navbar {
+    animation: amb-enter-soft 0.6s ease backwards;
+}
+
+html .stats-grid > :nth-child(2), html .crime-stats-grid > :nth-child(2), html .features-grid > :nth-child(2), .hero > :nth-child(3) { animation-delay: 70ms; }
+html .stats-grid > :nth-child(3), html .crime-stats-grid > :nth-child(3), html .features-grid > :nth-child(3), .hero > :nth-child(4) { animation-delay: 140ms; }
+html .stats-grid > :nth-child(4), html .crime-stats-grid > :nth-child(4), html .features-grid > :nth-child(4) { animation-delay: 210ms; }
+html .stats-grid > :nth-child(5), html .crime-stats-grid > :nth-child(5), html .features-grid > :nth-child(5) { animation-delay: 280ms; }
+html .stats-grid > :nth-child(n + 6), html .crime-stats-grid > :nth-child(n + 6), html .features-grid > :nth-child(n + 6) { animation-delay: 350ms; }
+html .content-area > .card:nth-of-type(n + 2),
+html .content-area > .table-container:nth-of-type(n + 2) { animation-delay: 160ms; }
+
+/* ----- Scroll reveal for content that starts below the fold (ambient.js) --- */
+html.amb-reveal-on .amb-reveal {
+    animation: none;
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+}
+
+html.amb-reveal-on .amb-reveal.amb-in {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.7s var(--amb-ease) var(--amb-delay, 0ms),
+                transform 0.7s var(--amb-ease) var(--amb-delay, 0ms);
+}
+
+/* After revealing, ambient.js swaps the reveal classes for this one, so the
+   element behaves normally again (hover lift) without replaying amb-enter. */
+html .amb-done {
+    animation: none;
+}
+
+/* ----- Small screens: lighter scene ---------------------------------------- */
+@media (max-width: 768px) {
+    .amb-sym:nth-of-type(n + 4),
+    .amb-blob:nth-of-type(3) {
+        display: none;
+    }
+
+    .amb-radar {
+        opacity: 0.6;
+    }
+
+    html .sidebar-menu a:hover {
+        padding-left: 20px;
+    }
+}
+
+/* ----- Reduced motion: keep the atmosphere, drop the movement ------------- */
+@media (prefers-reduced-motion: reduce) {
+    .amb-bg *,
+    .amb-bg *::before,
+    .amb-bg *::after,
+    .amb-hero-fx::before,
+    .amb-hero-fx::after {
+        animation: none !important;
+    }
+
+    .amb-sym {
+        opacity: var(--a);
+    }
+
+    .amb-radar span:first-child {
+        opacity: 0.35;
+        transform: scale(0.8);
+    }
+
+    html.amb-reveal-on .amb-reveal {
+        opacity: 1;
+        transform: none;
+    }
+
+    html .stat-card,
+    html .card,
+    html .table-container,
+    html .feature-card,
+    html .auth-card,
+    html .contact-item,
+    html .quick-actions,
+    html .page-title,
+    html .dashboard-header,
+    html .navbar,
+    .hero > *,
+    .section-title,
+    .about-content {
+        animation: none;
+    }
+
+    html .stat-card:hover,
+    html .feature-card:hover,
+    html .contact-item:hover,
+    html .action-btn:hover,
+    html .btn:hover,
+    html .stat-card:hover .stat-icon,
+    html .feature-card:hover .icon {
+        transform: none;
+    }
+
+    html .sidebar-menu a:hover {
+        padding-left: 20px;
+    }
+}

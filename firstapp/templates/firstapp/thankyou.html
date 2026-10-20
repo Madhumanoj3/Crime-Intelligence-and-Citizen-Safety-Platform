@@ -1,9 +1,10 @@
-{% load static %}
+﻿{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Thank You - CISP</title>
     <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+    <link rel="stylesheet" href="{% static 'firstapp/animations.css' %}">
 </head>
 <body>
 
@@ -17,5 +18,7 @@
     <a href="{% url 'index' %}" class="btn btn-outline-primary">Back to Home</a>
 </div>
 
+<script src="{% static 'firstapp/ambient.js' %}"></script>
+<script src="{% static 'firstapp/ui.js' %}"></script>
 </body>
 </html>

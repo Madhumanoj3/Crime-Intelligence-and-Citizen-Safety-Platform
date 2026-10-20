@@ -1,16 +1,20 @@
-{% load static %}
+﻿{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Police Personnel Registration - CISP</title>
     <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
+    <link rel="stylesheet" href="{% static 'firstapp/animations.css' %}">
 </head>
 <body>
 
-<div class="auth-wrapper">
+<div class="auth-split">
+    <div class="auth-split-left">{% include 'firstapp/partials/auth_brand_panel.html' %}</div>
+    <div class="auth-split-right">
     <div class="auth-card wide" style="max-width:640px;">
         <h2 style="margin-bottom: 2px;">🛡️ CISP</h2>
-        <p class="subtitle" style="margin-bottom: 15px;">Crime Intelligence &amp; Citizen Safety Platform</p>
+        <p class="subtitle" style="margin-bottom: 15px;">Police personnel registration</p>
 
         <!-- Auth Navigation Tabs -->
         <div class="auth-tabs">
@@ -105,8 +109,12 @@
             Already registered and verified? <a href="{% url 'login' %}" style="font-weight: bold;">Log in here</a>
         </p>
     </div>
+    </div>
 </div>
 
+<script src="{% static 'firstapp/ambient.js' %}"></script>
 <script src="{% static 'firstapp/script.js' %}"></script>
+<script src="{% static 'firstapp/ui.js' %}"></script>
 </body>
 </html>
+
