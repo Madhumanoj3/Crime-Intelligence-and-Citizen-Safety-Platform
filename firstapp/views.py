@@ -1132,20 +1132,22 @@ def thankyou(request):
     return render(request, 'firstapp/thankyou.html')
 
 def setup_initial_data(request):
-    import scratch_sync_dataset
-    if PoliceStation.objects.count() == 0 or request.GET.get('force') == '1':
-        scratch_sync_dataset.sync_data()
+    from django.core.management import call_command
+    try:
+        call_command('loaddata', 'local_data.json')
         return JsonResponse({
             'status': 'success',
-            'message': 'Database seeded successfully with 20 stations, 284 locations, and 80 officers!',
+            'message': 'Successfully loaded full local dataset (1,235 objects)!',
+            'users': User.objects.count(),
+            'citizens': User.objects.filter(role='citizen').count(),
+            'officers': User.objects.filter(role__in=['officer', 'inspector']).count(),
             'stations': PoliceStation.objects.count(),
             'locations': Location.objects.count(),
-            'officers': User.objects.filter(role__in=['officer', 'inspector']).count()
+            'complaints': Complaint.objects.count(),
+            'firs': FIR.objects.count(),
+            'cases': Case.objects.count(),
+            'sos': SOS.objects.count()
         })
-    return JsonResponse({
-        'status': 'already_seeded',
-        'message': 'Database already has data. Use ?force=1 if you want to re-sync.',
-        'stations': PoliceStation.objects.count(),
-        'locations': Location.objects.count()
-    })
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
