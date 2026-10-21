@@ -1,0 +1,8 @@
+# Force Unix line endings for shell scripts (required for Render/Linux)
+*.sh text eol=lf
+
+# Python files
+*.py text eol=lf
+
+# Everything else - auto-detect
+* text=auto

@@ -96,7 +96,9 @@ WSGI_APPLICATION = 'myapp.wsgi.application'
 
 if os.getenv('DATABASE_URL'):  # set by Render
     import dj_database_url
-    DATABASES = {'default': dj_database_url.config(conn_max_age=600, conn_health_checks=True)}
+    _db_url = os.getenv('DATABASE_URL', '')
+    _needs_ssl = ('postgres.render.com' in _db_url) or ('sslmode=require' in _db_url)
+    DATABASES = {'default': dj_database_url.config(conn_max_age=600, conn_health_checks=True, ssl_require=_needs_ssl)}
 else:
     DATABASES = {
         'default': {
