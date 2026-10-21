@@ -1,0 +1,20 @@
+Station_Name,Type,Address,Phone,Latitude,Longitude,Area,Distance_To_Area_km,Notes
+Superintendent Of Police,SP Office,"Madurai HO, Madurai - 625001","2525307, 2344197",9.92520,78.11980,Poondhotam,0.44,coordinates are rounded in the source file
+Karimedu Police Station,Police Station,"10th St, Arappalayam, Madurai, Tamil Nadu 625016",,9.93050,78.10020,Kalavasal,0.49,coordinates are rounded in the source file
+Bazzar Police Station,Police Station,"Kaaval Kooda St, Chinnakadai Area, Madurai, Tamil Nadu 625001",0452 233 6665,9.92100,78.11100,Madurai,0.66,coordinates are rounded in the source file
+Koodal Pudur Police Station,Police Station,"Railar Nagar, Koodal Nagar, Madurai, Tamil Nadu 625017",,9.88100,78.10100,Avaniyapuram,1.36,coordinates are rounded in the source file
+South Chitirai Street Police Station,Police Station,"South Chitirai Street, Madurai Bazaar, Madurai - 625001",(0452) 2344101,9.92050,78.11150,Madurai,0.69,"source name was just ""Police Station""; named after its street; coordinates are rounded in the source file"
+Police Women,Women Police Station,"Thilagar Tidal, South Veli Street, Madurai City, Madurai - 625001",(0452) 2338300,9.91900,78.10800,Ellis Nagar,0.91,coordinates are rounded in the source file
+Police Thidirnagar C 1,Police Station,"Thidir Nagar, Madurai City, Madurai - 625001",(0452) 2336665,9.93300,78.10200,Arappalayam,0.17,coordinates are rounded in the source file
+Assistant Commissioner Of Police Madurai Town,ACP Office,"Madurai City, Madurai - 625001","(0452) 2330072, 2321834, 2322496",9.92550,78.12000,Poondhotam,0.44,coordinates are rounded in the source file
+Police Teppakulam B 3,Police Station,"Teppakulam, Madurai City, Madurai - 625001",(0452) 2312577,9.91950,78.12100,Nelpettai,0.68,coordinates are rounded in the source file
+Police Women Town Hall,Women Police Station,"Town Hall Road, Madurai - 625001",(0452) 2330031,9.93100,78.11200,Ponnagaram,0.23,coordinates are rounded in the source file
+Police B1,Police Station,"Vilakkuthoon, Madurai Bazaar, Madurai - 625001",(0452) 2343573,9.92200,78.11050,Madurai,0.60,coordinates are rounded in the source file
+Police Rajaji Govt Hospital E 4,Police Station,"Rajaji Govt Hospital, Madurai Bazaar, Madurai - 625001",(0452) 2533806,9.93200,78.12200,Sellur,0.42,coordinates are rounded in the source file
+Deputy Superintendent Of Police,DSP Office,"Gandhi Nagar, Melur, Madurai - 625106",(0452) 2415141,10.03000,78.34000,Melur,0.28,coordinates are rounded in the source file
+Anna Nagar Police Station,Police Station,"Anna Nagar, Madurai",0452 - 2533247,9.94050,78.13100,BB Kulam,0.71,coordinates are rounded in the source file
+Jaihindapuram Police Station,Police Station,"Jaihindapuram, Madurai",0452 - 2671871,9.93250,78.12250,Sellur,0.37,coordinates are rounded in the source file
+Subramaniyapuram Police Station,Police Station,"Subramaniyapuram, Madurai",0452 - 2302153,9.93150,78.10150,Arappalayam,0.34,coordinates are rounded in the source file
+Mathiciyam Police Station,Police Station,"Mathiciyam, Madurai",0452 - 2533905,9.95100,78.13200,Athikulam,0.76,coordinates are rounded in the source file
+District Police Office,District HQ,"Swami Vivekananda Nagar, Kodikulam, Madurai, Tamil Nadu 625007",0452 253 9477,9.93400,78.10400,Arappalayam,0.11,coordinates are rounded in the source file
+D1 South Gate Police Station,Police Station,"South Gate, Madurai",0452-2737041,9.91100,78.11200,Jaihindpuram,0.67,coordinates are rounded in the source file

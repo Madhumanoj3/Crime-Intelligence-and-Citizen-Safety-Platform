@@ -18,7 +18,7 @@ import os
 import random
 
 SEED = 42
-N_RECORDS = 1500
+N_RECORDS = 10000
 OUT_CSV = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dataset', 'complaint_priority_dataset.csv')
 
 FIELDS = ['complaint_id', 'title', 'complaint_description', 'crime_category', 'location',

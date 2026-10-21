@@ -2,7 +2,7 @@
 Train the AI Complaint Priority model (Low / Medium / High).
 
 Features:
-  * TF-IDF of complaint title + description (word 1-2 grams)
+  * TF-IDF of complaint title + description (words)
   * one-hot crime category, location type and time of day
   * previous related reports in the same area (capped, scaled 0-1)
 Model: multinomial Logistic Regression.
@@ -61,8 +61,8 @@ def load_dataset(path):
 
 def fit(records, labels):
     """Fit vectorizer, encoder and classifier on the given records."""
-    vectorizer = TfidfVectorizer(lowercase=True, ngram_range=(1, 2), min_df=5,
-                                 sublinear_tf=True, stop_words='english')
+    vectorizer = TfidfVectorizer(lowercase=True, ngram_range=(1, 1), min_df=20,
+                                 sublinear_tf=True)
     vectorizer.fit([r['text'] for r in records])
     encoder = OneHotEncoder(categories=[CATEGORIES, LOCATION_TYPES, TIME_BUCKETS],
                             handle_unknown='ignore')

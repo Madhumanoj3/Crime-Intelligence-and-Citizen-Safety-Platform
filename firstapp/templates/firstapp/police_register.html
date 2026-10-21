@@ -75,7 +75,7 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="area">Area / Locality *</label>
-                    <input list="police-locations" id="area" name="area" placeholder="Type or choose area (e.g. Tallakulam)" required oninput="onPoliceAreaChange(this.value)">
+                    <input list="police-locations" id="area" name="area" placeholder="Type or choose area (e.g. Sellur)" required oninput="onPoliceAreaChange(this.value)">
                     <datalist id="police-locations">
                         {% for loc in locations %}
                         <option value="{{ loc.name }}">{{ loc.name }} ({{ loc.location_type }})</option>

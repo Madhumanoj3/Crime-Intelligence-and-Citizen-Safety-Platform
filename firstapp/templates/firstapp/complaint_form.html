@@ -86,10 +86,10 @@
                         </div>
                     </div>
 
-                    <!-- Madurai Area Selection (280+ Locations) -->
+                    <!-- Madurai Area Selection -->
                     <div class="form-group">
-                        <label for="area">Incident Area / Locality in Madurai * <small style="color:#2980b9;">(Choose from 280+ Madurai Locations)</small></label>
-                        <input list="madurai-complaint-areas" id="area" name="area" placeholder="Type or choose area (e.g. Anna Nagar, Tallakulam, Goripalayam, Simmakkal)" autocomplete="off" required oninput="onComplaintAreaChange(this.value)">
+                        <label for="area">Incident Area / Locality in Madurai * <small style="color:#2980b9;">(Choose from {{ locations|length }} Madurai areas)</small></label>
+                        <input list="madurai-complaint-areas" id="area" name="area" placeholder="Type or choose area (e.g. Anna Nagar, Sellur, Goripalayam)" autocomplete="off" required oninput="onComplaintAreaChange(this.value)">
                         <datalist id="madurai-complaint-areas">
                             {% for loc in locations %}
                             <option value="{{ loc.name }}" data-lat="{{ loc.latitude }}" data-lon="{{ loc.longitude }}">{{ loc.name }} ({{ loc.location_type }})</option>
@@ -98,8 +98,15 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="address">Specific Address / Landmark</label>
-                        <input type="text" id="address" name="address" placeholder="e.g. Opposite to Bus Stand, Main Road">
+                        <label for="landmark">Nearby Landmark <small style="color:#2980b9;">(optional, pins the incident location more exactly)</small></label>
+                        <input list="complaint-landmarks" id="landmark" name="landmark" placeholder="Type or choose a hospital, temple, bus stop, school..." autocomplete="off" oninput="onLandmarkChange(this.value)">
+                        <datalist id="complaint-landmarks"></datalist>
+                        <small id="landmark-hint" style="color:#666;"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Specific Address</label>
+                        <input type="text" id="address" name="address" placeholder="e.g. Door number, Main Road">
                     </div>
 
                     <div class="form-row">
@@ -145,6 +152,7 @@
     </div>
 </div>
 
+{{ landmarks|json_script:"landmark-data" }}
 <script>
     const complaintLocationMap = {
         {% for loc in locations %}
@@ -158,7 +166,39 @@
             document.getElementById('latitude').value = complaintLocationMap[trimmed].lat;
             document.getElementById('longitude').value = complaintLocationMap[trimmed].lon;
         }
+        fillLandmarks(trimmed);
     }
+
+    const allLandmarks = JSON.parse(document.getElementById('landmark-data').textContent);
+    const landmarkByName = {};
+    allLandmarks.forEach(function (l) { landmarkByName[l.name.toLowerCase()] = l; });
+
+    // Offer the landmarks of the chosen area; if the area has none, offer all of them
+    function fillLandmarks(area) {
+        const list = document.getElementById('complaint-landmarks');
+        const hint = document.getElementById('landmark-hint');
+        let shown = allLandmarks.filter(function (l) { return l.area.toLowerCase() === area.toLowerCase(); });
+        const inArea = shown.length > 0;
+        if (!inArea) shown = allLandmarks;
+        list.innerHTML = '';
+        shown.forEach(function (l) {
+            const o = document.createElement('option');
+            o.value = l.name;
+            o.textContent = l.name + ' (' + l.landmark_type + ')';
+            list.appendChild(o);
+        });
+        hint.textContent = area && inArea ? shown.length + ' landmarks found in ' + area
+            : 'Showing all landmarks in Madurai';
+    }
+
+    function onLandmarkChange(val) {
+        const l = landmarkByName[(val || '').trim().toLowerCase()];
+        if (l) {
+            document.getElementById('latitude').value = l.latitude;
+            document.getElementById('longitude').value = l.longitude;
+        }
+    }
+    fillLandmarks('');
 </script>
 <script src="{% static 'firstapp/ambient.js' %}"></script>
 <script src="{% static 'firstapp/script.js' %}"></script>

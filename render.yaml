@@ -1,0 +1,30 @@
+# Render Blueprint: one Django web service + one PostgreSQL database.
+databases:
+  - name: cisp-db
+    plan: free
+    databaseName: crime_db
+
+services:
+  - type: web
+    name: cisp-backend
+    runtime: python
+    plan: free
+    buildCommand: ./build.sh
+    startCommand: gunicorn myapp.wsgi:application
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.5
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cisp-db
+          property: connectionString
+      # Add your Vercel / custom domain here (comma-separated) if you use one:
+      # - key: DJANGO_ALLOWED_HOSTS
+      #   value: your-app.vercel.app
+      # - key: DJANGO_CSRF_TRUSTED_ORIGINS
+      #   value: https://your-app.vercel.app

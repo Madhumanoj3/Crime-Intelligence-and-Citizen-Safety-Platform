@@ -109,7 +109,7 @@
                                 <td>{{ c.category }}</td>
                                 <td>{{ c.incident_date }}</td>
                                 <td>
-                                    <span class="badge {% if c.status == 'Resolved' %}badge-success{% elif c.status == 'Rejected' %}badge-danger{% elif c.status == 'Under Review' %}badge-info{% else %}badge-warning{% endif %}">
+                                    <span class="badge {% if c.status == 'Resolved' %}badge-success{% elif c.status == 'Closed / Rejected' %}badge-danger{% elif c.status == 'Under Review' %}badge-info{% else %}badge-warning{% endif %}">
                                         {{ c.status }}
                                     </span>
                                 </td>

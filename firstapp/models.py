@@ -55,6 +55,21 @@ class PoliceStation(models.Model):
         return f"{self.station_id} - {self.name}"
 
 
+class Landmark(models.Model):
+    """A well-known place (hospital, temple, bus stop...) a citizen can name as a nearby landmark."""
+    landmark_id = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=200, unique=True)
+    landmark_type = models.CharField(max_length=50)
+    latitude = models.CharField(max_length=20)
+    longitude = models.CharField(max_length=20)
+    area = models.CharField(max_length=200, blank=True)
+    distance_km = models.CharField(max_length=10, blank=True)
+    address = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.landmark_type})"
+
+
 class Location(models.Model):
     name = models.CharField(max_length=200, unique=True)
     latitude = models.CharField(max_length=20)
@@ -83,6 +98,7 @@ class Complaint(models.Model):
     pincode = models.CharField(max_length=10, blank=True)
     latitude = models.CharField(max_length=20, blank=True)
     longitude = models.CharField(max_length=20, blank=True)
+    landmark = models.CharField(max_length=200, blank=True)
     evidence = models.CharField(max_length=200, blank=True)
 
     # Station & Officer Assignment (Hierarchy)

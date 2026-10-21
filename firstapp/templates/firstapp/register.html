@@ -70,8 +70,8 @@
             </div>
 
             <div class="form-group">
-                <label for="area">Madurai Area / Locality * <small style="color:#2980b9;">(Select from 280+ Madurai Locations)</small></label>
-                <input list="madurai-locations" id="area" name="area" placeholder="Type or choose area (e.g. Anna Nagar, Tallakulam, Sellur)" autocomplete="off" required oninput="onAreaChange(this.value)">
+                <label for="area">Madurai Area / Locality * <small style="color:#2980b9;">(Select from {{ locations|length }} Madurai areas)</small></label>
+                <input list="madurai-locations" id="area" name="area" placeholder="Type or choose area (e.g. Anna Nagar, Sellur, Villapuram)" autocomplete="off" required oninput="onAreaChange(this.value)">
                 <datalist id="madurai-locations">
                     {% for loc in locations %}
                     <option value="{{ loc.name }}" data-lat="{{ loc.latitude }}" data-lon="{{ loc.longitude }}">{{ loc.name }} ({{ loc.location_type }})</option>

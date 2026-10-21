@@ -153,6 +153,11 @@
                                     </span>
                                 </td>
                                 <td>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" style="margin-bottom:4px;"
+                                        data-map-id="{{ c.complaint_id }}" data-map-title="{{ c.title }}" data-map-addr="{{ c.address|default:c.city }}"
+                                        data-map-lat="{{ c.latitude }}" data-map-lon="{{ c.longitude }}"
+                                        onclick="openCrimeMap(this)">🗺️ Map</button>
+
                                     <!-- Action 1: Add Notes -->
                                     <button class="btn btn-sm btn-outline-primary" style="margin-bottom:4px;" onclick="openNotesModal('{{ c.complaint_id }}', '{{ c.investigation_notes|escapejs }}')">
                                         📝 Update Notes
@@ -301,6 +306,109 @@
         </form>
     </div>
 </div>
+
+<!-- Crime location map (Leaflet is loaded by the hotspot map partial above) -->
+<div class="modal-overlay" id="mapModal">
+    <div class="modal-box" style="max-width:760px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <h3 style="margin:0;" id="mapTitle">Crime location</h3>
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeCrimeMap()">✕ Close</button>
+        </div>
+        <p style="margin:0 0 8px 0; font-size:13px; color:#555;" id="mapAddr"></p>
+        <div id="crimeMap" style="height:340px; border-radius:6px; border:1px solid #ced4da;"></div>
+        <p style="margin:8px 0; font-size:13px;">
+            <span style="color:#c0392b;">● Crime location</span> &nbsp;
+            <span style="color:#2980b9;">● {% if station_obj %}Police station{% else %}Your current location{% endif %}</span> &nbsp;
+            <strong id="mapDist"></strong>
+        </p>
+        <div style="margin-top:10px;">
+            <button type="button" class="btn btn-sm btn-secondary" onclick="closeCrimeMap()">&larr; Back</button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+    var STATION = {% if station_obj %}[{{ station_obj.latitude }}, {{ station_obj.longitude }}]{% else %}null{% endif %};
+    var map = null, layer = null, routeStamp = 0;
+
+    function dot(color) {
+        return L.divIcon({
+            className: '',
+            html: '<div style="width:18px;height:18px;border-radius:50%;background:' + color + ';border:3px solid #fff;box-shadow:0 0 4px rgba(0,0,0,.6);"></div>',
+            iconSize: [18, 18], iconAnchor: [9, 9]
+        });
+    }
+
+    function draw(crime, me, meLabel) {
+        layer.clearLayers();
+        L.marker(crime, {icon: dot('#c0392b')}).addTo(layer).bindPopup('Crime location');
+        var pts = [crime];
+        if (me) {
+            L.marker(me, {icon: dot('#2980b9')}).addTo(layer).bindPopup(meLabel);
+            var straight = L.polyline([me, crime], {color: '#555', dashArray: '6 6', weight: 2}).addTo(layer);
+            pts.push(me);
+            var km = map.distance(me, crime) / 1000;
+            document.getElementById('mapDist').textContent = km.toFixed(1) + ' km straight line (' + meLabel.toLowerCase() + ') - finding road route...';
+            var stamp = ++routeStamp;
+            // Shortest road route from OSRM (public demo server); keeps the dashed line if it fails.
+            fetch('https://router.project-osrm.org/route/v1/driving/' + me[1] + ',' + me[0] + ';' + crime[1] + ',' + crime[0] +
+                  '?overview=full&geometries=geojson')
+                .then(function (r) { return r.json(); })
+                .then(function (d) {
+                    if (stamp !== routeStamp) return;
+                    var rt = d.routes && d.routes[0];
+                    if (!rt) throw new Error('no route');
+                    layer.removeLayer(straight);
+                    var line = L.geoJSON(rt.geometry, {style: {color: '#2980b9', weight: 5, opacity: 0.85}}).addTo(layer);
+                    map.fitBounds(line.getBounds(), {padding: [40, 40], maxZoom: 16});
+                    document.getElementById('mapDist').textContent = (rt.distance / 1000).toFixed(1) + ' km by road, about ' +
+                        Math.max(1, Math.round(rt.duration / 60)) + ' min (' + meLabel.toLowerCase() + ' to crime spot)';
+                })
+                .catch(function () {
+                    if (stamp === routeStamp)
+                        document.getElementById('mapDist').textContent = km.toFixed(1) + ' km straight line (road route unavailable)';
+                });
+        } else {
+            document.getElementById('mapDist').textContent = 'Your location is unavailable';
+        }
+        map.fitBounds(L.latLngBounds(pts), {padding: [40, 40], maxZoom: 16});
+    }
+
+    window.openCrimeMap = function (btn) {
+        var lat = parseFloat(btn.dataset.mapLat), lon = parseFloat(btn.dataset.mapLon);
+        document.getElementById('mapTitle').textContent = btn.dataset.mapId + ' - ' + btn.dataset.mapTitle;
+        document.getElementById('mapAddr').textContent = btn.dataset.mapAddr;
+        document.getElementById('mapModal').style.display = 'flex';
+        document.getElementById('mapDist').textContent = STATION ? '' : 'Finding your location...';
+
+        if (!map) {
+            map = L.map('crimeMap');
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'}).addTo(map);
+            layer = L.layerGroup().addTo(map);
+        }
+        setTimeout(function () { map.invalidateSize(); }, 50);
+        if (isNaN(lat) || isNaN(lon)) {
+            layer.clearLayers();
+            document.getElementById('mapDist').textContent = 'This complaint has no coordinates.';
+            return;
+        }
+        var crime = [lat, lon];
+        if (STATION) { draw(crime, STATION, 'Police station'); return; }
+        draw(crime, null);
+        if (!navigator.geolocation) return;
+        navigator.geolocation.getCurrentPosition(
+            function (p) { draw(crime, [p.coords.latitude, p.coords.longitude], 'Your current location'); },
+            function () {},
+            {enableHighAccuracy: true, timeout: 8000}
+        );
+    };
+
+    window.closeCrimeMap = function () { document.getElementById('mapModal').style.display = 'none'; };
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') window.closeCrimeMap(); });
+    document.getElementById('mapModal').addEventListener('click', function (e) { if (e.target === this) window.closeCrimeMap(); });
+})();
+</script>
 
 <script>
 function openNotesModal(cid, notes) {

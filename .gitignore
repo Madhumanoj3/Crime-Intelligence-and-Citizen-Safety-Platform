@@ -22,3 +22,6 @@ Thumbs.db
 
 # Build / logs
 *.log
+
+# Collected static files
+staticfiles/

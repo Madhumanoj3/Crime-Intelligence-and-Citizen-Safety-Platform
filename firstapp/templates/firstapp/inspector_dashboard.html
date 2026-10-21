@@ -305,15 +305,18 @@
     <div class="modal-box" style="max-width:760px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
             <h3 style="margin:0;" id="mapTitle">Crime location</h3>
-            <button type="button" class="btn btn-sm btn-outline" onclick="closeCrimeMap()">✕</button>
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeCrimeMap()">✕ Close</button>
         </div>
         <p style="margin:0 0 8px 0; font-size:13px; color:#555;" id="mapAddr"></p>
         <div id="crimeMap" style="height:340px; border-radius:6px; border:1px solid #ced4da;"></div>
         <p style="margin:8px 0; font-size:13px;">
             <span style="color:#c0392b;">● Crime location</span> &nbsp;
-            <span style="color:#2980b9;">● Your current location</span> &nbsp;
+            <span style="color:#2980b9;">● {% if station_obj %}Police station{% else %}Your current location{% endif %}</span> &nbsp;
             <strong id="mapDist"></strong>
         </p>
+        <div style="margin-top:10px;">
+            <button type="button" class="btn btn-sm btn-secondary" onclick="closeCrimeMap()">&larr; Back</button>
+        </div>
         <form method="POST" action="{% url 'inspector_dashboard' %}" id="mapAssignForm" style="display:none; gap:8px; align-items:center;">
             {% csrf_token %}
             <input type="hidden" name="action" value="assign_officer">
@@ -333,7 +336,7 @@
 <script>
 (function () {
     var STATION = {% if station_obj %}[{{ station_obj.latitude }}, {{ station_obj.longitude }}]{% else %}null{% endif %};
-    var map = null, layer = null;
+    var map = null, layer = null, routeStamp = 0;
 
     function dot(color) {
         return L.divIcon({
@@ -349,10 +352,29 @@
         var pts = [crime];
         if (me) {
             L.marker(me, {icon: dot('#2980b9')}).addTo(layer).bindPopup(meLabel);
-            L.polyline([me, crime], {color: '#555', dashArray: '6 6', weight: 2}).addTo(layer);
+            var straight = L.polyline([me, crime], {color: '#555', dashArray: '6 6', weight: 2}).addTo(layer);
             pts.push(me);
             var km = map.distance(me, crime) / 1000;
-            document.getElementById('mapDist').textContent = km.toFixed(1) + ' km away (' + meLabel.toLowerCase() + ')';
+            document.getElementById('mapDist').textContent = km.toFixed(1) + ' km straight line (' + meLabel.toLowerCase() + ') - finding road route...';
+            var stamp = ++routeStamp;
+            // Shortest road route from OSRM (public demo server); keeps the dashed line if it fails.
+            fetch('https://router.project-osrm.org/route/v1/driving/' + me[1] + ',' + me[0] + ';' + crime[1] + ',' + crime[0] +
+                  '?overview=full&geometries=geojson')
+                .then(function (r) { return r.json(); })
+                .then(function (d) {
+                    if (stamp !== routeStamp) return;
+                    var rt = d.routes && d.routes[0];
+                    if (!rt) throw new Error('no route');
+                    layer.removeLayer(straight);
+                    var line = L.geoJSON(rt.geometry, {style: {color: '#2980b9', weight: 5, opacity: 0.85}}).addTo(layer);
+                    map.fitBounds(line.getBounds(), {padding: [40, 40], maxZoom: 16});
+                    document.getElementById('mapDist').textContent = (rt.distance / 1000).toFixed(1) + ' km by road, about ' +
+                        Math.max(1, Math.round(rt.duration / 60)) + ' min (' + meLabel.toLowerCase() + ' to crime spot)';
+                })
+                .catch(function () {
+                    if (stamp === routeStamp)
+                        document.getElementById('mapDist').textContent = km.toFixed(1) + ' km straight line (road route unavailable)';
+                });
         } else {
             document.getElementById('mapDist').textContent = 'Your location is unavailable';
         }
@@ -366,7 +388,7 @@
         document.getElementById('mapComplaintId').value = btn.dataset.mapId;
         document.getElementById('mapAssignForm').style.display = btn.dataset.mapPending ? 'flex' : 'none';
         document.getElementById('mapModal').style.display = 'flex';
-        document.getElementById('mapDist').textContent = 'Finding your location...';
+        document.getElementById('mapDist').textContent = STATION ? '' : 'Finding your location...';
 
         if (!map) {
             map = L.map('crimeMap');
@@ -380,17 +402,19 @@
             return;
         }
         var crime = [lat, lon];
-        var fallback = STATION ? function () { draw(crime, STATION, 'Station location'); } : function () { draw(crime, null); };
+        if (STATION) { draw(crime, STATION, 'Police station'); return; }
         draw(crime, null);
-        if (!navigator.geolocation) { fallback(); return; }
+        if (!navigator.geolocation) return;
         navigator.geolocation.getCurrentPosition(
             function (p) { draw(crime, [p.coords.latitude, p.coords.longitude], 'Your current location'); },
-            fallback,
+            function () {},
             {enableHighAccuracy: true, timeout: 8000}
         );
     };
 
     window.closeCrimeMap = function () { document.getElementById('mapModal').style.display = 'none'; };
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') window.closeCrimeMap(); });
+    document.getElementById('mapModal').addEventListener('click', function (e) { if (e.target === this) window.closeCrimeMap(); });
 })();
 </script>
 <script src="{% static 'firstapp/ambient.js' %}"></script>

@@ -5,8 +5,9 @@ from django.db.models import Q
 
 from .models import (
     User, Complaint, Alert, SOS, MissingPerson,
-    LostFound, FIR, Case, Evidence, Accused, PoliceStation, Feedback, Location
+    LostFound, FIR, Case, Evidence, Accused, PoliceStation, Feedback, Location, Landmark
 )
+from .auth import role_required, POLICE_ROLES
 from .ai_detector import check_duplicate_complaint
 from .geo_router import find_jurisdiction_station
 from .hotspots import get_hotspots
@@ -261,6 +262,7 @@ def logout_view(request):
 # 2. CITIZEN VIEWS (SUBMIT & TRACK COMPLAINTS)
 # ==============================================================================
 
+@role_required('citizen')
 def citizen_dashboard(request):
     user = get_current_user(request)
     user_email = user.get('email', '').lower()
@@ -283,6 +285,7 @@ def citizen_dashboard(request):
     })
 
 
+@role_required('citizen')
 def complaint_form(request):
     user = get_current_user(request)
     stations = PoliceStation.objects.all()
@@ -303,6 +306,14 @@ def complaint_form(request):
         latitude = request.POST.get('latitude', '').strip()
         longitude = request.POST.get('longitude', '').strip()
         evidence = request.POST.get('evidence', '') or 'complaint_doc.pdf'
+        landmark = request.POST.get('landmark', '').strip()
+
+        # A named landmark is more precise than the area, so its coordinates win
+        landmark_obj = Landmark.objects.filter(name__iexact=landmark).first() if landmark else None
+        if landmark_obj:
+            landmark = landmark_obj.name
+            latitude = landmark_obj.latitude
+            longitude = landmark_obj.longitude
 
         # Look up location coordinates from Area if not provided
         if area and (not latitude or not longitude):
@@ -352,6 +363,7 @@ def complaint_form(request):
             pincode=pincode,
             latitude=latitude or (matched_station.latitude if matched_station else '9.9252'),
             longitude=longitude or (matched_station.longitude if matched_station else '78.1198'),
+            landmark=landmark,
             evidence=evidence,
             assigned_station_id=station_id,
             assigned_station_name=station_name,
@@ -373,10 +385,12 @@ def complaint_form(request):
     return render(request, 'firstapp/complaint_form.html', {
         'current_user': user,
         'stations': stations,
+        'landmarks': list(Landmark.objects.values('name', 'landmark_type', 'latitude', 'longitude', 'area')),
         'locations': locations,
     })
 
 
+@role_required()
 def complaints(request):
     user = get_current_user(request)
     if user.get('role') == 'citizen':
@@ -391,6 +405,7 @@ def complaints(request):
     })
 
 
+@role_required()
 def complaint_detail(request):
     user = get_current_user(request)
     complaint_id = request.GET.get('id', '')
@@ -408,6 +423,7 @@ def complaint_detail(request):
     })
 
 
+@role_required('citizen', json=True)
 def sos(request):
     user = get_current_user(request)
     now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -450,6 +466,7 @@ def sos(request):
     return render(request, 'firstapp/sos.html', {'current_user': user, 'current_time': now_str})
 
 
+@role_required('citizen')
 def missing_person(request):
     user = get_current_user(request)
     today_str = datetime.now().strftime('%Y-%m-%d')
@@ -474,6 +491,7 @@ def missing_person(request):
     })
 
 
+@role_required('citizen')
 def lost_found(request):
     user = get_current_user(request)
     today_str = datetime.now().strftime('%Y-%m-%d')
@@ -500,6 +518,7 @@ def lost_found(request):
     })
 
 
+@role_required('citizen')
 def community_alerts(request):
     user = get_current_user(request)
     return render(request, 'firstapp/community_alerts.html', {
@@ -512,6 +531,7 @@ def community_alerts(request):
 # 3. INSPECTOR (STATION IN-CHARGE) VIEWS & WORKFLOW
 # ==============================================================================
 
+@role_required('inspector')
 def inspector_dashboard(request):
     user = get_current_user(request)
     station_id = user.get('station_id', '')
@@ -566,6 +586,7 @@ def inspector_dashboard(request):
     })
 
 
+@role_required('inspector')
 def inspector_monitoring(request):
     user = get_current_user(request)
     station_id = user.get('station_id', '')
@@ -592,6 +613,7 @@ def inspector_monitoring(request):
 # 4. POLICE OFFICER (INVESTIGATING OFFICER) VIEWS & WORKFLOW
 # ==============================================================================
 
+@role_required('officer', 'police')
 def officer_dashboard(request):
     user = get_current_user(request)
     officer_email = user.get('email', '')
@@ -607,6 +629,7 @@ def officer_dashboard(request):
     my_cases = Case.objects.filter(
         Q(assigned_officer__icontains=officer_name) | Q(officer_badge=user.get('badge_number', ''))
     )
+    open_cases = my_cases.exclude(status='Closed')
 
     # Actions: Close/Reject or Add Investigation Notes
     if request.method == 'POST':
@@ -633,10 +656,14 @@ def officer_dashboard(request):
         'assigned_count': my_complaints.filter(status='Assigned').count(),
         'firs_registered_count': my_complaints.filter(status='FIR Registered').count(),
         'my_cases': list(my_cases.values()),
-        'total_cases_count': my_cases.count(),
+        'total_cases_count': open_cases.count(),
+        'closed_cases_count': my_cases.filter(status='Closed').count(),
+        'station_obj': (PoliceStation.objects.filter(station_id=user.get('station_id', '')).first()
+                        if user.get('station_id') else None),
     })
 
 
+@role_required()
 def police_dashboard(request):
     """Smart router to redirect to inspector or officer dashboard based on user role."""
     user = get_current_user(request)
@@ -649,6 +676,7 @@ def police_dashboard(request):
     return redirect('citizen_dashboard')
 
 
+@role_required(*POLICE_ROLES, 'admin')
 def police_complaints(request):
     user = get_current_user(request)
     role = user.get('role', 'officer')
@@ -676,6 +704,7 @@ def police_complaints(request):
     })
 
 
+@role_required(*POLICE_ROLES, 'admin')
 def fir(request):
     user = get_current_user(request)
     today_str = datetime.now().strftime('%Y-%m-%d')
@@ -736,6 +765,7 @@ def fir(request):
     })
 
 
+@role_required(*POLICE_ROLES, 'admin')
 def cases(request):
     user = get_current_user(request)
     all_cases = Case.objects.all()
@@ -752,13 +782,24 @@ def cases(request):
         witnesses = request.POST.get('witnesses', '')
         summary = request.POST.get('investigation_summary', '')
 
-        Case.objects.filter(case_id=case_id).update(
+        today = datetime.now().strftime('%Y-%m-%d')
+        case = all_cases.filter(case_id=case_id).first()
+        all_cases.filter(case_id=case_id).update(
             status=new_status,
+            end_date=today if new_status == 'Closed' else '',
             accused_info=accused_info,
             witnesses=witnesses,
             investigation_summary=summary,
             last_update=datetime.now().strftime('%Y-%m-%d %H:%M')
         )
+        # Keep the complaint in step with its case, otherwise every dashboard still shows it as active
+        if case:
+            if new_status == 'Closed':
+                Complaint.objects.filter(complaint_id=case.complaint_id).update(
+                    status='Resolved', case_status='Closed')
+            else:
+                Complaint.objects.filter(complaint_id=case.complaint_id).update(
+                    status='FIR Registered', case_status='Case Active')
         return redirect(f'/police/cases/?id={case_id}')
 
     selected_id = request.GET.get('id', '')
@@ -771,6 +812,7 @@ def cases(request):
     })
 
 
+@role_required(*POLICE_ROLES, 'admin')
 def evidence(request):
     user = get_current_user(request)
     if request.method == 'POST':
@@ -792,6 +834,7 @@ def evidence(request):
     })
 
 
+@role_required(*POLICE_ROLES, 'admin')
 def accused(request):
     user = get_current_user(request)
     if request.method == 'POST':
@@ -819,6 +862,7 @@ def accused(request):
     })
 
 
+@role_required(*POLICE_ROLES, 'admin')
 def police_sos(request):
     user = get_current_user(request)
     action = request.GET.get('action')
@@ -836,6 +880,7 @@ def police_sos(request):
     })
 
 
+@role_required(*POLICE_ROLES, 'admin')
 def crime_intelligence(request):
     user = get_current_user(request)
     complaints_qs = Complaint.objects.all()
@@ -850,6 +895,7 @@ def crime_intelligence(request):
     })
 
 
+@role_required(json=True)
 def hotspots_api(request):
     """Crime hotspots built from stored complaints, for the Leaflet map shown on every dashboard."""
     return JsonResponse(get_hotspots(request.GET.get('crime_type', ''), request.GET.get('year', '')))
@@ -859,6 +905,7 @@ def hotspots_api(request):
 # 5. ADMIN VIEWS (STATIONS & OFFICERS VERIFICATION / ASSIGNMENT ONLY)
 # ==============================================================================
 
+@role_required('admin')
 def admin_dashboard(request):
     user = get_current_user(request)
     users_qs = User.objects.all()
@@ -878,6 +925,7 @@ def admin_dashboard(request):
     })
 
 
+@role_required('admin')
 def users(request):
     user = get_current_user(request)
     stations = PoliceStation.objects.all()
@@ -977,6 +1025,7 @@ def users(request):
     })
 
 
+@role_required('admin')
 def police_stations(request):
     user = get_current_user(request)
     all_stations = PoliceStation.objects.all()
@@ -1027,6 +1076,7 @@ def police_stations(request):
     })
 
 
+@role_required('admin')
 def admin_alerts(request):
     user = get_current_user(request)
     today_str = datetime.now().strftime('%Y-%m-%d')

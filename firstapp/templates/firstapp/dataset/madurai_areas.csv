@@ -1,0 +1,307 @@
+Area_ID,Area,Type,Latitude,Longitude,Verified,OSM_ID,Notes
+AREA-001,Madurai,City,9.92612,78.11410,Yes,node/1254628537,
+AREA-002,Achampathu,Neighbourhood,9.93869,78.06567,Yes,node/9495842897,
+AREA-003,Agathapatti,Village,9.70041,77.96186,Yes,node/9036685857,
+AREA-004,Aiyankottai,Village,10.02928,78.01409,Yes,node/5166996740,
+AREA-005,Alagappan Nagar,Neighbourhood,9.89607,78.09802,Yes,node/14234191130,
+AREA-006,Alagapuri (near Ayyampatti),Village,10.06188,78.23663,Yes,node/5267455127,"same name as another place, so the nearest place was added"
+AREA-007,Alagapuri (near Ottaveedu),Village,10.05918,78.06815,Yes,node/5190876714,"same name as another place, so the nearest place was added"
+AREA-008,Alagarkovil,Village,10.06844,78.21571,Yes,node/315046026,
+AREA-009,Alampatti,Village,9.80253,77.95909,Yes,node/2082944093,
+AREA-010,Alanganallur,Town,10.04636,78.08781,Yes,node/5190307694,
+AREA-011,Alattur,Neighbourhood,9.98666,78.15692,Yes,node/13784338460,
+AREA-012,Ambalattadi,Village,10.01591,78.06799,Yes,node/5186256230,
+AREA-013,Anaikulam,Village,10.02179,78.03715,Yes,node/5181206176,
+AREA-014,Anaiyur,Suburb,9.96137,78.10852,Yes,node/13784338440,
+AREA-015,Andalpuram,Neighbourhood,9.90944,78.10171,Yes,node/13784338448,
+AREA-016,Angadimangalam,Village,9.84221,78.24596,Yes,node/9091605638,
+AREA-017,Anna Nagar,Suburb,9.92167,78.14814,Yes,node/4621834759,
+AREA-018,Anuppanadi,Suburb,9.90458,78.13931,Yes,node/12015455470,
+AREA-019,Appanthirupathi,Hamlet,10.01980,78.19337,Yes,node/9045514340,
+AREA-020,Arappalayam,Suburb,9.93419,78.10303,Yes,node/7934871411,
+AREA-021,Arasappanpatti,Village,10.04832,78.30337,Yes,node/5267455865,
+AREA-022,Athikulam,Suburb,9.95593,78.13679,Yes,node/13784338457,
+AREA-023,Avaniyapuram,Suburb,9.88050,78.11344,Yes,node/11358843347,
+AREA-024,Ayyampatti,Village,10.06478,78.23374,Yes,node/5267455129,
+AREA-025,Balaji Nagar,Neighbourhood,9.88380,78.06301,Yes,node/10846704115,
+AREA-026,Balarengapuram,Neighbourhood,9.91333,78.13076,Yes,node/13784338451,
+AREA-027,BB Kulam,Neighbourhood,9.94289,78.12496,Yes,node/13784338437,
+AREA-028,Bethaniyapuram,Suburb,9.93638,78.09365,Yes,node/7934851693,
+AREA-029,Boothakudi,Neighbourhood,9.99007,78.11642,Yes,node/14238131647,
+AREA-030,Chekkanurani,Town,9.94163,77.97349,Yes,node/353433171,
+AREA-031,Chellampatty,Village,9.94409,77.89799,Yes,node/8341277485,
+AREA-032,Chettiapatty,Village,9.97731,77.71899,Yes,node/352929977,
+AREA-033,Chettikulam,Village,9.86786,78.14618,Yes,node/9053961870,
+AREA-034,Chettiyarpatti,Village,10.06168,78.27018,Yes,node/5267455051,
+AREA-035,Chinna Sengappadai,Village,9.77016,77.92112,Yes,node/5136852008,
+AREA-036,Chinna Vellaipatti,Village,10.06507,78.25769,Yes,node/5267455052,
+AREA-037,Chinnakattalai,Village,9.84879,77.79897,Yes,node/9088678852,
+AREA-038,Chinthamani,Suburb,9.89474,78.13935,Yes,node/12015455471,
+AREA-039,Chittalangudi,Village,10.01538,78.02579,Yes,node/5167043558,
+AREA-040,Chittampatti,Village,9.98363,78.23448,Yes,node/9085307917,
+AREA-041,Chokkalinga Nagar,Neighbourhood,9.95721,78.09620,Yes,node/13784338444,
+AREA-042,Dharmathupatti,Neighbourhood,9.86407,78.00750,Yes,node/14234191133,
+AREA-043,Ellis Nagar,Suburb,9.91374,78.10158,Yes,node/7934871413,
+AREA-044,Elumalai,Village,9.86307,77.69896,Yes,node/245585103,
+AREA-045,Ettimangalam,Village,10.06255,78.31489,Yes,node/5267456246,
+AREA-046,Gobinayakkan Patti,Village,9.65150,77.83221,Yes,way/972954010,
+AREA-047,Gomathipuram,Neighbourhood,9.92475,78.15555,Yes,node/13784338452,
+AREA-048,Goripalayam,Suburb,9.93241,78.13046,Yes,node/13784338436,
+AREA-049,Harveypatti,Neighbourhood,9.87779,78.06044,Yes,node/8814210784,
+AREA-050,Iraniyam,Neighbourhood,9.99441,78.18031,Yes,node/14238131651,
+AREA-051,Iyer Bungalow,Suburb,9.96778,78.13638,Yes,node/13784338458,
+AREA-052,Jaihindpuram,Suburb,9.90553,78.10945,Yes,node/10846704111,
+AREA-053,Jeeva Nagar,Neighbourhood,9.90048,78.10898,Yes,node/13784338445,
+AREA-054,K. Pudur,Suburb,9.95502,78.15067,Yes,node/14238131645,
+AREA-055,Kadachanenthal,Suburb,9.97649,78.16819,Yes,node/13784338431,
+AREA-056,Kadavur,Village,10.07851,78.17524,Yes,node/9032920918,
+AREA-057,Kalavasal,Suburb,9.93010,78.09570,Yes,node/7934871410,
+AREA-058,Kallampatti,Village,10.03271,78.30407,Yes,node/5267455641,
+AREA-059,Kallandhiri,Hamlet,10.03854,78.20098,Yes,node/5197849350,
+AREA-060,Kalligudi,Village,9.69599,77.97229,Yes,node/5209161136,
+AREA-061,Kancharampettai,Village,10.03218,78.15712,Yes,node/9032919214,
+AREA-062,Kannanenthal,Neighbourhood,9.96447,78.14532,Yes,node/13784338459,
+AREA-063,Kappalur,Village,9.84379,78.01378,Yes,node/9036715200,
+AREA-064,Karisalkalampatti,Village,9.75618,77.95825,Yes,node/5136891418,
+AREA-065,Karisalpatti,Village,9.80180,77.97742,Yes,node/5121855649,
+AREA-066,Karumathur,Village,9.93414,77.92607,Yes,node/9027531182,
+AREA-067,Karungalakudi,Village,10.15905,78.35920,Yes,node/9007453477,
+AREA-068,Karuppayurani,Suburb,9.93150,78.17722,Yes,node/13784338453,
+AREA-069,Kathakinaru,Neighbourhood,9.98729,78.17048,Yes,node/14238131650,
+AREA-070,Kela Kallandhiri,Village,10.03588,78.20721,Yes,node/5197849349,
+AREA-071,Kidaripatti,Village,10.06388,78.25971,Yes,node/5267455053,
+AREA-072,Kilakuyilkudi,Village,9.91130,78.04256,Yes,node/9019535326,
+AREA-073,KK Nagar,Suburb,9.93451,78.14693,Yes,node/13784338434,
+AREA-074,Kochadai,Suburb,9.94050,78.08404,Yes,node/9508372807,
+AREA-075,Koodal Nagar,Suburb,9.96766,78.09644,Yes,node/13784338441,
+AREA-076,Kottampatti,Village,10.22159,78.37392,Yes,node/6330750091,
+AREA-077,Kovalan Nagar,Neighbourhood,9.89709,78.10171,Yes,node/3433562494,
+AREA-078,Kulamangalam,Village,10.01280,78.11266,Yes,node/9045514372,
+AREA-079,Kumaram,Hamlet,10.00754,78.09165,Yes,node/14238131648,
+AREA-080,Kuppalnatham,Hamlet,9.84367,77.81186,Yes,node/9088791348,
+AREA-081,Kusavanduku,Village,9.81978,78.12676,Yes,node/9119666041,
+AREA-082,Kuttanampatty,Village,9.94930,77.84708,Yes,node/1878165782,
+AREA-083,Lakshmipuram,Village,10.02746,78.22366,Yes,node/5197840372,
+AREA-084,M. Subbulapuram,Village,9.67822,77.81112,Yes,node/9060258806,
+AREA-085,M.Chatrapatti,Village,10.04778,78.16549,Yes,node/9032920917,
+AREA-086,Madakkulam,Suburb,9.91563,78.08948,Yes,node/9508372805,
+AREA-087,Maiyittanpatti,Village,9.67239,77.95123,Yes,node/4985097353,
+AREA-088,Managiri,Neighbourhood,9.92894,78.14592,Yes,node/13784338461,
+AREA-089,Mangulam,Village,9.79580,78.09292,Yes,node/9179208961,
+AREA-090,Maniyaranpatti,Village,10.04025,78.03946,Yes,node/5189133236,
+AREA-091,Matharai,Village,9.96853,77.77251,Yes,node/353433190,
+AREA-092,Mattuthavani,Neighbourhood,9.94772,78.15689,Yes,node/13784338433,
+AREA-093,Melapanangadi,Neighbourhood,9.97569,78.12718,Yes,node/13784338455,
+AREA-094,Melur,Town,10.03090,78.33759,Yes,node/245585726,
+AREA-095,Munichalai,Neighbourhood,9.91812,78.13441,Yes,node/13784338446,
+AREA-096,Muthu Patti,Neighbourhood,9.89238,78.09528,Yes,node/10846704112,
+AREA-097,Nadukottai,Village,9.78968,77.99018,Yes,node/5136900852,
+AREA-098,Nagamalai Pudukkottai,Village,9.93326,78.04906,Yes,node/9091604108,
+AREA-099,Nagari,Village,10.01893,78.01642,Yes,node/5167043559,
+AREA-100,Nagavakulam,Suburb,9.94119,78.13762,Yes,node/13784338435,
+AREA-101,Nallamanayakkanpatti,Village,9.65481,77.95940,Yes,node/4985092531,
+AREA-102,Nallur,Village,9.78815,78.13556,Yes,node/9179208963,
+AREA-103,Nayakkanpatti,Village,10.05207,78.21409,Yes,node/5197840369,
+AREA-104,Nedumadurai,Village,9.79693,78.08716,Yes,node/9083385778,
+AREA-105,Nehru Nagar,Neighbourhood,9.89593,78.08977,Yes,node/3433562495,
+AREA-106,Nelpettai,Neighbourhood,9.92304,78.12612,Yes,node/13784338447,
+AREA-107,Oomachikulam,Suburb,9.99388,78.14724,Yes,node/13784338454,
+AREA-108,Othakadai,Village,9.96052,78.18994,Yes,node/4349861865,
+AREA-109,Ottaveedu,Village,10.05365,78.07599,Yes,node/5190944830,
+AREA-110,Palamedu,Village,10.10568,78.11254,Yes,node/9045514336,
+AREA-111,Palanganatham,Suburb,9.90381,78.09115,Yes,node/7934871414,
+AREA-112,Palaya Sukkampatti,Village,10.03885,78.31995,Yes,node/5267456293,
+AREA-113,Pallavarayanpatti,Village,10.03785,78.32865,Yes,node/5267456306,
+AREA-114,Pallivasal,Suburb,9.85081,78.09622,Yes,node/9119658660,
+AREA-115,Pallpatti,Village,10.08693,77.95755,Yes,node/1166461203,
+AREA-116,Pamban Nagar Colony,Neighbourhood,9.87538,78.08458,Yes,node/10846704114,
+AREA-117,Pasingapuram,Neighbourhood,9.99151,78.09934,Yes,node/14238131646,
+AREA-118,Pasumalai,Suburb,9.89747,78.07932,Yes,node/9508372809,
+AREA-119,Peraiyur,Town,9.74116,77.79149,Yes,node/3464221908,
+AREA-120,Podumbu,Neighbourhood,9.98600,78.08535,Yes,node/14238131649,
+AREA-121,Poigaikaraipatti,Village,10.05070,78.20138,Yes,node/5197840371,
+AREA-122,Pokkuvarathu Nagar,Neighbourhood,9.82555,78.10336,Yes,node/9153666023,
+AREA-123,Pollarteru,Village,10.06263,78.28708,Yes,node/5267455048,
+AREA-124,Ponmeni,Suburb,9.92785,78.09068,Yes,node/9508372806,
+AREA-125,Ponnagaram,Neighbourhood,9.93044,78.10998,Yes,node/13784338449,
+AREA-126,Poondhotam,Neighbourhood,9.92805,78.11698,Yes,node/13784338450,
+AREA-127,Pudu Sukkampatti,Village,10.04609,78.32006,Yes,node/5267456292,
+AREA-128,Pudupatti (near Chinna Sengappadai),Village,9.77692,77.92026,Yes,node/5136848293,"same name as another place, so the nearest place was added"
+AREA-129,Pudupatti (near Ottaveedu),Village,10.04679,78.07023,Yes,node/5190755620,"same name as another place, so the nearest place was added"
+AREA-130,Pudur (near Kallampatti),Village,10.03020,78.30384,Yes,node/5267455543,"same name as another place, so the nearest place was added"
+AREA-131,Pudur (near Sambakulam),Village,10.02771,78.02564,Yes,node/5167005551,"same name as another place, so the nearest place was added"
+AREA-132,Puliankulam,Village,9.87919,78.18447,Yes,node/1669604217,
+AREA-133,Rayapuram,Village,10.01879,77.99720,Yes,node/5180465316,
+AREA-134,Rishabam,Village,10.02131,77.98684,Yes,node/5180476789,
+AREA-135,Sakkaraipatty,Village,9.94901,77.88015,Yes,node/353433184,
+AREA-136,Samathuvapuram (near Karisalkalampatti),Village,9.76151,77.97855,Yes,node/9036719856,"same name as another place, so the nearest place was added"
+AREA-137,Samathuvapuram (near Pokkuvarathu Nagar),Village,9.81998,78.10746,Yes,node/9119666038,"same name as another place, so the nearest place was added"
+AREA-138,Samayanallur,Town,9.97950,78.03566,Yes,node/11358843346,
+AREA-139,Sambakulam,Village,10.03179,78.02696,Yes,node/5167007183,
+AREA-140,Sanimallampatti,Village,9.75827,77.95242,Yes,node/5136891417,
+AREA-141,Saptur,Village,9.76973,77.73842,Yes,node/9026682799,
+AREA-142,Sekkanpatti,Village,10.03109,78.32974,Yes,node/5267456307,
+AREA-143,Sellur,Suburb,9.93574,78.12183,Yes,node/13784338438,
+AREA-144,Sengappadai,Village,9.76136,77.93831,Yes,node/5136891416,
+AREA-145,Servaikkaranpatti,Village,9.65443,77.94556,Yes,node/4985097354,
+AREA-146,Shanmukhanathanpatti,Village,10.05408,78.29832,Yes,node/5267455763,
+AREA-147,Sholavandan,Town,10.02098,77.96125,Yes,node/9089491586,
+AREA-148,Sikkandar Chavadi,Neighbourhood,9.97371,78.09411,Yes,node/13784338443,
+AREA-149,Silaiman,Village,9.87397,78.18988,Yes,node/1669605411,
+AREA-150,Sillipiyapatti,Village,10.06283,78.28409,Yes,node/5267455049,
+AREA-151,Sirvalai,Village,10.02611,78.06303,Yes,node/5186256295,
+AREA-152,Solankuruni,Village,9.80781,78.11999,Yes,node/9119666042,
+AREA-153,SS Colony,Neighbourhood,9.92283,78.09710,Yes,node/7934871412,
+AREA-154,Sundararajanpatti,Village,10.06626,78.23897,Yes,node/5267455128,
+AREA-155,Sundararajapuram,Village,10.06707,78.32110,Yes,node/5267456245,
+AREA-156,Surakkundu,Village,10.02992,78.31488,Yes,node/5267455444,
+AREA-157,Suvanjanpatti,Village,10.06257,78.32704,Yes,node/5267456244,
+AREA-158,T V S Nagar,Neighbourhood,9.89962,78.09727,Yes,node/14234191129,
+AREA-159,T.Kallupatti,Village,9.72055,77.85173,Yes,node/3463982443,
+AREA-160,Thanakankulam,Neighbourhood,9.88505,78.03944,Yes,node/14234101139,
+AREA-161,Thenpalanji,Village,9.90485,78.00043,Yes,node/9019535331,
+AREA-162,Therkutheru,Village,10.00757,78.28415,Yes,node/9044026857,
+AREA-163,Thiru Nagar,Neighbourhood,9.88637,78.05450,Yes,node/8814210808,
+AREA-164,Thirumalnattam,Village,10.01900,77.98700,Yes,node/5180471933,
+AREA-165,Thiruppalai,Suburb,9.97867,78.13788,Yes,node/13784338456,
+AREA-166,Thirupparankundram,Town,9.88003,78.06393,Yes,node/6833174270,
+AREA-167,Thiruvilanpatti,Neighbourhood,10.00948,78.19232,Yes,node/14238131652,
+AREA-168,Thoppur,Suburb,9.87399,78.02212,Yes,node/14234191132,
+AREA-169,Thuvariman,Suburb,9.96023,78.05614,Yes,node/9508372808,
+AREA-170,Tirumangalam,Town,9.82382,77.98622,Yes,node/961555135,
+AREA-171,Ukkalapatti,Village,10.03553,78.22175,Yes,node/5197840391,
+AREA-172,Uppadapatti,Village,10.07455,78.24396,Yes,node/5267455047,
+AREA-173,Usilampatti,Town,9.96487,77.78986,Yes,node/245585550,
+AREA-174,Uthangudi,Suburb,9.95159,78.16918,Yes,node/14238131644,
+AREA-175,Vadapalanji,Village,9.92623,78.00828,Yes,node/9019542621,
+AREA-176,Vadipatti,Town,10.08256,77.96834,Yes,node/3014212991,
+AREA-177,Vagurani,Village,9.90933,77.81093,Yes,way/1124773341,
+AREA-178,Vagurani Village,Village,9.91179,77.81175,Yes,node/9026741016,
+AREA-179,Vairavanatham,Village,10.02349,78.04636,Yes,node/5181206175,
+AREA-180,Valandur,Village,9.95117,77.87130,Yes,node/9027531183,
+AREA-181,Valayankulam,Village,9.80938,78.09631,Yes,node/10863592785,
+AREA-182,Valayapatti,Village,10.05713,78.21667,Yes,node/5197840370,
+AREA-183,Vandiyur,Suburb,9.91555,78.16098,Yes,node/12015455474,
+AREA-184,Varichiyur,Village,9.91124,78.25647,Yes,node/5008899226,
+AREA-185,Vayalur,Village,10.01738,78.05141,Yes,node/5181206061,
+AREA-186,Vedarpuliyankulam,Village,9.89456,78.02012,Yes,node/14234191134,
+AREA-187,Veerathin Adayalam Pudhupatty (near Villanathanpatti),Village,10.00781,78.45181,Yes,way/973215405,"same name as another place, so the nearest place was added"
+AREA-188,Veerathin Adayalam Pudhupatty (near Villanathanpatti) #2,Village,10.00807,78.45071,Yes,node/5434642693,"same name as another place, so the nearest place was added"
+AREA-189,Vellakulam,Village,9.68262,77.95662,Yes,node/9016646346,
+AREA-190,Vellalapatti,Village,10.05745,78.28736,Yes,node/5267455050,
+AREA-191,Vellaripatti,Village,9.99497,78.25450,Yes,node/9085307922,
+AREA-192,Velliyankundram,Hamlet,10.01951,78.18477,Yes,node/9045514344,
+AREA-193,Vilachery,Suburb,9.89684,78.06120,Yes,node/9508372810,
+AREA-194,Vilangudi,Suburb,9.95012,78.08771,Yes,node/13784338442,
+AREA-195,Villanathanpatti,Village,10.03907,78.34213,Yes,node/5263158016,
+AREA-196,Villapuram,Suburb,9.89739,78.12079,Yes,node/12015455472,
+AREA-197,Viraganoor,Suburb,9.89987,78.16268,Yes,node/12015455473,
+AREA-198,Virattippattu,Suburb,9.93500,78.07753,Yes,node/9508157274,
+AREA-199,Viswanathapuram,Suburb,9.95110,78.12500,Yes,node/13784338439,
+AREA-200,Vittankulam,Village,10.03845,78.04432,Yes,node/5189036638,
+AREA-201,A.Ramanathapuram,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-202,A.Vallalapatti,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-203,Achampatti,Village,9.8,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-204,Andarkottaram,Village,9.7,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-205,Appanuthu,Village,9.85,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-206,Arasaradi,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-207,Arumbanur,Village,9.95,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-208,Athanur,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-209,Athanur North,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-210,Aundipatti,Village,9.8,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-211,Ayyampalayam,Village,9.85,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-212,Ayyanarpatti,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-213,Bibikulam,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-214,Chembalayam,Town,9.7,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-215,Chinna Anuppanadi,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-216,Chinna Ilayararpatti,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-217,Chinna Thirupathi,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-218,Chokkanathapuram,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-219,Chokkikulam,Area,9.94,78.12,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-220,East Gate,Area,9.93,78.12,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-221,Edaithatti,Village,9.8,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-222,Gandhigramam,Area,9.95,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-223,Gandhinagar,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-224,Gandhipuram,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-225,Gnanaprakasam Nagar,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-226,Gopalapuram,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-227,Gowri Nagar,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-228,Kaka Thoppu,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-229,Kalikappan,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-230,Kallanai,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-231,Kallukudi,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-232,Kannanur,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-233,Kariapatti,Town,9.67,78.17,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-234,Karseri,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-235,Keerathurai,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-236,Kodikulam,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-237,Krishnapuram,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-238,Krishnapuram Colony,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-239,Kumarapuram,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-240,Maier Bungalow,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-241,Malligai Nagar,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-242,Manalur,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-243,Mangalam,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-244,Mannar Nagar,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-245,Mappalayam,Area,9.93,78.11,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-246,Maravankudieruppu,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-247,Meenakshi Nagar,Area,9.93,78.12,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-248,Melamadai,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-249,Mellur,Town,10.03,78.34,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-250,Milaguparai,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-251,Moolakulam,Area,9.95,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-252,Moozhakkarai,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-253,Muthuramalingapuram,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-254,Nagamalai,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-255,Nagappa Nagar,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-256,Nagarkovil,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-257,Narayanapuram,Area,9.93,78.12,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-258,Narimedu,Area,9.95,78.13,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-259,Nethaji Nagar,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-260,North Gate,Area,9.93,78.11,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-261,Panchayat Union Colony,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-262,Pandiarajapuram,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-263,Pankajam Colony,Area,9.95,78.12,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-264,Paravai,Town,9.95,78.05,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-265,Periya Kodakkarai,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-266,Perungudi,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-267,Perunguzhi,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-268,Poo Thottam,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-269,Pootuthakku,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-270,Railway Colony,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-271,Rajakambiram,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-272,Rajalakshmi Nagar,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-273,Ram Nagar,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-274,Ramaond Reserve Line,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-275,Sakthi Nagar,Area,9.93,78.12,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-276,Sathamangalam,Area,9.93,78.12,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-277,Sedapatti,Town,9.8,77.85,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-278,Sethupathi Colony,Area,9.93,78.12,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-279,Shenoy Nagar,Area,9.94,78.11,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-280,Simmakkal,Area,9.92,78.11,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-281,Solai Nagar,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-282,Sourashtra Colony,Area,9.93,78.11,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-283,South Gate,Area,9.91,78.11,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-284,Srinivasapuram,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-285,Subramaniapuram,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-286,Surya Nagar,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-287,Tallakulam,Area,9.93,78.12,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-288,Tallakulam North,Area,9.93,78.12,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-289,Tallakulam South,Area,9.93,78.12,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-290,Thaniyamangalam,Town,9.85,78.2,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-291,Thathampatti,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-292,Thathaneri,Area,9.95,78.13,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-293,Thiagarajar Nagar,Area,9.93,78.12,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-294,Thirubuvanam,Village,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-295,Thiruppathur,Town,10.1,78.6,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-296,Thiruvadavur,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-297,Thiruvathavur,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-298,Vadakkuthalai,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-299,Vadugapatti,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-300,Varaganeri,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-301,Vellalur,Town,10.08,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-302,Vilakkuthoon,Area,9.92,78.11,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-303,Visalakshi Nagar,Area,9.93,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-304,West Gate,Area,9.92,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-305,Yanaikkal,Area,9.93,78.11,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
+AREA-306,Z.Kottaipatti,Village,9.9,78.1,No,,"not in OpenStreetMap; coordinates from the old list, rounded to 2 decimals - check on a map"
