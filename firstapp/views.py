@@ -1132,9 +1132,9 @@ def thankyou(request):
     return render(request, 'firstapp/thankyou.html')
 
 def setup_initial_data(request):
-    from django.core.management import call_command
+    import load_backup_data
     try:
-        call_command('loaddata', 'local_data.json')
+        load_backup_data.sync_backup()
         return JsonResponse({
             'status': 'success',
             'message': 'Successfully loaded full local dataset (1,235 objects)!',

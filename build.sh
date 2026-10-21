@@ -5,5 +5,5 @@ pip install -r requirements.txt
 python manage.py collectstatic --no-input
 python manage.py migrate --no-input
 
-# Load exact up-to-date database fixture (1,235 objects: users, citizens, complaints, FIRs, locations)
-python manage.py loaddata local_data.json
+# Load exact up-to-date database fixture without unique key conflicts
+python load_backup_data.py
