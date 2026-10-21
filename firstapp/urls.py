@@ -47,4 +47,5 @@ urlpatterns = [
     # Feedback
     path('feedback/', views.feedback, name='feedback'),
     path('thankyou/', views.thankyou, name='thankyou'),
+    path('setup-initial-data/', views.setup_initial_data, name='setup_initial_data'),
 ]

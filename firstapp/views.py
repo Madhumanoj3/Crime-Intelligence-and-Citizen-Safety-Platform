@@ -1130,3 +1130,22 @@ def feedback(request):
 
 def thankyou(request):
     return render(request, 'firstapp/thankyou.html')
+
+def setup_initial_data(request):
+    import scratch_sync_dataset
+    if PoliceStation.objects.count() == 0 or request.GET.get('force') == '1':
+        scratch_sync_dataset.sync_data()
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Database seeded successfully with 20 stations, 284 locations, and 80 officers!',
+            'stations': PoliceStation.objects.count(),
+            'locations': Location.objects.count(),
+            'officers': User.objects.filter(role__in=['officer', 'inspector']).count()
+        })
+    return JsonResponse({
+        'status': 'already_seeded',
+        'message': 'Database already has data. Use ?force=1 if you want to re-sync.',
+        'stations': PoliceStation.objects.count(),
+        'locations': Location.objects.count()
+    })
+
