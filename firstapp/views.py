@@ -694,12 +694,43 @@ def lost_found(request):
     })
 
 
+def check_and_update_alert_expiry():
+    """Evaluate all Active alerts against current local datetime; expire any whose expiry_date has passed."""
+    now = datetime.now()
+    active_alerts = Alert.objects.filter(status='Active')
+    for alt in active_alerts:
+        raw_expiry = (alt.expiry_date or '').strip()
+        if not raw_expiry:
+            continue
+        exp_dt = None
+        for fmt in ('%Y-%m-%dT%H:%M', '%Y-%m-%d %H:%M', '%Y-%m-%d %H:%M:%S', '%Y-%m-%d'):
+            try:
+                exp_dt = datetime.strptime(raw_expiry, fmt)
+                if fmt == '%Y-%m-%d':
+                    exp_dt = exp_dt.replace(hour=23, minute=59, second=59)
+                break
+            except ValueError:
+                continue
+
+        if exp_dt and now >= exp_dt:
+            alt.status = 'Expired'
+            alt.badge_class = 'badge-secondary'
+            alt.save(update_fields=['status', 'badge_class'])
+
+
 @role_required('citizen')
 def community_alerts(request):
     user = get_current_user(request)
+    check_and_update_alert_expiry()
+    # Citizens ONLY see active, unexpired alerts
+    active_alerts = Alert.objects.filter(status='Active').order_by('-pk')
     return render(request, 'firstapp/community_alerts.html', {
         'current_user': user,
-        'alerts': list(Alert.objects.values())
+        'alerts': list(active_alerts.values()),
+        'alert_zones_json': list(active_alerts.values(
+            'alert_id', 'title', 'description', 'area', 'nearby_area',
+            'latitude', 'longitude', 'zone_radius_km', 'zone_color', 'severity', 'expiry_date'
+        )),
     })
 
 
@@ -1382,30 +1413,99 @@ def police_stations(request):
 @role_required('admin')
 def admin_alerts(request):
     user = get_current_user(request)
-    today_str = datetime.now().strftime('%Y-%m-%d')
+    check_and_update_alert_expiry()
+
+    today_str = datetime.now().strftime('%Y-%m-%d %H:%M')
     action = request.GET.get('action')
     alert_id = request.GET.get('id')
+
     if action == 'delete' and alert_id:
         Alert.objects.filter(alert_id=alert_id).delete()
         return redirect('admin_alerts')
+    elif action == 'expire' and alert_id:
+        # Admin manually expires the alert at any time
+        Alert.objects.filter(alert_id=alert_id).update(status='Expired', badge_class='badge-secondary')
+        return redirect('admin_alerts')
+    elif action == 'activate' and alert_id:
+        # Admin re-activates an expired alert
+        Alert.objects.filter(alert_id=alert_id).update(status='Active', badge_class='badge-danger')
+        return redirect('admin_alerts')
+
+    locations = Location.objects.all().order_by('name')
+    landmarks = Landmark.objects.all().order_by('name')
 
     if request.method == 'POST':
+        title = request.POST.get('title', '').strip()
+        description = request.POST.get('description', '').strip()
+        area = request.POST.get('area', '').strip()
+        nearby_area = request.POST.get('nearby_area', '').strip()
+        severity = request.POST.get('severity', 'High').strip()
+        zone_color = request.POST.get('zone_color', '#e74c3c').strip()
+        zone_radius_km = request.POST.get('zone_radius_km', '1.5').strip() or '1.5'
+        created_date = request.POST.get('created_date', '') or today_str
+        raw_expiry = request.POST.get('expiry_date', '').strip()
+        # Normalize datetime-local '2026-11-05T18:00' to readable '2026-11-05 18:00'
+        expiry_date = raw_expiry.replace('T', ' ') if raw_expiry else ''
+
+        # Coordinates resolution from nearby landmark or area
+        latitude = request.POST.get('latitude', '').strip()
+        longitude = request.POST.get('longitude', '').strip()
+
+        if nearby_area and (not latitude or not longitude):
+            lm = Landmark.objects.filter(name__iexact=nearby_area).first()
+            if lm:
+                latitude = lm.latitude
+                longitude = lm.longitude
+
+        if area and (not latitude or not longitude):
+            loc = Location.objects.filter(name__iexact=area).first()
+            if loc:
+                latitude = loc.latitude
+                longitude = loc.longitude
+
+        if not latitude or not longitude:
+            latitude = '9.9252'
+            longitude = '78.1198'
+
+        badge_class = {
+            'Critical': 'badge-danger',
+            'High': 'badge-danger',
+            'Medium': 'badge-warning',
+            'Caution': 'badge-warning',
+            'Advisory': 'badge-info',
+        }.get(severity, 'badge-danger')
+
         count = Alert.objects.count()
         Alert.objects.create(
             alert_id=f"ALT-{count + 1:03d}",
-            title=request.POST.get('title', '').strip(),
-            description=request.POST.get('description', '').strip(),
-            area=request.POST.get('area', '').strip(),
-            created_date=request.POST.get('created_date', '') or today_str,
-            expiry_date=request.POST.get('expiry_date', '') or 'Active 48h',
+            title=title,
+            description=description,
+            area=area,
+            nearby_area=nearby_area,
+            latitude=latitude,
+            longitude=longitude,
+            zone_radius_km=zone_radius_km,
+            zone_color=zone_color,
+            severity=severity,
+            created_date=created_date,
+            expiry_date=expiry_date,
             status='Active',
-            badge_class='badge-warning'
+            badge_class=badge_class
         )
         return redirect('admin_alerts')
 
+    all_alerts = Alert.objects.all().order_by('-pk')
+    active_alerts = all_alerts.filter(status='Active')
+
     return render(request, 'firstapp/admin_alerts.html', {
         'current_user': user,
-        'alerts': list(Alert.objects.values())
+        'alerts': list(all_alerts.values()),
+        'locations': locations,
+        'landmarks': list(landmarks.values('name', 'landmark_type', 'latitude', 'longitude', 'area')),
+        'alert_zones_json': list(active_alerts.values(
+            'alert_id', 'title', 'description', 'area', 'nearby_area',
+            'latitude', 'longitude', 'zone_radius_km', 'zone_color', 'severity', 'expiry_date'
+        )),
     })
 
 

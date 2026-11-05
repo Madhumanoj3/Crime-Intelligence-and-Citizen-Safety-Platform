@@ -1,38 +1,28 @@
-﻿{% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Community Alerts Management - CISP</title>
     <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
     <link rel="stylesheet" href="{% static 'firstapp/animations.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 </head>
 <body>
 
 <div class="dashboard-layout">
     <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <h2>🛡️ CISP</h2>
-            <p>Admin Panel</p>
-        </div>
-        <nav class="sidebar-menu">
-            <a href="{% url 'admin_dashboard' %}">📊 Dashboard</a>
-            <a href="{% url 'users' %}">👥 Users</a>
-            <a href="{% url 'police_stations' %}">🏢 Police Stations</a>
-            <a href="{% url 'admin_alerts' %}" class="active">📢 Community Alerts</a>
-        </nav>
-    </aside>
+    {% include 'firstapp/partials/admin_sidebar.html' %}
 
     <!-- Main Content -->
     <div class="main-content">
         <header class="dashboard-header">
             <div style="display:flex; align-items:center;">
                 <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-                <h2>Community Alert Management</h2>
+                <h2>Community Safety Alerts &amp; Incident Zones</h2>
             </div>
             <div class="header-right">
                 <span class="header-icon">🔔</span>
-                <span>👤 Admin</span>
+                <span>👤 Administrator</span>
                 <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
             </div>
         </header>
@@ -40,74 +30,208 @@
         <div class="content-area">
             <!-- Create Alert Form -->
             <div class="form-container">
-                <h3 class="page-title">Create Alert</h3>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
+                    <div>
+                        <h3 class="page-title" style="margin:0;">📢 Broadcast Community Alert &amp; Safety Zone</h3>
+                        <p style="margin:4px 0 0 0; font-size:13px; color:#666;">
+                            Publish real-time emergency, curfew, or safety alerts mapped to specific Madurai areas and nearby landmarks.
+                        </p>
+                    </div>
+                    <span class="badge badge-info" style="font-size:12px; padding:6px 12px;">Admin Authority</span>
+                </div>
+
                 <form method="POST" action="{% url 'admin_alerts' %}">
                     {% csrf_token %}
-                    <div class="form-group">
-                        <label for="alert_title">Alert Title *</label>
-                        <input type="text" id="alert_title" name="title" placeholder="Enter alert title" required>
+                    <div class="form-row">
+                        <div class="form-group" style="flex:2;">
+                            <label for="alert_title"><strong>Alert Title *</strong></label>
+                            <input type="text" id="alert_title" name="title" placeholder="e.g. Armed Robbery Warning / Night Curfew Advisory" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="alert_severity"><strong>Severity Level *</strong></label>
+                            <select id="alert_severity" name="severity" onchange="onSeverityChange(this.value)" required style="width:100%; padding:10px; border:1px solid #ced4da; border-radius:4px;">
+                                <option value="Critical">🔴 Critical (Curfew / Severe Incident)</option>
+                                <option value="High" selected>🟠 High (Robbery / Threat Alert)</option>
+                                <option value="Medium">🟡 Medium (Traffic / Public Caution)</option>
+                                <option value="Advisory">🔵 Advisory (Public Safety Notice)</option>
+                                <option value="Restriction">🟣 Restriction (Sec 144 / Special Perimeter)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="zone_color"><strong>Zone Color *</strong></label>
+                            <select id="zone_color" name="zone_color" style="width:100%; padding:10px; border:1px solid #ced4da; border-radius:4px;">
+                                <option value="#e74c3c" selected>🔴 Red Zone (#e74c3c)</option>
+                                <option value="#e67e22">🟠 Orange Zone (#e67e22)</option>
+                                <option value="#f39c12">🟡 Amber Zone (#f39c12)</option>
+                                <option value="#8e44ad">🟣 Purple Zone (#8e44ad)</option>
+                                <option value="#2980b9">🔵 Blue Zone (#2980b9)</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="alert_description">Description *</label>
-                        <textarea id="alert_description" name="description" rows="3" placeholder="Describe the alert" required></textarea>
+                        <label for="alert_description"><strong>Detailed Description &amp; Citizen Instructions *</strong></label>
+                        <textarea id="alert_description" name="description" rows="3" placeholder="Provide clear advisory details, safety precautions, or contact emergency numbers..." required></textarea>
                     </div>
 
-                    <div class="form-group">
-                        <label for="alert_area">Area *</label>
-                        <input type="text" id="alert_area" name="area" placeholder="Affected area (e.g. Mattuthavani, Madurai)" required>
+                    <!-- Location & Nearby Selection from Database -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="alert_area"><strong>Primary Locality / Area in Madurai *</strong></label>
+                            <input list="madurai-alert-areas" id="alert_area" name="area" placeholder="Type or select area (e.g. Kalavasal, Mattuthavani, Villapuram)" autocomplete="off" required oninput="onAreaChange(this.value)">
+                            <datalist id="madurai-alert-areas">
+                                {% for loc in locations %}
+                                <option value="{{ loc.name }}" data-lat="{{ loc.latitude }}" data-lon="{{ loc.longitude }}">{{ loc.name }} ({{ loc.location_type }})</option>
+                                {% endfor %}
+                            </datalist>
+                        </div>
+                        <div class="form-group">
+                            <label for="nearby_area"><strong>Nearby Landmark / Location</strong> <small style="color:#2980b9;">(Pins exact zone epicenter)</small></label>
+                            <input list="madurai-alert-landmarks" id="nearby_area" name="nearby_area" placeholder="Type nearby hospital, bus stand, temple..." autocomplete="off" oninput="onLandmarkChange(this.value)">
+                            <datalist id="madurai-alert-landmarks">
+                                {% for lm in landmarks %}
+                                <option value="{{ lm.name }}" data-lat="{{ lm.latitude }}" data-lon="{{ lm.longitude }}">{{ lm.name }} ({{ lm.area }})</option>
+                                {% endfor %}
+                            </datalist>
+                        </div>
+                        <div class="form-group">
+                            <label for="zone_radius_km"><strong>Alert Zone Radius</strong></label>
+                            <select id="zone_radius_km" name="zone_radius_km" style="width:100%; padding:10px; border:1px solid #ced4da; border-radius:4px;">
+                                <option value="0.5">0.5 km (Immediate Vicinity)</option>
+                                <option value="1.0">1.0 km (Neighbourhood)</option>
+                                <option value="1.5" selected>1.5 km (Standard Safety Zone)</option>
+                                <option value="2.5">2.5 km (Broad Sector)</option>
+                                <option value="5.0">5.0 km (City Sector)</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="created_date">Created Date</label>
-                            <input type="date" id="created_date" name="created_date">
+                            <label for="alert_lat">Latitude</label>
+                            <input type="text" id="alert_lat" name="latitude" placeholder="9.9252" readonly style="background:#f8f9fa;">
                         </div>
                         <div class="form-group">
-                            <label for="expiry_date">Expiry / Duration</label>
-                            <input type="text" id="expiry_date" name="expiry_date" placeholder="e.g. Active 48h">
+                            <label for="alert_lon">Longitude</label>
+                            <input type="text" id="alert_lon" name="longitude" placeholder="78.1198" readonly style="background:#f8f9fa;">
+                        </div>
+                        <div class="form-group" style="flex:2;">
+                            <label for="expiry_date">
+                                <strong>Expiration Date &amp; Time *</strong>
+                                <small style="color:#c0392b;">(Automatically expires and hides from citizens when reached)</small>
+                            </label>
+                            <input type="datetime-local" id="expiry_date" name="expiry_date" required style="width:100%; padding:9px; border:1px solid #ced4da; border-radius:4px;">
+                            <div style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
+                                <span style="font-size:11px; color:#666; margin-right:4px; align-self:center;">Quick Expiry:</span>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size:11px; padding:2px 8px;" onclick="setQuickExpiry(6)">+6h</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size:11px; padding:2px 8px;" onclick="setQuickExpiry(12)">+12h</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size:11px; padding:2px 8px;" onclick="setQuickExpiry(24)">+24h (1 Day)</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size:11px; padding:2px 8px;" onclick="setQuickExpiry(48)">+48h (2 Days)</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size:11px; padding:2px 8px;" onclick="setQuickExpiry(168)">+7 Days</button>
+                            </div>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Create Alert</button>
+                    <button type="submit" class="btn btn-primary btn-lg" style="margin-top:10px;">
+                        📢 Broadcast Alert &amp; Activate Zone
+                    </button>
                 </form>
             </div>
 
-            <!-- Existing Alerts -->
-            <div class="table-container">
-                <div class="table-header">
-                    <h3>Existing Alerts</h3>
+            <!-- Active Alert Zones Map -->
+            <div class="card mt-20">
+                <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+                    <span>🗺️ Active Community Alert Zones Map (Madurai Jurisdiction)</span>
+                    <span style="font-size:12px; color:#666;">Dashed circles indicate active safety perimeters with their assigned threat colors</span>
+                </div>
+                <div class="card-body">
+                    <div id="alertMap" style="height:380px; width:100%; border-radius:6px; border:1px solid #ced4da;"></div>
+                    <div style="margin-top:10px; display:flex; gap:16px; flex-wrap:wrap; font-size:12px; color:#555;">
+                        <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:#e74c3c;"></span> Critical / Red</div>
+                        <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:#e67e22;"></span> High / Orange</div>
+                        <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:#f39c12;"></span> Warning / Amber</div>
+                        <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:#8e44ad;"></span> Restriction / Purple</div>
+                        <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:#2980b9;"></span> Advisory / Blue</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Existing Alerts Registry -->
+            <div class="table-container mt-20">
+                <div class="table-header" style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <h3 style="margin:0;">📋 Community Alerts Registry</h3>
+                        <p style="margin:4px 0 0 0; font-size:13px; color:#666;">
+                            Active and expired community safety alerts. Admin can manually expire an active alert at any moment.
+                        </p>
+                    </div>
                 </div>
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Title</th>
-                            <th>Area</th>
-                            <th>Created</th>
-                            <th>Expiry</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>Alert ID</th>
+                            <th>Title &amp; Severity</th>
+                            <th>Area &amp; Nearby Landmark</th>
+                            <th>Zone Details</th>
+                            <th>Created Time</th>
+                            <th>Expiry Timestamp</th>
+                            <th>Live Status</th>
+                            <th>Admin Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% if alerts %}
                             {% for a in alerts %}
                             <tr>
-                                <td>{{ a.alert_id }}</td>
-                                <td>{{ a.title }}</td>
-                                <td>{{ a.area }}</td>
-                                <td>{{ a.created_date }}</td>
-                                <td>{{ a.expiry_date }}</td>
-                                <td><span class="badge {{ a.badge_class|default:'badge-warning' }}">{{ a.status }}</span></td>
+                                <td><strong>{{ a.alert_id }}</strong></td>
                                 <td>
-                                    <a href="{% url 'admin_alerts' %}?action=delete&id={{ a.alert_id }}" class="btn btn-sm btn-danger">Delete</a>
+                                    <strong>{{ a.title }}</strong><br>
+                                    <span class="badge" style="background:{{ a.zone_color|default:'#e74c3c' }}; color:#fff; font-size:11px;">
+                                        {{ a.severity|default:"High" }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <strong>📍 {{ a.area }}</strong>
+                                    {% if a.nearby_area %}
+                                        <br><small style="color:#2980b9;">Near: {{ a.nearby_area }}</small>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:{{ a.zone_color|default:'#e74c3c' }}; margin-right:4px;"></span>
+                                    {{ a.zone_radius_km|default:"1.5" }} km radius
+                                </td>
+                                <td><small>{{ a.created_date }}</small></td>
+                                <td>
+                                    <small>{{ a.expiry_date }}</small>
+                                </td>
+                                <td>
+                                    {% if a.status == 'Active' %}
+                                        <span class="badge badge-danger">Active Zone</span>
+                                    {% else %}
+                                        <span class="badge badge-secondary">Expired</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if a.status == 'Active' %}
+                                        <a href="{% url 'admin_alerts' %}?action=expire&id={{ a.alert_id }}" class="btn btn-sm btn-warning" style="padding:4px 8px; font-size:12px; margin-right:4px;" onclick="return confirm('Expire this alert immediately? It will stop displaying to citizens and on live maps.')">
+                                            ⏹️ Expire Now
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'admin_alerts' %}?action=activate&id={{ a.alert_id }}" class="btn btn-sm btn-success" style="padding:4px 8px; font-size:12px; margin-right:4px;">
+                                            ▶️ Re-activate
+                                        </a>
+                                    {% endif %}
+                                    <a href="{% url 'admin_alerts' %}?action=delete&id={{ a.alert_id }}" class="btn btn-sm btn-outline-danger" style="padding:4px 8px; font-size:12px;" onclick="return confirm('Permanently delete this alert?')">
+                                        🗑️ Delete
+                                    </a>
                                 </td>
                             </tr>
                             {% endfor %}
                         {% else %}
                             <tr>
-                                <td colspan="7" style="text-align:center; color:#888;">No alerts currently created.</td>
+                                <td colspan="8" style="text-align:center; color:#888; padding:30px;">
+                                    No community safety alerts recorded in the database.
+                                </td>
                             </tr>
                         {% endif %}
                     </tbody>
@@ -117,9 +241,131 @@
     </div>
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+    // Location maps and landmark maps for auto coordinate resolution
+    const locationCoords = {
+        {% for loc in locations %}
+        "{{ loc.name|escapejs }}": { lat: "{{ loc.latitude }}", lon: "{{ loc.longitude }}" },
+        {% endfor %}
+    };
+
+    const landmarkCoords = {
+        {% for lm in landmarks %}
+        "{{ lm.name|escapejs }}": { lat: "{{ lm.latitude }}", lon: "{{ lm.longitude }}", area: "{{ lm.area|escapejs }}" },
+        {% endfor %}
+    };
+
+    function onAreaChange(val) {
+        const key = (val || '').trim();
+        if (locationCoords[key]) {
+            document.getElementById('alert_lat').value = locationCoords[key].lat;
+            document.getElementById('alert_lon').value = locationCoords[key].lon;
+        }
+    }
+
+    function onLandmarkChange(val) {
+        const key = (val || '').trim();
+        if (landmarkCoords[key]) {
+            document.getElementById('alert_lat').value = landmarkCoords[key].lat;
+            document.getElementById('alert_lon').value = landmarkCoords[key].lon;
+            if (!document.getElementById('alert_area').value && landmarkCoords[key].area) {
+                document.getElementById('alert_area').value = landmarkCoords[key].area;
+            }
+        }
+    }
+
+    function onSeverityChange(val) {
+        const colorMap = {
+            'Critical': '#e74c3c',
+            'High': '#e67e22',
+            'Medium': '#f39c12',
+            'Restriction': '#8e44ad',
+            'Advisory': '#2980b9',
+        };
+        if (colorMap[val]) {
+            document.getElementById('zone_color').value = colorMap[val];
+        }
+    }
+
+    function setQuickExpiry(hours) {
+        const d = new Date();
+        d.setHours(d.getHours() + hours);
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        const hr = String(d.getHours()).padStart(2, '0');
+        const min = String(d.getMinutes()).padStart(2, '0');
+        document.getElementById('expiry_date').value = `${y}-${m}-${day}T${hr}:${min}`;
+    }
+
+    // Initialize Default Expiry to +24 hours
+    if (!document.getElementById('expiry_date').value) {
+        setQuickExpiry(24);
+    }
+
+    // Leaflet Interactive Alert Zone Map
+    (function () {
+        const mapEl = document.getElementById('alertMap');
+        if (!mapEl) return;
+
+        const map = L.map(mapEl, { scrollWheelZoom: false }).setView([9.9252, 78.1198], 12);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        const alertZones = {{ alert_zones_json|safe }};
+        if (alertZones && alertZones.length) {
+            const bounds = [];
+            alertZones.forEach(function (alt) {
+                const lat = parseFloat(alt.latitude) || 9.9252;
+                const lon = parseFloat(alt.longitude) || 78.1198;
+                const radiusM = (parseFloat(alt.zone_radius_km) || 1.5) * 1000;
+                const color = alt.zone_color || '#e74c3c';
+
+                bounds.push([lat, lon]);
+
+                const popupHtml = '<div style="min-width:180px;">' +
+                    '<span class="badge" style="background:' + color + '; color:#fff;">' + (alt.severity || 'ALERT') + '</span>' +
+                    '<h4 style="margin:6px 0 4px 0; font-size:14px;">' + alt.title + '</h4>' +
+                    '<p style="margin:0 0 6px 0; font-size:12px; color:#555;">' + alt.description + '</p>' +
+                    '<div style="font-size:11px; color:#666;">' +
+                    '📍 <strong>Area:</strong> ' + alt.area + (alt.nearby_area ? ' (Near ' + alt.nearby_area + ')' : '') +
+                    '<br>⏳ <strong>Expires:</strong> ' + alt.expiry_date +
+                    '<br>📏 <strong>Radius:</strong> ' + alt.zone_radius_km + ' km' +
+                    '</div></div>';
+
+                // Zone perimeter circle
+                L.circle([lat, lon], {
+                    radius: radiusM,
+                    color: color,
+                    weight: 3,
+                    dashArray: '6, 6',
+                    fillColor: color,
+                    fillOpacity: 0.22
+                }).bindPopup(popupHtml).addTo(map);
+
+                // Center warning marker
+                L.circleMarker([lat, lon], {
+                    radius: 12,
+                    color: '#ffffff',
+                    weight: 3,
+                    fillColor: color,
+                    fillOpacity: 0.95
+                }).bindPopup(popupHtml).bindTooltip('⚠️ Alert: ' + alt.title + ' (' + alt.area + ')').addTo(map);
+            });
+
+            if (bounds.length) {
+                map.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+            }
+        }
+    })();
+</script>
 <script src="{% static 'firstapp/ambient.js' %}"></script>
 <script src="{% static 'firstapp/script.js' %}"></script>
 <script src="{% static 'firstapp/ui.js' %}"></script>
 </body>
 </html>
+
 

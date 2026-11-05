@@ -130,6 +130,54 @@ def get_hotspots(crime_type='', year=''):
         c['id'] = i
         cluster_ids[c.pop('label')] = i
 
+    # Active Community Alert Zones with distinct colored safety perimeters
+    from .models import Alert
+    from datetime import datetime
+
+    now = datetime.now()
+    active_alerts_list = []
+    for a in Alert.objects.filter(status='Active'):
+        raw_exp = (a.expiry_date or '').strip()
+        is_expired = False
+        if raw_exp:
+            for fmt in ('%Y-%m-%dT%H:%M', '%Y-%m-%d %H:%M', '%Y-%m-%d %H:%M:%S', '%Y-%m-%d'):
+                try:
+                    exp_dt = datetime.strptime(raw_exp, fmt)
+                    if fmt == '%Y-%m-%d':
+                        exp_dt = exp_dt.replace(hour=23, minute=59, second=59)
+                    if now >= exp_dt:
+                        is_expired = True
+                    break
+                except ValueError:
+                    continue
+        if is_expired:
+            a.status = 'Expired'
+            a.badge_class = 'badge-secondary'
+            a.save(update_fields=['status', 'badge_class'])
+            continue
+
+        try:
+            alat = float(a.latitude) if a.latitude else 9.9252
+            alon = float(a.longitude) if a.longitude else 78.1198
+            aradius = float(a.zone_radius_km) if a.zone_radius_km else 1.5
+        except (ValueError, TypeError):
+            alat, alon, aradius = 9.9252, 78.1198, 1.5
+
+        active_alerts_list.append({
+            'alert_id': a.alert_id,
+            'title': a.title,
+            'description': a.description,
+            'area': a.area,
+            'nearby_area': a.nearby_area,
+            'lat': round(alat, 6),
+            'lon': round(alon, 6),
+            'radius_m': int(aradius * 1000),
+            'zone_color': a.zone_color or '#e74c3c',
+            'severity': a.severity or 'High',
+            'created_date': a.created_date,
+            'expiry_date': a.expiry_date,
+        })
+
     return {
         'source': 'Complaints stored in the database',
         'algorithm': f'complaints within {EPS_KM} km grouped by DBSCAN (haversine)',
@@ -142,4 +190,5 @@ def get_hotspots(crime_type='', year=''):
         'points': [{'lat': r['lat'], 'lon': r['lon'], 'type': r['type'], 'location': r['location'],
                     'date': r['date'], 'status': r['status'], 'cluster': cluster_ids[label]}
                    for r, label in zip(rows, labels)],
+        'active_alerts': active_alerts_list,
     }

@@ -1,10 +1,83 @@
-﻿{% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Community Alerts - CISP</title>
+    <title>Community Safety Alerts - CISP</title>
     <link rel="stylesheet" href="{% static 'firstapp/style.css' %}">
     <link rel="stylesheet" href="{% static 'firstapp/animations.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+    <style>
+        .alert-card-custom {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 18px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border-left: 6px solid #e74c3c;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .alert-card-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+        .alert-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .alert-card-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #1a252f;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .alert-card-body {
+            color: #495057;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+        .alert-card-footer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            font-size: 12px;
+            color: #6c757d;
+            border-top: 1px dashed #e9ecef;
+            padding-top: 10px;
+            align-items: center;
+        }
+        .badge-severity {
+            padding: 4px 10px;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .alert-map-card {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 24px;
+            overflow: hidden;
+            border: 1px solid #e9ecef;
+        }
+        .alert-map-header {
+            padding: 14px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
 
@@ -13,7 +86,7 @@
     <aside class="sidebar">
         <div class="sidebar-header">
             <h2>🛡️ CISP</h2>
-            <p>Citizen Panel</p>
+            <p>Citizen Safety Portal</p>
         </div>
         <nav class="sidebar-menu">
             <a href="{% url 'citizen_dashboard' %}">📊 Dashboard</a>
@@ -32,44 +105,198 @@
         <header class="dashboard-header">
             <div style="display:flex; align-items:center;">
                 <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-                <h2>Community Alerts</h2>
+                <h2>Community Safety Alerts &amp; Advisories</h2>
             </div>
             <div class="header-right">
                 <span class="header-icon">🔔</span>
-                <span>👤 {{ current_user.name|default:"Madhu Manoj" }}</span>
+                <span>👤 {{ current_user.name|default:"Citizen" }}</span>
                 <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
             </div>
         </header>
 
         <div class="content-area">
-            <h3 class="page-title">Safety Alerts in Your Area</h3>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <div>
+                    <h3 class="page-title" style="margin:0;">📢 Live Police Alerts &amp; High-Risk Threat Zones</h3>
+                    <p style="margin:4px 0 0 0; font-size:13px; color:#666;">
+                        Real-time community advisories issued by Madurai Police Commissionerate. Expired alerts are automatically removed.
+                    </p>
+                </div>
+                <div>
+                    <span class="badge badge-success" style="padding:6px 12px; font-size:12px;">
+                        ● Live Monitoring Active
+                    </span>
+                </div>
+            </div>
 
-            <div class="alerts-list">
+            <!-- Active Alerts Map Container -->
+            <div class="alert-map-card">
+                <div class="alert-map-header">
+                    <div>
+                        <strong>🗺️ Live Alert Zones Map (Madurai Jurisdiction)</strong>
+                        <span style="font-size:12px; color:#666; margin-left:8px;">
+                            Dashed safety circles display active perimeter zones with danger color rating
+                        </span>
+                    </div>
+                    <div style="display:flex; gap:12px; font-size:11px; align-items:center;">
+                        <span style="display:inline-flex; align-items:center; gap:4px;"><span style="width:10px; height:10px; border-radius:50%; background:#e74c3c;"></span> Critical</span>
+                        <span style="display:inline-flex; align-items:center; gap:4px;"><span style="width:10px; height:10px; border-radius:50%; background:#e67e22;"></span> High</span>
+                        <span style="display:inline-flex; align-items:center; gap:4px;"><span style="width:10px; height:10px; border-radius:50%; background:#f39c12;"></span> Warning</span>
+                        <span style="display:inline-flex; align-items:center; gap:4px;"><span style="width:10px; height:10px; border-radius:50%; background:#8e44ad;"></span> Restriction</span>
+                        <span style="display:inline-flex; align-items:center; gap:4px;"><span style="width:10px; height:10px; border-radius:50%; background:#2980b9;"></span> Advisory</span>
+                    </div>
+                </div>
+                <div id="citizenAlertMap" style="height:360px; width:100%;"></div>
+            </div>
+
+            <!-- Alerts List -->
+            <div class="alerts-container">
+                <h4 style="margin:0 0 14px 0; font-size:16px; color:#2c3e50; display:flex; align-items:center; gap:8px;">
+                    <span>📋 Active Public Advisories</span>
+                    <span style="font-size:12px; font-weight:normal; color:#7f8c8d;">
+                        ({{ alerts|length }} active {% if alerts|length == 1 %}zone{% else %}zones{% endif %})
+                    </span>
+                </h4>
+
                 {% if alerts %}
-                    {% for alert in alerts %}
-                    <div class="alert-card">
-                        <div class="alert-info">
-                            <h4>⚠️ {{ alert.title }}</h4>
-                            <p>{{ alert.description }}</p>
+                    {% for a in alerts %}
+                    <div class="alert-card-custom" style="border-left-color: {{ a.zone_color|default:'#e74c3c' }};">
+                        <div class="alert-card-header">
+                            <div>
+                                <h4 class="alert-card-title">
+                                    <span style="color: {{ a.zone_color|default:'#e74c3c' }}; font-size:18px;">⚠️</span>
+                                    {{ a.title }}
+                                </h4>
+                            </div>
+                            <span class="badge-severity" style="background-color: {{ a.zone_color|default:'#e74c3c' }};">
+                                {{ a.severity|default:"High" }}
+                            </span>
                         </div>
-                        <div class="alert-meta">
-                            <p><strong>Area:</strong> {{ alert.area }}</p>
-                            <p><strong>Date:</strong> {{ alert.created_date }}</p>
-                            <p><span class="badge {{ alert.badge_class|default:'badge-warning' }}">{{ alert.status }}</span></p>
+
+                        <div class="alert-card-body">
+                            {{ a.description }}
+                        </div>
+
+                        <div class="alert-card-footer">
+                            <div>
+                                <strong>📍 Primary Area:</strong> {{ a.area }}
+                            </div>
+                            {% if a.nearby_area %}
+                            <div>
+                                <strong>🎯 Landmark:</strong> {{ a.nearby_area }}
+                            </div>
+                            {% endif %}
+                            <div>
+                                <strong>⭕ Safety Zone:</strong> {{ a.zone_radius_km|default:"1.5" }} km radius
+                            </div>
+                            <div>
+                                <strong>🕒 Issued:</strong> {{ a.created_date }}
+                            </div>
+                            <div style="margin-left:auto; color:#c0392b; font-weight:600;">
+                                <strong>⏳ Active Until:</strong> {{ a.expiry_date }}
+                            </div>
                         </div>
                     </div>
                     {% endfor %}
                 {% else %}
-                    <p style="color:#888; text-align:center;">No community alerts active right now.</p>
+                    <div style="background:#fff; border-radius:8px; padding:40px 20px; text-align:center; border:1px dashed #ced4da;">
+                        <span style="font-size:42px;">✅</span>
+                        <h4 style="margin:12px 0 6px 0; color:#27ae60;">All Clear in Madurai City</h4>
+                        <p style="color:#7f8c8d; font-size:13px; margin:0;">
+                            No active emergency warnings, high-risk curfews, or community safety alerts currently in effect.
+                        </p>
+                    </div>
                 {% endif %}
             </div>
         </div>
     </div>
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const defaultLat = 9.9252;
+        const defaultLon = 78.1198;
+        const map = L.map('citizenAlertMap').setView([defaultLat, defaultLon], 12);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        const alertZones = {{ alert_zones_json|safe }};
+        const bounds = [];
+
+        if (alertZones && alertZones.length > 0) {
+            alertZones.forEach(function(zone) {
+                const lat = parseFloat(zone.latitude);
+                const lon = parseFloat(zone.longitude);
+                const color = zone.zone_color || '#e74c3c';
+                const radiusKm = parseFloat(zone.zone_radius_km) || 1.5;
+                const radiusM = radiusKm * 1000;
+
+                if (!isNaN(lat) && !isNaN(lon)) {
+                    bounds.push([lat, lon]);
+
+                    // Perimeter Circle
+                    const circle = L.circle([lat, lon], {
+                        color: color,
+                        fillColor: color,
+                        fillOpacity: 0.22,
+                        weight: 2.5,
+                        dashArray: '6, 6',
+                        radius: radiusM
+                    }).addTo(map);
+
+                    const popupContent = `
+                        <div style="font-family:sans-serif; min-width:200px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                                <strong style="font-size:14px; color:${color};">⚠️ ${zone.title}</strong>
+                                <span style="background:${color}; color:#fff; padding:2px 6px; border-radius:8px; font-size:10px; font-weight:bold;">
+                                    ${zone.severity || 'HIGH'}
+                                </span>
+                            </div>
+                            <div style="font-size:12px; color:#444; margin-bottom:6px;">
+                                ${zone.description || ''}
+                            </div>
+                            <div style="font-size:11px; color:#666; border-top:1px solid #eee; padding-top:4px;">
+                                📍 <strong>Area:</strong> ${zone.area} ${zone.nearby_area ? ' | Near ' + zone.nearby_area : ''}<br>
+                                ⭕ <strong>Perimeter:</strong> ${radiusKm} km<br>
+                                ⏳ <strong>Expires:</strong> ${zone.expiry_date}
+                            </div>
+                        </div>
+                    `;
+
+                    circle.bindPopup(popupContent);
+
+                    // Center warning marker icon
+                    const pulseIcon = L.divIcon({
+                        className: 'alert-zone-marker',
+                        html: `<div style="background:${color}; width:16px; height:16px; border-radius:50%; border:2px solid #fff; box-shadow:0 0 6px rgba(0,0,0,0.4);"></div>`,
+                        iconSize: [16, 16],
+                        iconAnchor: [8, 8]
+                    });
+
+                    const marker = L.marker([lat, lon], { icon: pulseIcon }).addTo(map);
+                    marker.bindPopup(popupContent);
+                }
+            });
+
+            if (bounds.length > 0) {
+                map.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+            }
+        }
+    });
+
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar) {
+            sidebar.classList.toggle('active');
+        }
+    }
+</script>
 <script src="{% static 'firstapp/ambient.js' %}"></script>
 <script src="{% static 'firstapp/script.js' %}"></script>
 <script src="{% static 'firstapp/ui.js' %}"></script>
 </body>
 </html>
-

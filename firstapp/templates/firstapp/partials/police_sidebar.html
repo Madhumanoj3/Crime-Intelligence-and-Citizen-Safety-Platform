@@ -30,6 +30,18 @@
         <a href="{% url 'police_sos' %}"{% if page == 'police_sos' %} class="active"{% endif %}>🆘 Emergency SOS</a>
         <a href="{% url 'crime_intelligence' %}"{% if page == 'crime_intelligence' %} class="active"{% endif %}>🗺️ Crime Intelligence</a>
     </nav>
+    {% elif current_user.role == 'admin' %}
+    <div class="sidebar-header">
+        <h2>🛡️ CISP</h2>
+        <p>Admin Panel</p>
+    </div>
+    <nav class="sidebar-menu">
+        <a href="{% url 'admin_dashboard' %}"{% if page == 'admin_dashboard' %} class="active"{% endif %}>📊 Dashboard</a>
+        <a href="{% url 'cases' %}"{% if page == 'cases' %} class="active"{% endif %}>📁 All Station Cases</a>
+        <a href="{% url 'users' %}"{% if page == 'users' %} class="active"{% endif %}>👥 Officers &amp; Personnel</a>
+        <a href="{% url 'police_stations' %}"{% if page == 'police_stations' %} class="active"{% endif %}>🏢 Police Stations</a>
+        <a href="{% url 'admin_alerts' %}"{% if page == 'admin_alerts' %} class="active"{% endif %}>📢 Community Alerts</a>
+    </nav>
     {% else %}
     <div class="sidebar-header">
         <h2>🛡️ CISP</h2>

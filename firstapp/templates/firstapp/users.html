@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,18 +33,7 @@
 
 <div class="dashboard-layout">
     <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <h2>🛡️ CISP</h2>
-            <p>Admin Panel</p>
-        </div>
-        <nav class="sidebar-menu">
-            <a href="{% url 'admin_dashboard' %}">📊 Dashboard</a>
-            <a href="{% url 'users' %}" class="active">👥 Officers &amp; Personnel</a>
-            <a href="{% url 'police_stations' %}">🏢 Police Stations</a>
-            <a href="{% url 'admin_alerts' %}">📢 Community Alerts</a>
-        </nav>
-    </aside>
+    {% include 'firstapp/partials/admin_sidebar.html' %}
 
     <!-- Main Content -->
     <div class="main-content">

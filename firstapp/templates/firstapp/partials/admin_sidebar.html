@@ -1,0 +1,16 @@
+{# Admin-side sidebar: active link highlighted by URL name. #}
+{% with page=request.resolver_match.url_name %}
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h2>🛡️ CISP</h2>
+        <p>Admin Panel</p>
+    </div>
+    <nav class="sidebar-menu">
+        <a href="{% url 'admin_dashboard' %}"{% if page == 'admin_dashboard' %} class="active"{% endif %}>📊 Dashboard</a>
+        <a href="{% url 'cases' %}"{% if page == 'cases' %} class="active"{% endif %}>📁 All Station Cases</a>
+        <a href="{% url 'users' %}"{% if page == 'users' %} class="active"{% endif %}>👥 Officers &amp; Personnel</a>
+        <a href="{% url 'police_stations' %}"{% if page == 'police_stations' %} class="active"{% endif %}>🏢 Police Stations</a>
+        <a href="{% url 'admin_alerts' %}"{% if page == 'admin_alerts' %} class="active"{% endif %}>📢 Community Alerts</a>
+    </nav>
+</aside>
+{% endwith %}

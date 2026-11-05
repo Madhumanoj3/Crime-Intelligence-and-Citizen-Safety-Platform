@@ -120,6 +120,41 @@
             }).bindPopup(popup).bindTooltip(escapeHtml(c.area) + ' (' + c.count + ')').addTo(hotspotLayer);
         });
 
+        // Render Active Community Alert Zones with custom colored perimeters
+        if (data.active_alerts && data.active_alerts.length) {
+            data.active_alerts.forEach(function (alt) {
+                var zoneColor = alt.zone_color || '#e74c3c';
+                var alertPopup = '<div style="min-width:210px; font-family:inherit;">' +
+                    '<span class="badge" style="background:' + zoneColor + '; color:#fff; font-size:11px; padding:3px 8px; border-radius:3px;">⚠️ ACTIVE COMMUNITY ALERT</span>' +
+                    '<h4 style="margin:7px 0 4px 0; font-size:14px; color:#2c3e50;">' + escapeHtml(alt.title) + '</h4>' +
+                    '<p style="margin:0 0 6px 0; font-size:12px; color:#555; line-height:1.4;">' + escapeHtml(alt.description) + '</p>' +
+                    '<div style="font-size:11px; color:#666; background:#f8f9fa; padding:5px; border-radius:4px; border-left:3px solid ' + zoneColor + ';">' +
+                    '📍 <strong>Area:</strong> ' + escapeHtml(alt.area) + (alt.nearby_area ? ' (Near ' + escapeHtml(alt.nearby_area) + ')' : '') +
+                    '<br>⏳ <strong>Expires:</strong> ' + escapeHtml(alt.expiry_date) +
+                    '<br>🛡️ <strong>Severity:</strong> <strong style="color:' + zoneColor + ';">' + escapeHtml(alt.severity) + '</strong>' +
+                    '</div></div>';
+
+                // Perimeter Alert Zone Circle
+                L.circle([alt.lat, alt.lon], {
+                    radius: alt.radius_m,
+                    color: zoneColor,
+                    weight: 3,
+                    dashArray: '6, 6',
+                    fillColor: zoneColor,
+                    fillOpacity: 0.22
+                }).bindPopup(alertPopup).addTo(hotspotLayer);
+
+                // Warning Marker at Center
+                L.circleMarker([alt.lat, alt.lon], {
+                    radius: 13,
+                    color: '#ffffff',
+                    weight: 3,
+                    fillColor: zoneColor,
+                    fillOpacity: 0.95
+                }).bindPopup(alertPopup).bindTooltip('⚠️ Alert: ' + escapeHtml(alt.title) + ' (' + escapeHtml(alt.area) + ')').addTo(hotspotLayer);
+            });
+        }
+
         if (!pointsToggle.checked) map.removeLayer(pointLayer);
 
         var high = data.clusters.filter(function (c) { return c.risk === 'High'; }).length;

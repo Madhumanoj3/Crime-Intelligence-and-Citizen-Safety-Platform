@@ -10,7 +10,11 @@
 
 <div class="dashboard-layout">
     <!-- Sidebar -->
-    {% include 'firstapp/partials/police_sidebar.html' %}
+    {% if current_user.role == 'admin' %}
+        {% include 'firstapp/partials/admin_sidebar.html' %}
+    {% else %}
+        {% include 'firstapp/partials/police_sidebar.html' %}
+    {% endif %}
 
     <!-- Main Content -->
     <div class="main-content">
@@ -21,7 +25,11 @@
             </div>
             <div class="header-right">
                 <span class="header-icon">🔔</span>
-                <span>👮 {{ current_user.name }} ({{ current_user.badge_number|default:"TN-POL-01" }})</span>
+                {% if current_user.role == 'admin' %}
+                    <span>👤 Administrator (All Stations Master View)</span>
+                {% else %}
+                    <span>👮 {{ current_user.name }} ({{ current_user.badge_number|default:"TN-POL-01" }})</span>
+                {% endif %}
                 <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
             </div>
         </header>

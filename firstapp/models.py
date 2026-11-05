@@ -138,13 +138,19 @@ class Alert(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     area = models.CharField(max_length=200)
+    nearby_area = models.CharField(max_length=200, blank=True, default='')
+    latitude = models.CharField(max_length=30, blank=True, default='')
+    longitude = models.CharField(max_length=30, blank=True, default='')
+    zone_radius_km = models.CharField(max_length=10, blank=True, default='1.5')
+    zone_color = models.CharField(max_length=30, blank=True, default='#e74c3c')
+    severity = models.CharField(max_length=30, blank=True, default='High')
     created_date = models.CharField(max_length=30)
-    expiry_date = models.CharField(max_length=30)
-    status = models.CharField(max_length=20)
-    badge_class = models.CharField(max_length=30)
+    expiry_date = models.CharField(max_length=50)
+    status = models.CharField(max_length=20, default='Active')
+    badge_class = models.CharField(max_length=30, default='badge-danger')
 
     def __str__(self):
-        return self.alert_id
+        return f"{self.alert_id} - {self.title} ({self.status})"
 
 
 class SOS(models.Model):

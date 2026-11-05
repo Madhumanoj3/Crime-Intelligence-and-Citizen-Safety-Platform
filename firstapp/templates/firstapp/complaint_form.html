@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -75,14 +75,29 @@
                         <textarea id="description" name="description" rows="4" placeholder="Describe what happened, where, and any identifying details" required></textarea>
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="incident_date">Incident Date *</label>
-                            <input type="date" id="incident_date" name="incident_date" required>
+                    <!-- Incident Date & Time with "Present (Now)" Button -->
+                    <div style="background:#f4f6f9; border:1px solid #e2e8f0; border-radius:8px; padding:14px; margin-bottom:18px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+                            <label style="font-size:13px; font-weight:700; color:#2c3e50; margin:0;">When did the incident occur?</label>
+                            <button type="button" id="btn_set_present" class="btn btn-sm btn-outline-primary" style="padding:5px 12px; font-size:12px; font-weight:600; display:inline-flex; align-items:center; gap:6px; cursor:pointer;" onclick="setPresentDateTime()">
+                                ⏱️ Present (Use Current Date &amp; Time)
+                            </button>
                         </div>
-                        <div class="form-group">
-                            <label for="incident_time">Incident Time</label>
-                            <input type="time" id="incident_time" name="incident_time">
+                        <div class="form-row" style="margin-bottom:0;">
+                            <div class="form-group" style="margin-bottom:0;">
+                                <label for="incident_date" id="label_incident_date" style="display:flex; justify-content:space-between; align-items:center;">
+                                    <span>Incident Date *</span>
+                                    <span id="badge_incident_date" style="font-weight:600; font-size:12px; color:#27ae60; display:none;"></span>
+                                </label>
+                                <input type="date" id="incident_date" name="incident_date" required onchange="updateDateLabel(this.value, false)">
+                            </div>
+                            <div class="form-group" style="margin-bottom:0;">
+                                <label for="incident_time" id="label_incident_time" style="display:flex; justify-content:space-between; align-items:center;">
+                                    <span>Incident Time</span>
+                                    <span id="badge_incident_time" style="font-weight:600; font-size:12px; color:#27ae60; display:none;"></span>
+                                </label>
+                                <input type="time" id="incident_time" name="incident_time" onchange="updateTimeLabel(this.value, false)">
+                            </div>
                         </div>
                     </div>
 
@@ -199,6 +214,49 @@
         }
     }
     fillLandmarks('');
+
+    // Handle "Present" button to populate current date & time and reflect in labels
+    function setPresentDateTime() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+
+        const currentDate = `${year}-${month}-${day}`;
+        const currentTime = `${hours}:${minutes}`;
+
+        const dateInput = document.getElementById('incident_date');
+        const timeInput = document.getElementById('incident_time');
+
+        if (dateInput) {
+            dateInput.value = currentDate;
+            updateDateLabel(currentDate, true);
+        }
+        if (timeInput) {
+            timeInput.value = currentTime;
+            updateTimeLabel(currentTime, true);
+        }
+    }
+
+    function updateDateLabel(val, isPresent) {
+        const badge = document.getElementById('badge_incident_date');
+        if (badge && val) {
+            badge.style.display = 'inline';
+            badge.textContent = isPresent ? `✓ Present Date: ${val}` : `Selected: ${val}`;
+            badge.style.color = isPresent ? '#27ae60' : '#2980b9';
+        }
+    }
+
+    function updateTimeLabel(val, isPresent) {
+        const badge = document.getElementById('badge_incident_time');
+        if (badge && val) {
+            badge.style.display = 'inline';
+            badge.textContent = isPresent ? `✓ Present Time: ${val}` : `Selected: ${val}`;
+            badge.style.color = isPresent ? '#27ae60' : '#2980b9';
+        }
+    }
 </script>
 <script src="{% static 'firstapp/ambient.js' %}"></script>
 <script src="{% static 'firstapp/script.js' %}"></script>
