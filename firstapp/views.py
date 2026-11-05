@@ -792,16 +792,37 @@ def inspector_dashboard(request):
         action = request.POST.get('action')
         complaint_id = request.POST.get('complaint_id')
         if action == 'assign_officer':
-            officer_id = request.POST.get('officer_id')
-            officer = User.objects.filter(id=officer_id).first() or User.objects.filter(email=officer_id).first() or User.objects.filter(official_email=officer_id).first()
+            officer_id = (request.POST.get('officer_id') or '').strip()
+            officer = None
+            if officer_id.isdigit():
+                officer = User.objects.filter(id=int(officer_id)).first()
+            if not officer:
+                officer = User.objects.filter(
+                    Q(email__iexact=officer_id) |
+                    Q(official_email__iexact=officer_id) |
+                    Q(personal_email__iexact=officer_id) |
+                    Q(name__iexact=officer_id) |
+                    Q(badge_number__iexact=officer_id)
+                ).first()
             if officer:
-                Complaint.objects.filter(complaint_id=complaint_id).update(
-                    assigned_officer_id=officer.official_email or officer.email,
-                    assigned_officer_name=officer.name,
-                    assigned_by_inspector=user.get('name', 'Inspector'),
-                    assigned_date=datetime.now().strftime('%Y-%m-%d %H:%M'),
-                    status='Assigned'
-                )
+                comp_obj = Complaint.objects.filter(complaint_id=complaint_id).first()
+                if comp_obj:
+                    new_status = 'Assigned' if comp_obj.status in ['Pending Review', 'Pending', 'Assigned'] else comp_obj.status
+                    Complaint.objects.filter(complaint_id=complaint_id).update(
+                        assigned_officer_id=officer.official_email or officer.email,
+                        assigned_officer_name=officer.name,
+                        assigned_by_inspector=user.get('name', 'Inspector'),
+                        assigned_date=datetime.now().strftime('%Y-%m-%d %H:%M'),
+                        status=new_status
+                    )
+                    Case.objects.filter(complaint_id=complaint_id).update(
+                        assigned_officer=officer.name,
+                        officer_badge=officer.badge_number or ''
+                    )
+                    FIR.objects.filter(complaint_id=complaint_id).update(
+                        investigating_officer=officer.name,
+                        officer_badge=officer.badge_number or ''
+                    )
         elif action == 'mark_duplicate':
             reason = request.POST.get('reason', 'Identified as duplicate of another complaint')
             Complaint.objects.filter(complaint_id=complaint_id).update(
@@ -883,22 +904,86 @@ def inspector_monitoring(request):
 # 4. POLICE OFFICER (INVESTIGATING OFFICER) VIEWS & WORKFLOW
 # ==============================================================================
 
+def _get_officer_complaints(user):
+    """
+    Retrieve all complaints assigned to a police officer.
+    Matches across:
+      - primary email, official_email, personal_email
+      - numeric user id
+      - officer badge number
+      - officer name (iexact or icontains)
+      - linked Cases or FIRs assigned to this officer
+    """
+    officer_email = (user.get('email') or '').strip()
+    officer_official = (user.get('official_email') or '').strip()
+    officer_personal = (user.get('personal_email') or '').strip()
+    officer_name = (user.get('name') or '').strip()
+    officer_badge = (user.get('badge_number') or '').strip()
+    officer_id = str(user.get('id') or '').strip()
+
+    off_filter = Q()
+    has_criteria = False
+
+    if officer_email:
+        off_filter |= Q(assigned_officer_id__iexact=officer_email)
+        has_criteria = True
+    if officer_official:
+        off_filter |= Q(assigned_officer_id__iexact=officer_official)
+        has_criteria = True
+    if officer_personal:
+        off_filter |= Q(assigned_officer_id__iexact=officer_personal)
+        has_criteria = True
+    if officer_id and officer_id != 'None':
+        off_filter |= Q(assigned_officer_id__iexact=officer_id)
+        has_criteria = True
+    if officer_badge:
+        off_filter |= Q(assigned_officer_id__iexact=officer_badge)
+        has_criteria = True
+    if officer_name:
+        off_filter |= Q(assigned_officer_name__iexact=officer_name) | Q(assigned_officer_name__icontains=officer_name)
+        has_criteria = True
+
+    # Include complaints for any Case assigned to this officer
+    case_query = Q()
+    if officer_name:
+        case_query |= Q(assigned_officer__icontains=officer_name)
+    if officer_badge:
+        case_query |= Q(officer_badge=officer_badge)
+    if case_query:
+        linked_case_comp_ids = list(Case.objects.filter(case_query).values_list('complaint_id', flat=True))
+        if linked_case_comp_ids:
+            off_filter |= Q(complaint_id__in=linked_case_comp_ids)
+            has_criteria = True
+
+    # Include complaints for any FIR where this officer is the investigating officer
+    fir_query = Q()
+    if officer_name:
+        fir_query |= Q(investigating_officer__icontains=officer_name)
+    if officer_badge:
+        fir_query |= Q(officer_badge=officer_badge)
+    if fir_query:
+        linked_fir_comp_ids = list(FIR.objects.filter(fir_query).values_list('complaint_id', flat=True))
+        if linked_fir_comp_ids:
+            off_filter |= Q(complaint_id__in=linked_fir_comp_ids)
+            has_criteria = True
+
+    if not has_criteria:
+        return Complaint.objects.none()
+
+    return Complaint.objects.filter(off_filter).order_by('-pk')
+
+
 @role_required('officer', 'police')
 def officer_dashboard(request):
     user = get_current_user(request)
-    officer_email = user.get('email', '')
-    officer_official = user.get('official_email', '')
-    officer_name = user.get('name', '')
     station_id = user.get('station_id', '')
 
     # Officer sees complaints assigned directly to them
-    my_complaints = Complaint.objects.filter(
-        Q(assigned_officer_id__iexact=officer_email) |
-        Q(assigned_officer_id__iexact=officer_official) |
-        Q(assigned_officer_name__iexact=officer_name)
-    )
+    my_complaints = _get_officer_complaints(user)
+    officer_name = user.get('name', '')
+    officer_badge = user.get('badge_number', '')
     my_cases = Case.objects.filter(
-        Q(assigned_officer__icontains=officer_name) | Q(officer_badge=user.get('badge_number', ''))
+        Q(assigned_officer__icontains=officer_name) | Q(officer_badge=officer_badge)
     )
     open_cases = my_cases.exclude(status='Closed')
 
@@ -982,14 +1067,7 @@ def police_complaints(request):
         return redirect('inspector_dashboard')
 
     # For Officer: View my assigned complaints
-    officer_email = user.get('email', '')
-    officer_official = user.get('official_email', '')
-    officer_name = user.get('name', '')
-    all_complaints = Complaint.objects.filter(
-        Q(assigned_officer_id__iexact=officer_email) |
-        Q(assigned_officer_id__iexact=officer_official) |
-        Q(assigned_officer_name__iexact=officer_name)
-    )
+    all_complaints = _get_officer_complaints(user)
 
     selected_id = request.GET.get('view_id', '')
     selected = all_complaints.filter(complaint_id=selected_id).first() or all_complaints.first()
@@ -1071,7 +1149,7 @@ def cases(request):
     # 1. Police Officer: Only cases assigned directly to this officer
     # 2. Inspector: Only cases within this inspector's police station jurisdiction
     # 3. Admin: Master view of all cases across all stations in the city/district
-    if user.get('role') == 'officer':
+    if user.get('role') in ['officer', 'police']:
         all_cases = all_cases.filter(
             Q(assigned_officer__icontains=user.get('name', '')) | Q(officer_badge=user.get('badge_number', ''))
         )
