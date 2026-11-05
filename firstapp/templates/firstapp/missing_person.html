@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,6 +10,9 @@
 
 <div class="dashboard-layout">
     <!-- Sidebar -->
+    {% if current_user.role == 'inspector' or current_user.role == 'officer' or current_user.role == 'police' %}
+        {% include 'firstapp/partials/police_sidebar.html' %}
+    {% else %}
     <aside class="sidebar">
         <div class="sidebar-header">
             <h2>🛡️ CISP</h2>
@@ -26,13 +29,14 @@
             <a href="{% url 'feedback' %}">💬 Feedback</a>
         </nav>
     </aside>
+    {% endif %}
 
     <!-- Main Content -->
     <div class="main-content">
         <header class="dashboard-header">
             <div style="display:flex; align-items:center;">
                 <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-                <h2>Missing Person</h2>
+                <h2>Missing Person Registry &amp; Police Tracker</h2>
             </div>
             <div class="header-right">
                 <span class="header-icon">🔔</span>
@@ -45,62 +49,130 @@
             <!-- Report Form -->
             <div class="form-container">
                 <h3 class="page-title">Report Missing Person</h3>
+                <p style="color:#666; font-size:13px; margin-bottom:18px;">
+                    Provide the missing person's details and last seen locality. The system will automatically geo-route this report to the jurisdictional Police Station for search and patrol coordination.
+                </p>
+
                 <form method="POST" action="{% url 'missing_person' %}">
                     {% csrf_token %}
                     <div class="form-row">
                         <div class="form-group">
                             <label for="person_name">Person Name *</label>
-                            <input type="text" id="person_name" name="person_name" placeholder="Full name" required>
+                            <input type="text" id="person_name" name="person_name" placeholder="Full name of missing person" required>
                         </div>
                         <div class="form-group">
                             <label for="age">Age *</label>
-                            <input type="number" id="age" name="age" placeholder="Age" required>
+                            <input type="number" id="age" name="age" placeholder="Age in years" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="gender">Gender</label>
+                            <label for="gender">Gender *</label>
                             <select id="gender" name="gender" required>
                                 <option value="">Select Gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="last_seen_date">Last Seen Date</label>
+                            <label for="last_seen_date">Last Seen Date *</label>
                             <input type="date" id="last_seen_date" name="last_seen_date" required>
                         </div>
                     </div>
 
+                    <!-- Madurai Area Selection (Matches Complaint & User Registration) -->
                     <div class="form-group">
-                        <label for="last_seen_location">Last Seen Location *</label>
-                        <input type="text" id="last_seen_location" name="last_seen_location" placeholder="Location where last seen (e.g. Mattuthavani Bus Stand, Madurai)" required>
+                        <label for="area">Last Seen Area / Locality in Madurai * <small style="color:#2980b9;">(Select from {{ locations|length }} Madurai areas)</small></label>
+                        <input list="madurai-missing-areas" id="area" name="area" placeholder="Type or choose area (e.g. Anna Nagar, Sellur, Goripalayam)" autocomplete="off" required oninput="onMissingAreaChange(this.value)">
+                        <datalist id="madurai-missing-areas">
+                            {% for loc in locations %}
+                            <option value="{{ loc.name }}" data-lat="{{ loc.latitude }}" data-lon="{{ loc.longitude }}">{{ loc.name }} ({{ loc.location_type }})</option>
+                            {% endfor %}
+                        </datalist>
                     </div>
 
                     <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea id="description" name="description" rows="3" placeholder="Physical appearance, clothing, etc."></textarea>
+                        <label for="landmark">Nearby Landmark <small style="color:#2980b9;">(optional, pins location precisely)</small></label>
+                        <input list="missing-landmarks" id="landmark" name="landmark" placeholder="Type or choose landmark (temple, hospital, bus terminal...)" autocomplete="off" oninput="onMissingLandmarkChange(this.value)">
+                        <datalist id="missing-landmarks"></datalist>
+                        <small id="missing-landmark-hint" style="color:#666;"></small>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Submit Missing Person Report</button>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="street">Street / Road Name</label>
+                            <input type="text" id="street" name="street" placeholder="e.g. West Veli Street">
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Specific Address / Place</label>
+                            <input type="text" id="address" name="address" placeholder="e.g. Near Bus Stand, Platform 2">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" name="city" value="Madurai" readonly style="background:#f8f9fa;">
+                        </div>
+                        <div class="form-group">
+                            <label for="pincode">Pincode</label>
+                            <input type="text" id="pincode" name="pincode" placeholder="e.g. 625001" value="625001">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contact_phone">Reporter / Guardian Contact Phone *</label>
+                            <input type="tel" id="contact_phone" name="contact_phone" value="{{ current_user.phone|default:'' }}" placeholder="10-digit mobile number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="latitude">Latitude (Auto-calculated)</label>
+                            <input type="text" id="latitude" name="latitude" placeholder="e.g. 9.9252" readonly style="background:#f8f9fa;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="longitude">Longitude (Auto-calculated)</label>
+                        <input type="text" id="longitude" name="longitude" placeholder="e.g. 78.1198" readonly style="background:#f8f9fa;">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Physical Description &amp; Clothing</label>
+                        <textarea id="description" name="description" rows="3" placeholder="Height, complexion, clothing worn when last seen, identification marks, etc."></textarea>
+                    </div>
+
+                    <div class="info-box warning" style="margin-bottom:18px;">
+                        🛡️ <strong>Automated Station Routing:</strong> When submitted, our geospatial engine assigns this missing person report directly to the nearest Madurai Police Station for prompt broadcast and search.
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width:100%; padding:12px; font-size:15px;">Submit Missing Person Report &amp; Geo-Route</button>
                 </form>
             </div>
 
             <!-- Missing Persons List -->
-            <h3 class="page-title">Reported Missing Persons</h3>
+            <h3 class="page-title mt-20">Registered Missing Persons &amp; Station Assignments</h3>
             <div class="persons-grid">
                 {% if missing_persons %}
                     {% for p in missing_persons %}
-                    <div class="person-card">
-                        <div class="person-photo">👤</div>
-                        <h4>{{ p.name }}</h4>
-                        <p><strong>Age:</strong> {{ p.age }}</p>
-                        <p><strong>Gender:</strong> {{ p.gender }}</p>
-                        <p><strong>Last Seen:</strong> {{ p.last_seen_location }}</p>
-                        <p><strong>Reported:</strong> {{ p.reported_date }}</p>
-                        <p><span class="badge {% if p.status == 'Found' %}badge-success{% else %}badge-danger{% endif %}">{{ p.status }}</span></p>
+                    <div class="person-card" style="border: 1px solid #e0e0e0; border-radius:8px; padding:16px; background:#fff; box-shadow:0 2px 6px rgba(0,0,0,0.05);">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                            <div class="person-photo" style="font-size:32px;">👤</div>
+                            <span class="badge {% if p.status == 'Found' %}badge-success{% else %}badge-danger{% endif %}">{{ p.status }}</span>
+                        </div>
+                        <h4 style="margin:8px 0 4px 0;">{{ p.name }}</h4>
+                        <p style="margin:2px 0;"><strong>Report ID:</strong> {{ p.person_id }}</p>
+                        <p style="margin:2px 0;"><strong>Age &amp; Gender:</strong> {{ p.age }} yrs, {{ p.gender }}</p>
+                        <p style="margin:2px 0;"><strong>Last Seen Area:</strong> 📍 {{ p.area|default:p.last_seen_location }} {% if p.landmark %}<br><small style="color:#2980b9;">Landmark: {{ p.landmark }}</small>{% endif %}</p>
+                        <p style="margin:2px 0;"><strong>Jurisdiction Police Station:</strong><br>🏢 <strong>{{ p.assigned_station_name|default:"Station Assigned" }}</strong></p>
+                        <p style="margin:2px 0;"><strong>Reported On:</strong> {{ p.reported_date }}</p>
+                        {% if p.contact_phone %}
+                        <p style="margin:2px 0;"><strong>Reporter Contact:</strong> 📞 {{ p.contact_phone }}</p>
+                        {% endif %}
+                        {% if p.description %}
+                        <p style="margin:6px 0 0 0; font-size:12px; color:#555; background:#f8f9fa; padding:6px; border-radius:4px;">{{ p.description }}</p>
+                        {% endif %}
                     </div>
                     {% endfor %}
                 {% else %}
@@ -110,6 +182,56 @@
         </div>
     </div>
 </div>
+
+{{ landmarks|json_script:"missing-landmark-data" }}
+<script>
+    const missingLocationMap = {
+        {% for loc in locations %}
+        "{{ loc.name|escapejs }}": { lat: "{{ loc.latitude }}", lon: "{{ loc.longitude }}" },
+        {% endfor %}
+    };
+
+    function onMissingAreaChange(val) {
+        const trimmed = val ? val.trim() : '';
+        if (missingLocationMap[trimmed]) {
+            document.getElementById('latitude').value = missingLocationMap[trimmed].lat;
+            document.getElementById('longitude').value = missingLocationMap[trimmed].lon;
+        }
+        fillMissingLandmarks(trimmed);
+    }
+
+    const allMissingLandmarks = JSON.parse(document.getElementById('missing-landmark-data').textContent || '[]');
+    const missingLandmarkByName = {};
+    allMissingLandmarks.forEach(function (l) { missingLandmarkByName[l.name.toLowerCase()] = l; });
+
+    function fillMissingLandmarks(area) {
+        const list = document.getElementById('missing-landmarks');
+        const hint = document.getElementById('missing-landmark-hint');
+        if (!list) return;
+        let shown = allMissingLandmarks.filter(function (l) { return l.area.toLowerCase() === area.toLowerCase(); });
+        const inArea = shown.length > 0;
+        if (!inArea) shown = allMissingLandmarks;
+        list.innerHTML = '';
+        shown.forEach(function (l) {
+            const o = document.createElement('option');
+            o.value = l.name;
+            o.textContent = l.name + ' (' + l.landmark_type + ')';
+            list.appendChild(o);
+        });
+        if (hint) {
+            hint.textContent = area && inArea ? shown.length + ' landmarks found in ' + area : 'Showing all landmarks in Madurai';
+        }
+    }
+
+    function onMissingLandmarkChange(val) {
+        const l = missingLandmarkByName[(val || '').trim().toLowerCase()];
+        if (l) {
+            document.getElementById('latitude').value = l.latitude;
+            document.getElementById('longitude').value = l.longitude;
+        }
+    }
+    fillMissingLandmarks('');
+</script>
 
 <script src="{% static 'firstapp/ambient.js' %}"></script>
 <script src="{% static 'firstapp/script.js' %}"></script>

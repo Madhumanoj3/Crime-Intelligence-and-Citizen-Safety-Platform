@@ -201,7 +201,11 @@
                                         data-map-lat="{{ c.latitude }}" data-map-lon="{{ c.longitude }}"
                                         data-map-pending="{% if c.status == 'Pending Review' or c.status == 'Pending' %}1{% endif %}"
                                         onclick="openCrimeMap(this)">🗺️ Map</button><br>
-                                    {% if c.status == 'Pending Review' or c.status == 'Pending' %}
+                                    {% if c.status == 'Resolved' %}
+                                        <span class="badge badge-success" style="padding:6px 10px;">🔒 Case Resolved &amp; Closed</span>
+                                    {% elif c.status == 'Closed / Rejected' %}
+                                        <span class="badge badge-secondary" style="padding:6px 10px;">❌ Closed / Rejected</span>
+                                    {% elif c.status == 'Pending Review' or c.status == 'Pending' %}
                                         <!-- Quick Assign Form -->
                                         <form method="POST" action="{% url 'inspector_dashboard' %}" style="display:inline-block; margin-bottom:4px;">
                                             {% csrf_token %}
@@ -238,6 +242,116 @@
                                     No complaints currently queued for this jurisdiction.
                                 </td>
                             </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Station Missing Persons Registry -->
+            <div class="table-container mt-20">
+                <div class="table-header">
+                    <div>
+                        <h3 style="margin:0;">👤 Station Missing Persons (Jurisdiction Routed)</h3>
+                        <p style="font-size:13px; color:#666; margin:4px 0 0 0;">
+                            Missing person reports geo-routed to {{ station_name }} for search &amp; tracing operations.
+                        </p>
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Report ID</th>
+                            <th>Person Name &amp; Age</th>
+                            <th>Last Seen Details</th>
+                            <th>Reporter Contact</th>
+                            <th>Reported On</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if station_missing_persons %}
+                            {% for p in station_missing_persons %}
+                            <tr>
+                                <td><strong>{{ p.person_id }}</strong></td>
+                                <td>{{ p.name }} ({{ p.age }} yrs, {{ p.gender }})</td>
+                                <td>📍 {{ p.area|default:p.last_seen_location }} {% if p.landmark %}<br><small style="color:#2980b9;">Near {{ p.landmark }}</small>{% endif %}</td>
+                                <td>📞 {{ p.contact_phone|default:p.reported_by }}</td>
+                                <td>{{ p.reported_date }}</td>
+                                <td><span class="badge {% if p.status == 'Found' %}badge-success{% else %}badge-danger{% endif %}">{{ p.status }}</span></td>
+                                <td>
+                                    <form method="POST" action="{% url 'inspector_dashboard' %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="update_missing_status">
+                                        <input type="hidden" name="person_id" value="{{ p.person_id }}">
+                                        {% if p.status == 'Missing' %}
+                                        <input type="hidden" name="status" value="Found">
+                                        <button type="submit" class="btn btn-sm btn-success">Mark Found</button>
+                                        {% else %}
+                                        <input type="hidden" name="status" value="Missing">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Mark Missing</button>
+                                        {% endif %}
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr><td colspan="7" style="text-align:center; color:#888; padding:20px;">No missing persons reported for this jurisdiction.</td></tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Station Lost & Found Registry -->
+            <div class="table-container mt-20">
+                <div class="table-header">
+                    <div>
+                        <h3 style="margin:0;">🔍 Station Lost &amp; Found Registry (Jurisdiction Routed)</h3>
+                        <p style="font-size:13px; color:#666; margin:4px 0 0 0;">
+                            Articles lost or found in {{ station_name }} jurisdiction for custody and verification.
+                        </p>
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Item Name &amp; Category</th>
+                            <th>Report Type</th>
+                            <th>Incident Location</th>
+                            <th>Contact</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if station_lost_found %}
+                            {% for itm in station_lost_found %}
+                            <tr>
+                                <td><strong>{{ itm.item_id }}</strong></td>
+                                <td><strong>{{ itm.name }}</strong> ({{ itm.category }})</td>
+                                <td><span class="badge {% if itm.report_type == 'lost' %}badge-warning{% else %}badge-info{% endif %}">{{ itm.report_type|upper }}</span></td>
+                                <td>📍 {{ itm.area|default:itm.location }} {% if itm.landmark %}<br><small style="color:#2980b9;">Near {{ itm.landmark }}</small>{% endif %}</td>
+                                <td>📞 {{ itm.contact_phone|default:itm.reported_by }}</td>
+                                <td><span class="badge {% if itm.status == 'Found' or itm.status == 'Recovered' %}badge-success{% else %}badge-danger{% endif %}">{{ itm.status }}</span></td>
+                                <td>
+                                    <form method="POST" action="{% url 'inspector_dashboard' %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="update_lostfound_status">
+                                        <input type="hidden" name="item_id" value="{{ itm.item_id }}">
+                                        {% if itm.status == 'Lost' %}
+                                        <input type="hidden" name="status" value="Found">
+                                        <button type="submit" class="btn btn-sm btn-success">Mark Found</button>
+                                        {% else %}
+                                        <input type="hidden" name="status" value="Lost">
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary">Mark Lost</button>
+                                        {% endif %}
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr><td colspan="7" style="text-align:center; color:#888; padding:20px;">No lost or found items recorded for this jurisdiction.</td></tr>
                         {% endif %}
                     </tbody>
                 </table>
@@ -285,6 +399,65 @@
                                 <td>{{ station_name }}</td>
                                 <td>officer.a@tnpolice.gov.in</td>
                                 <td><span class="badge badge-success">On Duty</span></td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Station Monitored Investigation Cases (Jurisdiction Isolated) -->
+            <div class="table-container mt-20">
+                <div class="table-header">
+                    <div>
+                        <h3 style="margin:0;">📁 Station Monitored Investigation Cases</h3>
+                        <p style="font-size:13px; color:#666; margin:4px 0 0 0;">
+                            Live monitoring of cases and trial progress strictly under <strong>{{ station_name }}</strong> jurisdiction.
+                        </p>
+                    </div>
+                    <span class="badge badge-info" style="font-size:12px; padding:6px 12px;">{{ station_name }} ONLY</span>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Case ID</th>
+                            <th>FIR ID &amp; Complaint</th>
+                            <th>Investigating Officer (IO)</th>
+                            <th>Case Status</th>
+                            <th>Start Date</th>
+                            <th>Last Diary Update</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if monitored_cases %}
+                            {% for cs in monitored_cases %}
+                            <tr>
+                                <td><strong>{{ cs.case_id }}</strong></td>
+                                <td>
+                                    <span class="badge badge-danger">{{ cs.fir_id }}</span><br>
+                                    <small style="color:#666;">{{ cs.complaint_id }}</small>
+                                </td>
+                                <td>
+                                    👮 <strong>{{ cs.assigned_officer }}</strong><br>
+                                    <small style="color:#888;">Badge: {{ cs.officer_badge }}</small>
+                                </td>
+                                <td>
+                                    <span class="badge {% if cs.status == 'Closed' %}badge-success{% else %}badge-warning{% endif %}">
+                                        {{ cs.status }}
+                                    </span>
+                                </td>
+                                <td><small>{{ cs.start_date }}</small></td>
+                                <td><small>{{ cs.last_update|default:cs.start_date }}</small></td>
+                                <td>
+                                    <a href="{% url 'cases' %}?id={{ cs.case_id }}" class="btn btn-sm btn-outline-primary" style="padding:4px 8px; font-size:12px;">View Case &rarr;</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="7" style="text-align:center; padding:25px; color:#888;">
+                                    No active case files recorded for {{ station_name }} jurisdiction.
+                                </td>
                             </tr>
                         {% endif %}
                     </tbody>

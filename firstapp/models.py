@@ -110,9 +110,9 @@ class Complaint(models.Model):
     assigned_date = models.CharField(max_length=30, blank=True)
 
     # Status tracking
-    status = models.CharField(max_length=40, default='Pending Review')
-    fir_status = models.CharField(max_length=30, default='Not Filed')
-    case_status = models.CharField(max_length=30, default='Not Assigned')
+    status = models.CharField(max_length=100, default='Pending Review')
+    fir_status = models.CharField(max_length=100, default='Not Filed')
+    case_status = models.CharField(max_length=100, default='Not Assigned')
 
     # AI Duplicate Detection fields
     ai_duplicate_flag = models.CharField(max_length=30, default='Unique')
@@ -179,8 +179,22 @@ class MissingPerson(models.Model):
     reported_date = models.CharField(max_length=20)
     status = models.CharField(max_length=20, default='Missing')
 
+    # Location & Jurisdiction Routing
+    area = models.CharField(max_length=100, blank=True, default='')
+    landmark = models.CharField(max_length=200, blank=True, default='')
+    address = models.TextField(blank=True, default='')
+    street = models.CharField(max_length=100, blank=True, default='')
+    city = models.CharField(max_length=50, blank=True, default='Madurai')
+    district = models.CharField(max_length=50, blank=True, default='Madurai')
+    pincode = models.CharField(max_length=10, blank=True, default='625001')
+    latitude = models.CharField(max_length=20, blank=True, default='')
+    longitude = models.CharField(max_length=20, blank=True, default='')
+    assigned_station_id = models.CharField(max_length=30, blank=True, default='')
+    assigned_station_name = models.CharField(max_length=200, blank=True, default='')
+    contact_phone = models.CharField(max_length=20, blank=True, default='')
+
     def __str__(self):
-        return self.person_id
+        return f"{self.person_id} - {self.name} ({self.status})"
 
 
 class LostFound(models.Model):
@@ -196,40 +210,54 @@ class LostFound(models.Model):
     report_type = models.CharField(max_length=10)
     status = models.CharField(max_length=20)
 
+    # Location & Jurisdiction Routing
+    area = models.CharField(max_length=100, blank=True, default='')
+    landmark = models.CharField(max_length=200, blank=True, default='')
+    address = models.TextField(blank=True, default='')
+    street = models.CharField(max_length=100, blank=True, default='')
+    city = models.CharField(max_length=50, blank=True, default='Madurai')
+    district = models.CharField(max_length=50, blank=True, default='Madurai')
+    pincode = models.CharField(max_length=10, blank=True, default='625001')
+    latitude = models.CharField(max_length=20, blank=True, default='')
+    longitude = models.CharField(max_length=20, blank=True, default='')
+    assigned_station_id = models.CharField(max_length=30, blank=True, default='')
+    assigned_station_name = models.CharField(max_length=200, blank=True, default='')
+    contact_phone = models.CharField(max_length=20, blank=True, default='')
+
     def __str__(self):
-        return self.item_id
+        return f"{self.item_id} - {self.name} ({self.status})"
 
 
 class FIR(models.Model):
-    fir_id = models.CharField(max_length=20, unique=True)
-    complaint_id = models.CharField(max_length=20)
-    station_id = models.CharField(max_length=30, blank=True)
+    fir_id = models.CharField(max_length=30, unique=True)
+    complaint_id = models.CharField(max_length=30)
+    station_id = models.CharField(max_length=50, blank=True)
     station_name = models.CharField(max_length=200, blank=True)
-    investigating_officer = models.CharField(max_length=100, blank=True)
-    officer_badge = models.CharField(max_length=30, blank=True)
+    investigating_officer = models.CharField(max_length=150, blank=True)
+    officer_badge = models.CharField(max_length=50, blank=True)
     section_of_law = models.CharField(max_length=200)
-    fir_date = models.CharField(max_length=20)
+    fir_date = models.CharField(max_length=30)
     description = models.TextField()
-    status = models.CharField(max_length=30)
+    status = models.CharField(max_length=100)
 
     def __str__(self):
         return self.fir_id
 
 
 class Case(models.Model):
-    case_id = models.CharField(max_length=20, unique=True)
-    fir_id = models.CharField(max_length=20)
-    complaint_id = models.CharField(max_length=20)
-    station_id = models.CharField(max_length=30, blank=True)
-    assigned_officer = models.CharField(max_length=100)
-    officer_badge = models.CharField(max_length=30)
-    status = models.CharField(max_length=30)
-    start_date = models.CharField(max_length=20)
-    end_date = models.CharField(max_length=20, blank=True)
+    case_id = models.CharField(max_length=30, unique=True)
+    fir_id = models.CharField(max_length=30)
+    complaint_id = models.CharField(max_length=30)
+    station_id = models.CharField(max_length=50, blank=True)
+    assigned_officer = models.CharField(max_length=150)
+    officer_badge = models.CharField(max_length=50)
+    status = models.CharField(max_length=100)
+    start_date = models.CharField(max_length=30)
+    end_date = models.CharField(max_length=30, blank=True)
     description = models.TextField(blank=True)
     witnesses = models.TextField(blank=True)
     accused_info = models.TextField(blank=True)
-    last_update = models.CharField(max_length=30, blank=True)
+    last_update = models.CharField(max_length=50, blank=True)
     investigation_summary = models.TextField(blank=True)
 
     def __str__(self):

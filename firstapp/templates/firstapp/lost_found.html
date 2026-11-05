@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,6 +10,9 @@
 
 <div class="dashboard-layout">
     <!-- Sidebar -->
+    {% if current_user.role == 'inspector' or current_user.role == 'officer' or current_user.role == 'police' %}
+        {% include 'firstapp/partials/police_sidebar.html' %}
+    {% else %}
     <aside class="sidebar">
         <div class="sidebar-header">
             <h2>🛡️ CISP</h2>
@@ -26,13 +29,14 @@
             <a href="{% url 'feedback' %}">💬 Feedback</a>
         </nav>
     </aside>
+    {% endif %}
 
     <!-- Main Content -->
     <div class="main-content">
         <header class="dashboard-header">
             <div style="display:flex; align-items:center;">
                 <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-                <h2>Lost &amp; Found</h2>
+                <h2>Lost &amp; Found Article Registry &amp; Police Station Routing</h2>
             </div>
             <div class="header-right">
                 <span class="header-icon">🔔</span>
@@ -52,40 +56,102 @@
             <div id="lost-tab" class="tab-pane active">
                 <div class="form-container">
                     <h3 class="page-title">Report Lost Item</h3>
+                    <p style="color:#666; font-size:13px; margin-bottom:18px;">
+                        Report an article lost in Madurai. This report is automatically geo-routed to the jurisdictional Police Station for property matching and cross-verification.
+                    </p>
                     <form method="POST" action="{% url 'lost_found' %}">
                         {% csrf_token %}
                         <input type="hidden" name="report_type" value="lost">
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="lost_name">Item Name *</label>
-                                <input type="text" id="lost_name" name="item_name" placeholder="e.g. Wallet, Phone" required>
+                                <input type="text" id="lost_name" name="item_name" placeholder="e.g. Samsung Galaxy Phone, Leather Wallet" required>
                             </div>
                             <div class="form-group">
-                                <label for="lost_type">Item Type</label>
+                                <label for="lost_type">Item Category</label>
                                 <select id="lost_type" name="item_type">
-                                    <option value="electronics">Electronics</option>
-                                    <option value="documents">Documents</option>
-                                    <option value="jewelry">Jewelry</option>
-                                    <option value="bag">Bag/Luggage</option>
-                                    <option value="other">Other</option>
+                                    <option value="electronics">Electronics (Mobile, Laptop, Earphones)</option>
+                                    <option value="documents">Official Documents (Aadhaar, License, Cards)</option>
+                                    <option value="jewelry">Jewelry &amp; Valuables</option>
+                                    <option value="bag">Bag / Backpack / Luggage</option>
+                                    <option value="keys">Keys / Vehicle Documents</option>
+                                    <option value="other">Other Personal Article</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="lost_desc">Description</label>
-                            <textarea id="lost_desc" name="description" rows="3" placeholder="Describe the lost item"></textarea>
-                        </div>
+
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="lost_location">Location *</label>
-                                <input type="text" id="lost_location" name="location" placeholder="Where you lost it (e.g. Simmakkal, Madurai)" required>
+                                <label for="lost_date">Date Lost *</label>
+                                <input type="date" id="lost_date" name="date" required>
                             </div>
                             <div class="form-group">
-                                <label for="lost_date">Date</label>
-                                <input type="date" id="lost_date" name="date">
+                                <label for="lost_phone">Contact Phone *</label>
+                                <input type="tel" id="lost_phone" name="contact_phone" value="{{ current_user.phone|default:'' }}" placeholder="10-digit mobile number" required>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit Lost Item Report</button>
+
+                        <!-- Madurai Area Selection (Matches Complaint & User Registration) -->
+                        <div class="form-group">
+                            <label for="lost_area">Incident Area / Locality in Madurai * <small style="color:#2980b9;">(Select from {{ locations|length }} Madurai areas)</small></label>
+                            <input list="madurai-lost-areas" id="lost_area" name="area" placeholder="Type or choose area (e.g. Simmakkal, Goripalayam, Anna Nagar)" autocomplete="off" required oninput="onLostAreaChange(this.value)">
+                            <datalist id="madurai-lost-areas">
+                                {% for loc in locations %}
+                                <option value="{{ loc.name }}" data-lat="{{ loc.latitude }}" data-lon="{{ loc.longitude }}">{{ loc.name }} ({{ loc.location_type }})</option>
+                                {% endfor %}
+                            </datalist>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lost_landmark">Nearby Landmark <small style="color:#2980b9;">(optional, pins location precisely)</small></label>
+                            <input list="lost-landmarks" id="lost_landmark" name="landmark" placeholder="Type or choose nearby landmark..." autocomplete="off" oninput="onLostLandmarkChange(this.value)">
+                            <datalist id="lost-landmarks"></datalist>
+                            <small id="lost-landmark-hint" style="color:#666;"></small>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="lost_street">Street / Road Name</label>
+                                <input type="text" id="lost_street" name="street" placeholder="e.g. North Veli Street">
+                            </div>
+                            <div class="form-group">
+                                <label for="lost_address">Specific Spot / Place</label>
+                                <input type="text" id="lost_address" name="address" placeholder="e.g. Outside City Hospital Bus Stop">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="lost_city">City</label>
+                                <input type="text" id="lost_city" name="city" value="Madurai" readonly style="background:#f8f9fa;">
+                            </div>
+                            <div class="form-group">
+                                <label for="lost_pincode">Pincode</label>
+                                <input type="text" id="lost_pincode" name="pincode" placeholder="e.g. 625001" value="625001">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="lost_lat">Latitude (Auto-calculated)</label>
+                                <input type="text" id="lost_lat" name="latitude" placeholder="e.g. 9.9252" readonly style="background:#f8f9fa;">
+                            </div>
+                            <div class="form-group">
+                                <label for="lost_lon">Longitude (Auto-calculated)</label>
+                                <input type="text" id="lost_lon" name="longitude" placeholder="e.g. 78.1198" readonly style="background:#f8f9fa;">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lost_desc">Item Description &amp; Identifying Details</label>
+                            <textarea id="lost_desc" name="description" rows="3" placeholder="Color, brand, serial number, wallpaper/stickers, cash amount, or contents inside"></textarea>
+                        </div>
+
+                        <div class="info-box warning" style="margin-bottom:18px;">
+                            🛡️ <strong>Automated Station Routing:</strong> When submitted, your lost report is geo-routed to the jurisdictional Police Station so officers can compare with retrieved items.
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width:100%; padding:12px; font-size:15px;">Submit Lost Item Report &amp; Geo-Route</button>
                     </form>
                 </div>
             </div>
@@ -94,55 +160,127 @@
             <div id="found-tab" class="tab-pane">
                 <div class="form-container">
                     <h3 class="page-title">Report Found Item</h3>
+                    <p style="color:#666; font-size:13px; margin-bottom:18px;">
+                        Report an unclaimed item found in Madurai. Geo-routed to the local Police Station for safekeeping and citizen reunion.
+                    </p>
                     <form method="POST" action="{% url 'lost_found' %}">
                         {% csrf_token %}
                         <input type="hidden" name="report_type" value="found">
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="found_name">Item Name *</label>
-                                <input type="text" id="found_name" name="item_name" placeholder="e.g. Wallet, Phone" required>
+                                <input type="text" id="found_name" name="item_name" placeholder="e.g. Found Purse, ATM Card" required>
                             </div>
                             <div class="form-group">
-                                <label for="found_type">Item Type</label>
+                                <label for="found_type">Item Category</label>
                                 <select id="found_type" name="item_type">
-                                    <option value="electronics">Electronics</option>
-                                    <option value="documents">Documents</option>
-                                    <option value="jewelry">Jewelry</option>
-                                    <option value="bag">Bag/Luggage</option>
-                                    <option value="other">Other</option>
+                                    <option value="electronics">Electronics (Mobile, Laptop, Earphones)</option>
+                                    <option value="documents">Official Documents (Aadhaar, License, Cards)</option>
+                                    <option value="jewelry">Jewelry &amp; Valuables</option>
+                                    <option value="bag">Bag / Backpack / Luggage</option>
+                                    <option value="keys">Keys / Vehicle Documents</option>
+                                    <option value="other">Other Personal Article</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="found_desc">Description</label>
-                            <textarea id="found_desc" name="description" rows="3" placeholder="Describe the found item"></textarea>
-                        </div>
+
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="found_location">Location *</label>
-                                <input type="text" id="found_location" name="location" placeholder="Where you found it (e.g. Periyar Bus Stand, Madurai)" required>
+                                <label for="found_date">Date Found *</label>
+                                <input type="date" id="found_date" name="date" required>
                             </div>
                             <div class="form-group">
-                                <label for="found_date">Date</label>
-                                <input type="date" id="found_date" name="date">
+                                <label for="found_phone">Your Contact Phone *</label>
+                                <input type="tel" id="found_phone" name="contact_phone" value="{{ current_user.phone|default:'' }}" placeholder="10-digit mobile number" required>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success">Submit Found Item Report</button>
+
+                        <!-- Madurai Area Selection (Matches Complaint & User Registration) -->
+                        <div class="form-group">
+                            <label for="found_area">Found Area / Locality in Madurai * <small style="color:#2980b9;">(Select from {{ locations|length }} Madurai areas)</small></label>
+                            <input list="madurai-found-areas" id="found_area" name="area" placeholder="Type or choose area (e.g. Periyar Bus Stand, Mattuthavani)" autocomplete="off" required oninput="onFoundAreaChange(this.value)">
+                            <datalist id="madurai-found-areas">
+                                {% for loc in locations %}
+                                <option value="{{ loc.name }}" data-lat="{{ loc.latitude }}" data-lon="{{ loc.longitude }}">{{ loc.name }} ({{ loc.location_type }})</option>
+                                {% endfor %}
+                            </datalist>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="found_landmark">Nearby Landmark <small style="color:#2980b9;">(optional)</small></label>
+                            <input list="found-landmarks" id="found_landmark" name="landmark" placeholder="Type or choose nearby landmark..." autocomplete="off" oninput="onFoundLandmarkChange(this.value)">
+                            <datalist id="found-landmarks"></datalist>
+                            <small id="found-landmark-hint" style="color:#666;"></small>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="found_street">Street / Road Name</label>
+                                <input type="text" id="found_street" name="street" placeholder="e.g. South Masi Street">
+                            </div>
+                            <div class="form-group">
+                                <label for="found_address">Found Location Spot</label>
+                                <input type="text" id="found_address" name="address" placeholder="e.g. Near ATM counter or park bench">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="found_city">City</label>
+                                <input type="text" id="found_city" name="city" value="Madurai" readonly style="background:#f8f9fa;">
+                            </div>
+                            <div class="form-group">
+                                <label for="found_pincode">Pincode</label>
+                                <input type="text" id="found_pincode" name="pincode" placeholder="e.g. 625001" value="625001">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="found_lat">Latitude (Auto-calculated)</label>
+                                <input type="text" id="found_lat" name="latitude" placeholder="e.g. 9.9252" readonly style="background:#f8f9fa;">
+                            </div>
+                            <div class="form-group">
+                                <label for="found_lon">Longitude (Auto-calculated)</label>
+                                <input type="text" id="found_lon" name="longitude" placeholder="e.g. 78.1198" readonly style="background:#f8f9fa;">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="found_desc">Found Item Description</label>
+                            <textarea id="found_desc" name="description" rows="3" placeholder="Condition of the item, custody location, etc."></textarea>
+                        </div>
+
+                        <div class="info-box info" style="margin-bottom:18px;">
+                            🛡️ <strong>Automated Station Routing:</strong> When submitted, this report is geo-routed to the jurisdictional Police Station for owner verification.
+                        </div>
+
+                        <button type="submit" class="btn btn-success" style="width:100%; padding:12px; font-size:15px;">Submit Found Item Report &amp; Geo-Route</button>
                     </form>
                 </div>
             </div>
 
             <!-- Reported Items -->
-            <h3 class="page-title mt-20">Reported Items</h3>
+            <h3 class="page-title mt-20">Reported Items Registry &amp; Station Assignments</h3>
             <div class="items-grid">
                 {% if items %}
                     {% for itm in items %}
-                    <div class="item-card">
-                        <h4>{{ itm.name }}</h4>
-                        <p><strong>Type:</strong> {{ itm.category }}</p>
-                        <p><strong>Location:</strong> {{ itm.location }}</p>
-                        <p><strong>Reported:</strong> {{ itm.date }}</p>
-                        <p><span class="badge {% if itm.status == 'Found' %}badge-success{% else %}badge-danger{% endif %}">{{ itm.status }}</span></p>
+                    <div class="item-card" style="border: 1px solid #e0e0e0; border-radius:8px; padding:16px; background:#fff; box-shadow:0 2px 6px rgba(0,0,0,0.05);">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                            <span class="badge {% if itm.report_type == 'lost' %}badge-warning{% else %}badge-info{% endif %}">{{ itm.report_type|upper }}</span>
+                            <span class="badge {% if itm.status == 'Found' or itm.status == 'Recovered' %}badge-success{% else %}badge-danger{% endif %}">{{ itm.status }}</span>
+                        </div>
+                        <h4 style="margin:10px 0 4px 0;">{{ itm.name }}</h4>
+                        <p style="margin:2px 0;"><strong>Category:</strong> {{ itm.category }}</p>
+                        <p style="margin:2px 0;"><strong>Location:</strong> 📍 {{ itm.area|default:itm.location }} {% if itm.landmark %}(Near {{ itm.landmark }}){% endif %}</p>
+                        <p style="margin:2px 0;"><strong>Jurisdiction Police Station:</strong><br>🏢 <strong>{{ itm.assigned_station_name|default:"Station Assigned" }}</strong></p>
+                        <p style="margin:2px 0;"><strong>Date:</strong> {{ itm.date }}</p>
+                        {% if itm.contact_phone %}
+                        <p style="margin:2px 0;"><strong>Contact:</strong> 📞 {{ itm.contact_phone }}</p>
+                        {% endif %}
+                        {% if itm.description %}
+                        <p style="margin:6px 0 0 0; font-size:12px; color:#555; background:#f8f9fa; padding:6px; border-radius:4px;">{{ itm.description }}</p>
+                        {% endif %}
                     </div>
                     {% endfor %}
                 {% else %}
@@ -152,6 +290,75 @@
         </div>
     </div>
 </div>
+
+{{ landmarks|json_script:"lostfound-landmark-data" }}
+<script>
+    const lfLocationMap = {
+        {% for loc in locations %}
+        "{{ loc.name|escapejs }}": { lat: "{{ loc.latitude }}", lon: "{{ loc.longitude }}" },
+        {% endfor %}
+    };
+
+    function onLostAreaChange(val) {
+        const trimmed = val ? val.trim() : '';
+        if (lfLocationMap[trimmed]) {
+            document.getElementById('lost_lat').value = lfLocationMap[trimmed].lat;
+            document.getElementById('lost_lon').value = lfLocationMap[trimmed].lon;
+        }
+        fillLandmarksForTab(trimmed, 'lost-landmarks', 'lost-landmark-hint');
+    }
+
+    function onFoundAreaChange(val) {
+        const trimmed = val ? val.trim() : '';
+        if (lfLocationMap[trimmed]) {
+            document.getElementById('found_lat').value = lfLocationMap[trimmed].lat;
+            document.getElementById('found_lon').value = lfLocationMap[trimmed].lon;
+        }
+        fillLandmarksForTab(trimmed, 'found-landmarks', 'found-landmark-hint');
+    }
+
+    const allLfLandmarks = JSON.parse(document.getElementById('lostfound-landmark-data').textContent || '[]');
+    const lfLandmarkByName = {};
+    allLfLandmarks.forEach(function (l) { lfLandmarkByName[l.name.toLowerCase()] = l; });
+
+    function fillLandmarksForTab(area, datalistId, hintId) {
+        const list = document.getElementById(datalistId);
+        const hint = document.getElementById(hintId);
+        if (!list) return;
+        let shown = allLfLandmarks.filter(function (l) { return l.area.toLowerCase() === area.toLowerCase(); });
+        const inArea = shown.length > 0;
+        if (!inArea) shown = allLfLandmarks;
+        list.innerHTML = '';
+        shown.forEach(function (l) {
+            const o = document.createElement('option');
+            o.value = l.name;
+            o.textContent = l.name + ' (' + l.landmark_type + ')';
+            list.appendChild(o);
+        });
+        if (hint) {
+            hint.textContent = area && inArea ? shown.length + ' landmarks found in ' + area : 'Showing all landmarks in Madurai';
+        }
+    }
+
+    function onLostLandmarkChange(val) {
+        const l = lfLandmarkByName[(val || '').trim().toLowerCase()];
+        if (l) {
+            document.getElementById('lost_lat').value = l.latitude;
+            document.getElementById('lost_lon').value = l.longitude;
+        }
+    }
+
+    function onFoundLandmarkChange(val) {
+        const l = lfLandmarkByName[(val || '').trim().toLowerCase()];
+        if (l) {
+            document.getElementById('found_lat').value = l.latitude;
+            document.getElementById('found_lon').value = l.longitude;
+        }
+    }
+
+    fillLandmarksForTab('', 'lost-landmarks', 'lost-landmark-hint');
+    fillLandmarksForTab('', 'found-landmarks', 'found-landmark-hint');
+</script>
 
 <script src="{% static 'firstapp/ambient.js' %}"></script>
 <script src="{% static 'firstapp/script.js' %}"></script>

@@ -66,6 +66,26 @@ def _complaint_to_dict(c):
     return {f.name: getattr(c, f.name) for f in c._meta.fields}
 
 
+def _get_station_jurisdiction_for_user(user):
+    """Resolve station_id, station_name, and PoliceStation object for a police user."""
+    station_id = user.get('station_id', '')
+    station_name = user.get('station_name') or user.get('station') or ''
+
+    if not station_id and station_name:
+        st_obj = PoliceStation.objects.filter(Q(name__iexact=station_name) | Q(name__icontains=station_name)).first()
+        if st_obj:
+            station_id = st_obj.station_id
+            station_name = st_obj.name
+    elif station_id and not station_name:
+        st_obj = PoliceStation.objects.filter(station_id=station_id).first()
+        if st_obj:
+            station_name = st_obj.name
+    else:
+        st_obj = PoliceStation.objects.filter(station_id=station_id).first() if station_id else None
+
+    return station_id, station_name, st_obj
+
+
 # ==============================================================================
 # 1. PUBLIC & AUTH VIEWS
 # ==============================================================================
@@ -417,9 +437,15 @@ def complaint_detail(request):
         qs = Complaint.objects.all()
 
     obj = qs.filter(complaint_id=complaint_id).first() or qs.first()
+    fir_obj = FIR.objects.filter(complaint_id=obj.complaint_id).first() if obj else None
+    case_obj = Case.objects.filter(complaint_id=obj.complaint_id).first() if obj else None
+    evidence_list = list(Evidence.objects.filter(complaint_id=obj.complaint_id).values()) if obj else []
     return render(request, 'firstapp/complaint_detail.html', {
         'current_user': user,
-        'complaint': _complaint_to_dict(obj) if obj else None
+        'complaint': _complaint_to_dict(obj) if obj else None,
+        'fir': fir_obj,
+        'case': case_obj,
+        'evidence_list': evidence_list,
     })
 
 
@@ -466,55 +492,205 @@ def sos(request):
     return render(request, 'firstapp/sos.html', {'current_user': user, 'current_time': now_str})
 
 
-@role_required('citizen')
+@role_required()
 def missing_person(request):
     user = get_current_user(request)
     today_str = datetime.now().strftime('%Y-%m-%d')
+    stations = PoliceStation.objects.all()
+    locations = Location.objects.all().order_by('name')
+
     if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'update_status':
+            person_id = request.POST.get('person_id')
+            new_status = request.POST.get('status', 'Found')
+            MissingPerson.objects.filter(person_id=person_id).update(status=new_status)
+            return redirect('missing_person')
+
+        name = request.POST.get('person_name', '').strip()
+        age = request.POST.get('age', '').strip()
+        gender = request.POST.get('gender', '').strip().title()
+        last_seen_date = request.POST.get('last_seen_date', '') or today_str
+        description = request.POST.get('description', '').strip()
+        contact_phone = request.POST.get('contact_phone', '').strip() or user.get('phone', '')
+
+        # Location details
+        area = request.POST.get('area', '').strip()
+        landmark = request.POST.get('landmark', '').strip()
+        address = request.POST.get('address', '').strip()
+        street = request.POST.get('street', '').strip()
+        city = request.POST.get('city', '').strip() or 'Madurai'
+        district = request.POST.get('district', '').strip() or city
+        pincode = request.POST.get('pincode', '').strip() or '625001'
+        latitude = request.POST.get('latitude', '').strip()
+        longitude = request.POST.get('longitude', '').strip()
+
+        # Coordinate lookup from Landmark / Area
+        landmark_obj = Landmark.objects.filter(name__iexact=landmark).first() if landmark else None
+        if landmark_obj:
+            landmark = landmark_obj.name
+            latitude = landmark_obj.latitude
+            longitude = landmark_obj.longitude
+
+        if area and (not latitude or not longitude):
+            loc_obj = Location.objects.filter(name__iexact=area).first()
+            if loc_obj:
+                latitude = loc_obj.latitude
+                longitude = loc_obj.longitude
+
+        if (not latitude or not longitude) and user.get('latitude'):
+            latitude = user.get('latitude')
+            longitude = user.get('longitude')
+
+        # Jurisdictional Routing to nearest Police Station
+        matched_station, dist_km, match_reason = find_jurisdiction_station(
+            complaint_lat=latitude, complaint_lon=longitude,
+            city=city, pincode=pincode, address=f"{area} {address}",
+            stations=list(stations)
+        )
+        station_id = matched_station.station_id if matched_station else 'PS-001'
+        station_name = matched_station.name if matched_station else 'Primary Police Station'
+
+        last_seen_location = f"{area}, {landmark}".strip(', ') if landmark else (area or address or city)
+
         count = MissingPerson.objects.count()
         MissingPerson.objects.create(
             person_id=f"MIS-{count + 1:03d}",
-            name=request.POST.get('person_name', '').strip(),
-            age=request.POST.get('age', '').strip(),
-            gender=request.POST.get('gender', '').strip().title(),
-            last_seen_date=request.POST.get('last_seen_date', '') or today_str,
-            last_seen_location=request.POST.get('last_seen_location', '').strip(),
-            description=request.POST.get('description', '').strip(),
-            reported_by=user.get('name', ''),
+            name=name,
+            age=age,
+            gender=gender,
+            last_seen_date=last_seen_date,
+            last_seen_location=last_seen_location,
+            description=description,
+            reported_by=user.get('name', 'Citizen'),
             reported_date=today_str,
-            status='Missing'
+            status='Missing',
+            area=area,
+            landmark=landmark,
+            address=address,
+            street=street,
+            city=city,
+            district=district,
+            pincode=pincode,
+            latitude=latitude or (matched_station.latitude if matched_station else '9.9252'),
+            longitude=longitude or (matched_station.longitude if matched_station else '78.1198'),
+            assigned_station_id=station_id,
+            assigned_station_name=station_name,
+            contact_phone=contact_phone,
         )
         return redirect('missing_person')
+
+    missing_qs = MissingPerson.objects.all().order_by('-pk')
+    station_id = user.get('station_id', '')
+
     return render(request, 'firstapp/missing_person.html', {
         'current_user': user,
-        'missing_persons': list(MissingPerson.objects.values())
+        'missing_persons': list(missing_qs.values()),
+        'locations': locations,
+        'landmarks': list(Landmark.objects.values('name', 'landmark_type', 'latitude', 'longitude', 'area')),
+        'stations': stations,
+        'station_id': station_id,
     })
 
 
-@role_required('citizen')
+@role_required()
 def lost_found(request):
     user = get_current_user(request)
     today_str = datetime.now().strftime('%Y-%m-%d')
+    stations = PoliceStation.objects.all()
+    locations = Location.objects.all().order_by('name')
+
     if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'update_status':
+            item_id = request.POST.get('item_id')
+            new_status = request.POST.get('status', 'Found')
+            LostFound.objects.filter(item_id=item_id).update(status=new_status)
+            return redirect('lost_found')
+
         report_type = request.POST.get('report_type', 'lost').strip().lower()
         item_type = request.POST.get('item_type', 'other').strip()
+        item_name = request.POST.get('item_name', '').strip()
+        description = request.POST.get('description', '').strip()
+        date_val = request.POST.get('date', '') or today_str
+        contact_phone = request.POST.get('contact_phone', '').strip() or user.get('phone', '')
+
+        # Location details
+        area = request.POST.get('area', '').strip()
+        landmark = request.POST.get('landmark', '').strip()
+        address = request.POST.get('address', '').strip()
+        street = request.POST.get('street', '').strip()
+        city = request.POST.get('city', '').strip() or 'Madurai'
+        district = request.POST.get('district', '').strip() or city
+        pincode = request.POST.get('pincode', '').strip() or '625001'
+        latitude = request.POST.get('latitude', '').strip()
+        longitude = request.POST.get('longitude', '').strip()
+
+        # Coordinate lookup from Landmark / Area
+        landmark_obj = Landmark.objects.filter(name__iexact=landmark).first() if landmark else None
+        if landmark_obj:
+            landmark = landmark_obj.name
+            latitude = landmark_obj.latitude
+            longitude = landmark_obj.longitude
+
+        if area and (not latitude or not longitude):
+            loc_obj = Location.objects.filter(name__iexact=area).first()
+            if loc_obj:
+                latitude = loc_obj.latitude
+                longitude = loc_obj.longitude
+
+        if (not latitude or not longitude) and user.get('latitude'):
+            latitude = user.get('latitude')
+            longitude = user.get('longitude')
+
+        # Jurisdictional Routing to nearest Police Station
+        matched_station, dist_km, match_reason = find_jurisdiction_station(
+            complaint_lat=latitude, complaint_lon=longitude,
+            city=city, pincode=pincode, address=f"{area} {address}",
+            stations=list(stations)
+        )
+        station_id = matched_station.station_id if matched_station else 'PS-001'
+        station_name = matched_station.name if matched_station else 'Primary Police Station'
+
+        location_str = f"{area}, {landmark}".strip(', ') if landmark else (area or address or city)
+
         count = LostFound.objects.count()
         LostFound.objects.create(
             item_id=f"LF-{count + 1:03d}",
             item_type=item_type,
-            name=request.POST.get('item_name', '').strip(),
+            name=item_name,
             category=item_type.title(),
-            description=request.POST.get('description', '').strip(),
-            location=request.POST.get('location', '').strip(),
-            date=request.POST.get('date', '') or today_str,
-            reported_by=user.get('name', ''),
+            description=description,
+            location=location_str,
+            date=date_val,
+            reported_by=user.get('name', 'Citizen'),
             report_type=report_type,
-            status='Lost' if report_type == 'lost' else 'Found'
+            status='Lost' if report_type == 'lost' else 'Found',
+            area=area,
+            landmark=landmark,
+            address=address,
+            street=street,
+            city=city,
+            district=district,
+            pincode=pincode,
+            latitude=latitude or (matched_station.latitude if matched_station else '9.9252'),
+            longitude=longitude or (matched_station.longitude if matched_station else '78.1198'),
+            assigned_station_id=station_id,
+            assigned_station_name=station_name,
+            contact_phone=contact_phone,
         )
         return redirect('lost_found')
+
+    items_qs = LostFound.objects.all().order_by('-pk')
+    station_id = user.get('station_id', '')
+
     return render(request, 'firstapp/lost_found.html', {
         'current_user': user,
-        'items': list(LostFound.objects.values())
+        'items': list(items_qs.values()),
+        'locations': locations,
+        'landmarks': list(Landmark.objects.values('name', 'landmark_type', 'latitude', 'longitude', 'area')),
+        'stations': stations,
+        'station_id': station_id,
     })
 
 
@@ -534,21 +710,53 @@ def community_alerts(request):
 @role_required('inspector')
 def inspector_dashboard(request):
     user = get_current_user(request)
-    station_id = user.get('station_id', '')
+    station_id, station_name, station_obj = _get_station_jurisdiction_for_user(user)
 
-    # Filter station complaints
-    if station_id:
-        complaints_qs = Complaint.objects.filter(Q(assigned_station_id=station_id) | Q(assigned_station_name__icontains=user.get('station_name', '')))
-        officers_qs = User.objects.filter(role='officer', station_id=station_id, is_verified=True)
-        firs_qs = FIR.objects.filter(station_id=station_id)
-        cases_qs = Case.objects.filter(station_id=station_id)
+    # Filter station complaints & records strictly for this station's jurisdiction
+    if station_id or station_name:
+        comp_filter = Q()
+        if station_id:
+            comp_filter |= Q(assigned_station_id=station_id)
+        if station_name:
+            comp_filter |= Q(assigned_station_name__icontains=station_name)
+
+        complaints_qs = Complaint.objects.filter(comp_filter)
+        st_cmp_ids = list(complaints_qs.values_list('complaint_id', flat=True))
+
+        off_filter = Q(role='officer', is_verified=True)
+        if station_id:
+            off_filter &= (Q(station_id=station_id) | Q(station_name__icontains=station_name) | Q(station__icontains=station_name))
+        else:
+            off_filter &= (Q(station_name__icontains=station_name) | Q(station__icontains=station_name))
+        officers_qs = User.objects.filter(off_filter)
+
+        fir_filter = Q()
+        if station_id:
+            fir_filter |= Q(station_id=station_id)
+        if station_name:
+            fir_filter |= Q(station_name__icontains=station_name)
+        if st_cmp_ids:
+            fir_filter |= Q(complaint_id__in=st_cmp_ids)
+        firs_qs = FIR.objects.filter(fir_filter)
+
+        case_filter = Q()
+        if station_id:
+            case_filter |= Q(station_id=station_id)
+        if st_cmp_ids:
+            case_filter |= Q(complaint_id__in=st_cmp_ids)
+        cases_qs = Case.objects.filter(case_filter)
+
+        station_missing = MissingPerson.objects.filter(comp_filter)
+        station_lf = LostFound.objects.filter(comp_filter)
     else:
-        complaints_qs = Complaint.objects.all()
-        officers_qs = User.objects.filter(role='officer', is_verified=True)
-        firs_qs = FIR.objects.all()
-        cases_qs = Case.objects.all()
+        complaints_qs = Complaint.objects.none()
+        officers_qs = User.objects.none()
+        firs_qs = FIR.objects.none()
+        cases_qs = Case.objects.none()
+        station_missing = MissingPerson.objects.none()
+        station_lf = LostFound.objects.none()
 
-    # Handle quick Inspector actions (Assign Officer or Mark Duplicate)
+    # Handle quick Inspector actions
     if request.method == 'POST':
         action = request.POST.get('action')
         complaint_id = request.POST.get('complaint_id')
@@ -569,11 +777,19 @@ def inspector_dashboard(request):
                 status='Duplicate / Ignored',
                 rejection_reason=reason
             )
+        elif action == 'update_missing_status':
+            person_id = request.POST.get('person_id')
+            new_status = request.POST.get('status', 'Found')
+            MissingPerson.objects.filter(person_id=person_id).update(status=new_status)
+        elif action == 'update_lostfound_status':
+            item_id = request.POST.get('item_id')
+            new_status = request.POST.get('status', 'Found')
+            LostFound.objects.filter(item_id=item_id).update(status=new_status)
         return redirect('inspector_dashboard')
 
     return render(request, 'firstapp/inspector_dashboard.html', {
         'current_user': user,
-        'station_name': user.get('station_name') or user.get('station') or 'All Stations',
+        'station_name': station_name or 'Station Jurisdiction',
         'pending_review_count': complaints_qs.filter(status__in=['Pending Review', 'Pending']).count(),
         'duplicate_flagged_count': complaints_qs.filter(ai_duplicate_flag='Possible Duplicate').count(),
         'assigned_count': complaints_qs.filter(status__in=['Assigned', 'Under Investigation']).count(),
@@ -581,28 +797,51 @@ def inspector_dashboard(request):
         'active_cases_count': cases_qs.exclude(status='Closed').count(),
         'station_complaints': [_complaint_to_dict(c) for c in complaints_qs.order_by('-pk')],
         'station_officers': list(officers_qs.values()),
-        'monitored_cases': list(cases_qs[:8]),
-        'station_obj': PoliceStation.objects.filter(station_id=station_id).first() if station_id else None,
+        'monitored_cases': list(cases_qs.order_by('-start_date')[:10].values()),
+        'station_missing_persons': list(station_missing.order_by('-pk').values()),
+        'station_lost_found': list(station_lf.order_by('-pk').values()),
+        'station_obj': station_obj,
     })
 
 
 @role_required('inspector')
 def inspector_monitoring(request):
     user = get_current_user(request)
-    station_id = user.get('station_id', '')
+    station_id, station_name, _ = _get_station_jurisdiction_for_user(user)
 
-    if station_id:
-        officers = User.objects.filter(role='officer', station_id=station_id, is_verified=True)
-        assigned_complaints = Complaint.objects.filter(assigned_station_id=station_id).exclude(status__in=['Pending Review', 'Duplicate / Ignored'])
-        cases = Case.objects.filter(station_id=station_id)
+    if station_id or station_name:
+        comp_filter = Q()
+        if station_id:
+            comp_filter |= Q(assigned_station_id=station_id)
+        if station_name:
+            comp_filter |= Q(assigned_station_name__icontains=station_name)
+
+        station_complaints = Complaint.objects.filter(comp_filter)
+        st_cmp_ids = list(station_complaints.values_list('complaint_id', flat=True))
+
+        off_filter = Q(role='officer', is_verified=True)
+        if station_id:
+            off_filter &= (Q(station_id=station_id) | Q(station_name__icontains=station_name) | Q(station__icontains=station_name))
+        else:
+            off_filter &= (Q(station_name__icontains=station_name) | Q(station__icontains=station_name))
+        officers = User.objects.filter(off_filter)
+
+        assigned_complaints = station_complaints.exclude(status__in=['Pending Review', 'Duplicate / Ignored'])
+
+        case_filter = Q()
+        if station_id:
+            case_filter |= Q(station_id=station_id)
+        if st_cmp_ids:
+            case_filter |= Q(complaint_id__in=st_cmp_ids)
+        cases = Case.objects.filter(case_filter).order_by('-start_date')
     else:
-        officers = User.objects.filter(role='officer', is_verified=True)
-        assigned_complaints = Complaint.objects.exclude(status__in=['Pending Review', 'Duplicate / Ignored'])
-        cases = Case.objects.all()
+        officers = User.objects.none()
+        assigned_complaints = Complaint.objects.none()
+        cases = Case.objects.none()
 
     return render(request, 'firstapp/inspector_monitoring.html', {
         'current_user': user,
-        'station_name': user.get('station_name') or user.get('station') or 'Station Jurisdiction',
+        'station_name': station_name or 'Station Jurisdiction',
         'officers': list(officers.values()),
         'assigned_complaints': [_complaint_to_dict(c) for c in assigned_complaints],
         'cases': list(cases.values()),
@@ -619,6 +858,7 @@ def officer_dashboard(request):
     officer_email = user.get('email', '')
     officer_official = user.get('official_email', '')
     officer_name = user.get('name', '')
+    station_id = user.get('station_id', '')
 
     # Officer sees complaints assigned directly to them
     my_complaints = Complaint.objects.filter(
@@ -631,10 +871,26 @@ def officer_dashboard(request):
     )
     open_cases = my_cases.exclude(status='Closed')
 
-    # Actions: Close/Reject or Add Investigation Notes
+    # Station missing persons & lost/found
+    if station_id:
+        station_missing = MissingPerson.objects.filter(Q(assigned_station_id=station_id) | Q(assigned_station_name__icontains=user.get('station_name', '')))
+        station_lf = LostFound.objects.filter(Q(assigned_station_id=station_id) | Q(assigned_station_name__icontains=user.get('station_name', '')))
+    else:
+        station_missing = MissingPerson.objects.all()
+        station_lf = LostFound.objects.all()
+
+    # Actions: Close/Reject, Add Investigation Notes, or Update Missing / Lost-Found
     if request.method == 'POST':
         action = request.POST.get('action')
         complaint_id = request.POST.get('complaint_id')
+
+        # If modifying a complaint, ensure it is not already closed/resolved
+        if complaint_id:
+            comp = Complaint.objects.filter(complaint_id=complaint_id).first()
+            if comp and (comp.status in ['Resolved', 'Closed / Rejected'] or comp.case_status == 'Closed'):
+                # Closed case cannot be modified; view-only mode
+                return redirect('officer_dashboard')
+
         if action == 'add_notes':
             notes = request.POST.get('investigation_notes', '').strip()
             Complaint.objects.filter(complaint_id=complaint_id).update(
@@ -647,6 +903,14 @@ def officer_dashboard(request):
                 status='Closed / Rejected',
                 rejection_reason=reason
             )
+        elif action == 'update_missing_status':
+            person_id = request.POST.get('person_id')
+            new_status = request.POST.get('status', 'Found')
+            MissingPerson.objects.filter(person_id=person_id).update(status=new_status)
+        elif action == 'update_lostfound_status':
+            item_id = request.POST.get('item_id')
+            new_status = request.POST.get('status', 'Found')
+            LostFound.objects.filter(item_id=item_id).update(status=new_status)
         return redirect('officer_dashboard')
 
     return render(request, 'firstapp/officer_dashboard.html', {
@@ -658,6 +922,8 @@ def officer_dashboard(request):
         'my_cases': list(my_cases.values()),
         'total_cases_count': open_cases.count(),
         'closed_cases_count': my_cases.filter(status='Closed').count(),
+        'station_missing_persons': list(station_missing.order_by('-pk').values()),
+        'station_lost_found': list(station_lf.order_by('-pk').values()),
         'station_obj': (PoliceStation.objects.filter(station_id=user.get('station_id', '')).first()
                         if user.get('station_id') else None),
     })
@@ -769,21 +1035,48 @@ def fir(request):
 def cases(request):
     user = get_current_user(request)
     all_cases = Case.objects.all()
+
+    # Role-based case isolation:
+    # 1. Police Officer: Only cases assigned directly to this officer
+    # 2. Inspector: Only cases within this inspector's police station jurisdiction
+    # 3. Admin: Master view of all cases across all stations in the city/district
     if user.get('role') == 'officer':
         all_cases = all_cases.filter(
             Q(assigned_officer__icontains=user.get('name', '')) | Q(officer_badge=user.get('badge_number', ''))
         )
+    elif user.get('role') == 'inspector':
+        station_id, station_name, _ = _get_station_jurisdiction_for_user(user)
+        if station_id or station_name:
+            comp_filter = Q()
+            if station_id:
+                comp_filter |= Q(assigned_station_id=station_id)
+            if station_name:
+                comp_filter |= Q(assigned_station_name__icontains=station_name)
+            st_cmp_ids = list(Complaint.objects.filter(comp_filter).values_list('complaint_id', flat=True))
+
+            case_filter = Q()
+            if station_id:
+                case_filter |= Q(station_id=station_id)
+            if st_cmp_ids:
+                case_filter |= Q(complaint_id__in=st_cmp_ids)
+            all_cases = all_cases.filter(case_filter)
+        else:
+            all_cases = all_cases.none()
 
     # Handle Case Update
     if request.method == 'POST':
         case_id = request.POST.get('case_id')
+        case = all_cases.filter(case_id=case_id).first()
+        # If the case is already closed, prevent modification (View-Only)
+        if case and case.status == 'Closed':
+            return redirect(f'/police/cases/?id={case_id}')
+
         new_status = request.POST.get('status')
         accused_info = request.POST.get('accused_info', '')
         witnesses = request.POST.get('witnesses', '')
         summary = request.POST.get('investigation_summary', '')
 
         today = datetime.now().strftime('%Y-%m-%d')
-        case = all_cases.filter(case_id=case_id).first()
         all_cases.filter(case_id=case_id).update(
             status=new_status,
             end_date=today if new_status == 'Closed' else '',
@@ -799,7 +1092,7 @@ def cases(request):
                     status='Resolved', case_status='Closed')
             else:
                 Complaint.objects.filter(complaint_id=case.complaint_id).update(
-                    status='FIR Registered', case_status='Case Active')
+                    status='FIR Registered', case_status=new_status)
         return redirect(f'/police/cases/?id={case_id}')
 
     selected_id = request.GET.get('id', '')
@@ -911,6 +1204,15 @@ def admin_dashboard(request):
     users_qs = User.objects.all()
     stations_qs = PoliceStation.objects.all()
 
+    # Admin oversight: Full city/district master view of all cases across all police stations
+    all_cases_qs = Case.objects.all().order_by('-start_date')
+    station_map = {s.station_id: s.name for s in stations_qs}
+    all_cases_data = []
+    for c in all_cases_qs:
+        cd = {f.name: getattr(c, f.name) for f in c._meta.fields}
+        cd['station_name'] = station_map.get(c.station_id, c.station_id or 'Headquarters')
+        all_cases_data.append(cd)
+
     return render(request, 'firstapp/admin_dashboard.html', {
         'current_user': user,
         'citizens_count': users_qs.filter(role='citizen').count(),
@@ -922,6 +1224,7 @@ def admin_dashboard(request):
         'total_cases': Case.objects.count(),
         'recent_users': list(users_qs.order_by('-id').values()[:5]),
         'recent_stations': list(stations_qs.values()[:4]),
+        'all_cases': all_cases_data,
     })
 
 

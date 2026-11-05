@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,8 +16,8 @@
             content: '';
             position: absolute;
             top: 20px;
-            left: 5%;
-            right: 5%;
+            left: 3%;
+            right: 3%;
             height: 4px;
             background: #e0e0e0;
             z-index: 1;
@@ -27,10 +27,11 @@
             z-index: 2;
             text-align: center;
             flex: 1;
+            padding: 0 4px;
         }
         .step-circle {
-            width: 42px;
-            height: 42px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: #e0e0e0;
             color: #777;
@@ -39,7 +40,7 @@
             justify-content: center;
             margin: 0 auto 8px auto;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 15px;
             border: 3px solid white;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
@@ -51,15 +52,20 @@
             background: #27ae60;
             color: white;
         }
+        .step-item.rejected .step-circle {
+            background: #e74c3c !important;
+            color: white;
+        }
         .step-title {
             font-size: 12px;
             font-weight: bold;
-            color: #555;
+            color: #444;
         }
         .step-desc {
             font-size: 11px;
-            color: #888;
+            color: #777;
             margin-top: 2px;
+            line-height: 1.3;
         }
     </style>
 </head>
@@ -122,51 +128,89 @@
             <a href="{% url 'complaints' %}" style="font-size:14px; margin-bottom:15px; display:inline-block;">&larr; Back to My Complaints</a>
             {% endif %}
 
-            <!-- Visual Progress Tracker -->
+            <!-- Visual Progress Tracker (7-Stage Full Lifecycle) -->
             <div class="card">
-                <div class="card-header">Police Investigation Workflow Progress</div>
+                <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+                    <span>Police Investigation Workflow Progress</span>
+                    <span style="font-size:12px; font-weight:normal; color:#666;">
+                        Stage: <strong>
+                        {% if complaint.status == 'Resolved' or complaint.case_status == 'Closed' %}
+                            ✅ Stage 7/7: Case Resolved &amp; Closed
+                        {% elif complaint.status == 'Closed / Rejected' %}
+                            ❌ Case Closed / Rejected
+                        {% elif complaint.fir_status == 'FIR Registered' or complaint.status == 'FIR Registered' %}
+                            📄 Stage 6/7: FIR Registered &amp; Trial Ongoing
+                        {% elif complaint.status == 'Under Investigation' %}
+                            🔍 Stage 5/7: Field Investigation Active
+                        {% elif complaint.assigned_officer_name %}
+                            👮 Stage 4/7: Officer Assigned
+                        {% elif complaint.status != 'Pending Review' and complaint.status != 'Pending' %}
+                            🛡️ Stage 3/7: Inspector Review
+                        {% else %}
+                            📥 Stage 2/7: Geo-Routed &amp; Queued
+                        {% endif %}
+                        </strong>
+                    </span>
+                </div>
                 <div class="card-body">
                     <div class="workflow-timeline">
-                        <!-- Step 1 -->
+                        <!-- Step 1: Submitted -->
                         <div class="step-item completed">
-                            <div class="step-circle">1</div>
-                            <div class="step-title">Submitted</div>
+                            <div class="step-circle">✓</div>
+                            <div class="step-title">1. Submitted</div>
                             <div class="step-desc">Complaint Filed</div>
                         </div>
 
-                        <!-- Step 2 -->
+                        <!-- Step 2: Geo-Routed -->
                         <div class="step-item completed">
-                            <div class="step-circle">2</div>
-                            <div class="step-title">Geo-Routed</div>
+                            <div class="step-circle">✓</div>
+                            <div class="step-title">2. Geo-Routed</div>
                             <div class="step-desc">{{ complaint.assigned_station_name|default:"Station Assigned" }}</div>
                         </div>
 
-                        <!-- Step 3 -->
-                        <div class="step-item {% if complaint.status != 'Pending Review' and complaint.status != 'Pending' %}completed{% else %}active{% endif %}">
-                            <div class="step-circle">3</div>
-                            <div class="step-title">Inspector Review</div>
+                        <!-- Step 3: Inspector Review -->
+                        <div class="step-item {% if complaint.status == 'Duplicate / Ignored' or complaint.status == 'Closed / Rejected' %}completed{% elif complaint.assigned_officer_name or complaint.status != 'Pending Review' and complaint.status != 'Pending' %}completed{% else %}active{% endif %}">
+                            <div class="step-circle">{% if complaint.status == 'Duplicate / Ignored' %}⚠️{% elif complaint.assigned_officer_name or complaint.status != 'Pending Review' and complaint.status != 'Pending' %}✓{% else %}3{% endif %}</div>
+                            <div class="step-title">3. Inspector Review</div>
                             <div class="step-desc">AI Check &amp; Validation</div>
                         </div>
 
-                        <!-- Step 4 -->
+                        <!-- Step 4: Officer Assigned -->
                         <div class="step-item {% if complaint.assigned_officer_name %}completed{% elif complaint.status == 'Assigned' %}active{% endif %}">
-                            <div class="step-circle">4</div>
-                            <div class="step-title">Officer Assigned</div>
+                            <div class="step-circle">{% if complaint.assigned_officer_name %}✓{% else %}4{% endif %}</div>
+                            <div class="step-title">4. Officer Assigned</div>
                             <div class="step-desc">{{ complaint.assigned_officer_name|default:"Awaiting Assignment" }}</div>
                         </div>
 
-                        <!-- Step 5 -->
-                        <div class="step-item {% if complaint.status == 'FIR Registered' or complaint.status == 'Case Active' or complaint.status == 'Resolved' %}completed{% elif complaint.status == 'Under Investigation' %}active{% endif %}">
-                            <div class="step-circle">5</div>
-                            <div class="step-title">Investigation</div>
-                            <div class="step-desc">Field Inquiry &amp; Evidence</div>
+                        <!-- Step 5: Investigation -->
+                        <div class="step-item {% if complaint.status == 'Resolved' or complaint.case_status == 'Closed' or complaint.fir_status == 'FIR Registered' or complaint.status == 'FIR Registered' or complaint.status == 'Case Active' %}completed{% elif complaint.status == 'Under Investigation' %}active{% endif %}">
+                            <div class="step-circle">{% if complaint.status == 'Resolved' or complaint.case_status == 'Closed' or complaint.fir_status == 'FIR Registered' %}✓{% else %}5{% endif %}</div>
+                            <div class="step-title">5. Investigation</div>
+                            <div class="step-desc">{% if case and case.status %}{{ case.status }}{% else %}Field Inquiry &amp; Evidence{% endif %}</div>
                         </div>
 
-                        <!-- Step 6 -->
-                        <div class="step-item {% if complaint.fir_status == 'FIR Registered' or complaint.status == 'Resolved' %}completed{% endif %}">
-                            <div class="step-circle">6</div>
-                            <div class="step-title">FIR / Case</div>
+                        <!-- Step 6: FIR Registered -->
+                        <div class="step-item {% if complaint.status == 'Resolved' or complaint.case_status == 'Closed' %}completed{% elif complaint.fir_status == 'FIR Registered' or complaint.status == 'FIR Registered' %}completed active{% endif %}">
+                            <div class="step-circle">{% if complaint.status == 'Resolved' or complaint.case_status == 'Closed' or complaint.fir_status == 'FIR Registered' %}✓{% else %}6{% endif %}</div>
+                            <div class="step-title">6. FIR / Trial</div>
                             <div class="step-desc">{{ complaint.fir_status|default:"Not Filed" }}</div>
+                        </div>
+
+                        <!-- Step 7: Case Closed -->
+                        <div class="step-item {% if complaint.status == 'Resolved' or complaint.case_status == 'Closed' %}completed{% elif complaint.status == 'Closed / Rejected' %}completed rejected{% elif complaint.fir_status == 'FIR Registered' %}active{% endif %}">
+                            <div class="step-circle">{% if complaint.status == 'Resolved' or complaint.case_status == 'Closed' %}✓{% elif complaint.status == 'Closed / Rejected' %}❌{% else %}7{% endif %}</div>
+                            <div class="step-title">7. Case Closed</div>
+                            <div class="step-desc">
+                                {% if complaint.status == 'Resolved' or complaint.case_status == 'Closed' %}
+                                    <strong style="color:#27ae60;">Resolved &amp; Closed</strong>
+                                {% elif complaint.status == 'Closed / Rejected' %}
+                                    <strong style="color:#e74c3c;">Closed / Rejected</strong>
+                                {% elif complaint.status == 'Duplicate / Ignored' %}
+                                    <strong style="color:#e67e22;">Duplicate Closed</strong>
+                                {% else %}
+                                    Pending Resolution
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -265,6 +309,130 @@
                     {% endif %}
                 </div>
             </div>
+
+            <!-- Case Investigation & Progress Updates Card -->
+            {% if case %}
+            <div class="card mt-20" style="border-top:4px solid #2e86c1;">
+                <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+                    <span>📁 Official Case Diary &amp; Investigation Progress — <strong>{{ case.case_id }}</strong></span>
+                    <span class="badge {% if case.status == 'Closed' %}badge-success{% else %}badge-warning{% endif %}">
+                        {% if case.status == 'Closed' %}✅ Case Resolved &amp; Closed{% else %}⚡ {{ case.status }}{% endif %}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Current Case Stage</div>
+                            <div class="detail-value">
+                                <span class="badge {% if case.status == 'Closed' %}badge-success{% else %}badge-info{% endif %}" style="font-size:13px;">
+                                    {{ case.status }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Lead Investigating Officer</div>
+                            <div class="detail-value">👮 <strong>{{ case.assigned_officer }}</strong> (Badge: {{ case.officer_badge }})</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Investigation Started</div>
+                            <div class="detail-value">{{ case.start_date }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">{% if case.status == 'Closed' %}Case Closed On{% else %}Latest Diary Entry{% endif %}</div>
+                            <div class="detail-value">{{ case.end_date|default:case.last_update|default:case.start_date }}</div>
+                        </div>
+                    </div>
+
+                    {% if case.investigation_summary %}
+                    <div style="margin-top:15px; background:#f4f9fd; border-left:4px solid #3498db; padding:12px 16px; border-radius:4px;">
+                        <div class="detail-label" style="color:#2980b9; font-weight:bold;">🔍 Official Case Diary &amp; Findings Update</div>
+                        <p style="font-size:14px; color:#333; margin-top:6px; line-height:1.6; white-space:pre-line;">{{ case.investigation_summary }}</p>
+                    </div>
+                    {% endif %}
+
+                    {% if case.accused_info %}
+                    <div style="margin-top:12px; background:#fef9e7; border-left:4px solid #f39c12; padding:10px 14px; border-radius:4px;">
+                        <div class="detail-label" style="color:#b9770e; font-weight:bold;">👤 Suspects / Accused Profile &amp; Custody Status</div>
+                        <p style="font-size:13px; color:#444; margin-top:4px;">{{ case.accused_info }}</p>
+                    </div>
+                    {% endif %}
+
+                    {% if case.witnesses %}
+                    <div style="margin-top:12px; background:#fbfcfc; border:1px solid #eaeded; padding:10px 14px; border-radius:4px;">
+                        <div class="detail-label" style="color:#566573; font-weight:bold;">👥 Key Witnesses &amp; Testimonies Recorded</div>
+                        <p style="font-size:13px; color:#444; margin-top:4px;">{{ case.witnesses }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- FIR Information Card -->
+            {% if fir %}
+            <div class="card mt-20" style="border-top:4px solid #c0392b;">
+                <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+                    <span>📄 Registered First Information Report — <strong>{{ fir.fir_id }}</strong></span>
+                    <span class="badge badge-danger">Official Police Record</span>
+                </div>
+                <div class="card-body">
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">FIR Number</div>
+                            <div class="detail-value"><strong style="color:#c0392b;">{{ fir.fir_id }}</strong></div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Section(s) of Law</div>
+                            <div class="detail-value"><strong>{{ fir.section_of_law }}</strong></div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Jurisdiction Police Station</div>
+                            <div class="detail-value">🏢 {{ fir.station_name|default:fir.station_id }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Registration Date</div>
+                            <div class="detail-value">{{ fir.fir_date }}</div>
+                        </div>
+                    </div>
+                    {% if fir.description %}
+                    <div style="margin-top:12px;">
+                        <div class="detail-label">FIR Occurrence Summary</div>
+                        <p style="font-size:13px; color:#444; margin-top:4px; line-height:1.5;">{{ fir.description }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Evidence Files Vault Card -->
+            {% if evidence_list %}
+            <div class="card mt-20">
+                <div class="card-header">📎 Attached Evidence Documents &amp; Files</div>
+                <div class="card-body">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Evidence ID</th>
+                                <th>File Name</th>
+                                <th>Type</th>
+                                <th>Size</th>
+                                <th>Logged On</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ev in evidence_list %}
+                            <tr>
+                                <td><strong>{{ ev.evidence_id }}</strong></td>
+                                <td>📄 {{ ev.file_name }}</td>
+                                <td>{{ ev.file_type }}</td>
+                                <td>{{ ev.file_size }}</td>
+                                <td>{{ ev.uploaded_date }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>

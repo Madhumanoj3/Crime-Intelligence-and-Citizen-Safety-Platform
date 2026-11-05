@@ -17,6 +17,7 @@
         </div>
         <nav class="sidebar-menu">
             <a href="{% url 'admin_dashboard' %}" class="active">📊 Dashboard</a>
+            <a href="{% url 'cases' %}">📁 All Station Cases</a>
             <a href="{% url 'users' %}">👥 Officers &amp; Personnel</a>
             <a href="{% url 'police_stations' %}">🏢 Police Stations</a>
             <a href="{% url 'admin_alerts' %}">📢 Community Alerts</a>
@@ -72,6 +73,73 @@
                         <strong>Police Officers</strong> investigate and file FIRs/Cases.
                     </p>
                 </div>
+            </div>
+
+            <!-- All Jurisdiction Cases & Master Investigation Oversight (Admin Exclusive) -->
+            <div class="table-container mt-20">
+                <div class="table-header">
+                    <div>
+                        <h3 style="margin:0;">📁 All Jurisdiction Cases &amp; Master Investigation Oversight</h3>
+                        <p style="font-size:13px; color:#666; margin:4px 0 0 0;">
+                            District-wide administrative oversight of all criminal cases and investigation diaries across all police stations.
+                        </p>
+                    </div>
+                    <div>
+                        <span class="badge badge-danger" style="font-size:12px; padding:6px 12px; margin-right:8px;">ADMIN MASTER VIEW (ALL STATIONS)</span>
+                        <a href="{% url 'cases' %}" class="btn btn-sm btn-outline-primary">Manage Cases &rarr;</a>
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Case ID</th>
+                            <th>FIR ID &amp; Complaint</th>
+                            <th>Police Station Jurisdiction</th>
+                            <th>Lead Investigating Officer</th>
+                            <th>Case Status</th>
+                            <th>Start Date</th>
+                            <th>Last Diary Update</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if all_cases %}
+                            {% for cs in all_cases %}
+                            <tr>
+                                <td><strong>{{ cs.case_id }}</strong></td>
+                                <td>
+                                    <span class="badge badge-danger">{{ cs.fir_id }}</span><br>
+                                    <small style="color:#666;">{{ cs.complaint_id }}</small>
+                                </td>
+                                <td>
+                                    <strong>🏢 {{ cs.station_name }}</strong><br>
+                                    <small style="color:#888;">Station ID: {{ cs.station_id|default:"PS-001" }}</small>
+                                </td>
+                                <td>
+                                    👮 <strong>{{ cs.assigned_officer }}</strong><br>
+                                    <small style="color:#888;">Badge: {{ cs.officer_badge }}</small>
+                                </td>
+                                <td>
+                                    <span class="badge {% if cs.status == 'Closed' %}badge-success{% else %}badge-warning{% endif %}">
+                                        {{ cs.status }}
+                                    </span>
+                                </td>
+                                <td><small>{{ cs.start_date }}</small></td>
+                                <td><small>{{ cs.last_update|default:cs.start_date }}</small></td>
+                                <td>
+                                    <a href="{% url 'cases' %}?id={{ cs.case_id }}" class="btn btn-sm btn-outline-primary" style="padding:4px 8px; font-size:12px;">Review Case &rarr;</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="8" style="text-align:center; padding:30px; color:#888;">
+                                    No cases recorded across any police station.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
             </div>
 
             <!-- Recent Stations Table -->

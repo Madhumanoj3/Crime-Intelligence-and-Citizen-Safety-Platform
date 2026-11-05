@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -97,17 +97,24 @@
             <!-- Monitored Cases Table -->
             <div class="table-container mt-20">
                 <div class="table-header">
-                    <h3>📁 Monitored Case Files &amp; Trial Progress</h3>
+                    <div>
+                        <h3 style="margin:0;">📁 Monitored Case Files &amp; Trial Progress ({{ station_name }})</h3>
+                        <p style="font-size:13px; color:#666; margin:4px 0 0 0;">
+                            Live tracking of ongoing investigations and court trials strictly within <strong>{{ station_name }}</strong> jurisdiction.
+                        </p>
+                    </div>
+                    <span class="badge badge-info" style="font-size:12px; padding:6px 12px;">{{ station_name }} ONLY</span>
                 </div>
                 <table class="data-table">
                     <thead>
                         <tr>
                             <th>Case ID</th>
-                            <th>FIR ID</th>
+                            <th>FIR ID &amp; Complaint</th>
                             <th>Lead Investigating Officer</th>
                             <th>Case Stage</th>
                             <th>Start Date</th>
                             <th>Last Diary Update</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -115,21 +122,27 @@
                             {% for cs in cases %}
                             <tr>
                                 <td><strong>{{ cs.case_id }}</strong></td>
-                                <td><span class="badge badge-danger">{{ cs.fir_id }}</span></td>
-                                <td>👮 {{ cs.assigned_officer }} ({{ cs.officer_badge }})</td>
+                                <td>
+                                    <span class="badge badge-danger">{{ cs.fir_id }}</span><br>
+                                    <small style="color:#666;">{{ cs.complaint_id }}</small>
+                                </td>
+                                <td>👮 <strong>{{ cs.assigned_officer }}</strong><br><small style="color:#888;">Badge: {{ cs.officer_badge }}</small></td>
                                 <td>
                                     <span class="badge {% if cs.status == 'Closed' %}badge-success{% else %}badge-warning{% endif %}">
                                         {{ cs.status }}
                                     </span>
                                 </td>
-                                <td>{{ cs.start_date }}</td>
-                                <td>{{ cs.last_update|default:cs.start_date }}</td>
+                                <td><small>{{ cs.start_date }}</small></td>
+                                <td><small>{{ cs.last_update|default:cs.start_date }}</small></td>
+                                <td>
+                                    <a href="{% url 'cases' %}?id={{ cs.case_id }}" class="btn btn-sm btn-outline-primary" style="padding:4px 8px; font-size:12px;">View Case &rarr;</a>
+                                </td>
                             </tr>
                             {% endfor %}
                         {% else %}
                             <tr>
-                                <td colspan="6" style="text-align:center; padding:20px; color:#888;">
-                                    No active case files in this station jurisdiction.
+                                <td colspan="7" style="text-align:center; padding:25px; color:#888;">
+                                    No active case files in this station jurisdiction ({{ station_name }}).
                                 </td>
                             </tr>
                         {% endif %}
